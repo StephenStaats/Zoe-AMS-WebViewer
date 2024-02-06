@@ -155,7 +155,8 @@ class Waveform {
         }
 
         var wvfSamples = [];
-        if (this.waveformId == window.Z_WAVEFORM_ID.Z_WAVEFORM_SPO2) {
+        //if (this.waveformId == window.Z_WAVEFORM_ID.Z_WAVEFORM_SPO2) {
+        if (this.waveformId == window.Z_WAVEFORM_ID.Z_WAVEFORM_INVALID) {
             var s;
             for (s = 0; s < window.simulatedWaveformSpO2.length - 1; s++) {
                 var thisSample = window.simulatedWaveformSpO2[s] ;
@@ -470,6 +471,38 @@ function drawHomeScreenAreas() {
 
 }
 
+function drawSpO2Waveform() {
+
+  wvf = homeScreen.waveforms[0] ;
+
+  displayCtx.fillStyle = "#000000";
+  displayCtx.clearRect(homeScreen.waveforms[2].left, homeScreen.waveforms[2].top, homeScreen.waveforms[2].width, homeScreen.waveforms[2].height);
+  displayCtx.fillRect(homeScreen.waveforms[2].left, homeScreen.waveforms[2].top, homeScreen.waveforms[2].width, homeScreen.waveforms[2].height);
+
+  displayCtx.strokeStyle = wvf.color;
+  displayCtx.lineWidth = 2;
+  displayCtx.lineJoin = 'round';
+  displayCtx.lineCap = 'round';
+
+  const normalizeWaveform = value => homeScreen.waveforms[2].top + homeScreen.waveforms[2].height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * homeScreen.waveforms[2].height);
+
+  displayCtx.beginPath();
+
+  var endY;
+  endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
+
+  displayCtx.moveTo(homeScreen.waveforms[2].left, endY)
+  var x;
+  for (x = homeScreen.waveforms[2].left; x < homeScreen.waveforms[2].right; x += 2) {
+    wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
+    endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
+    displayCtx.lineTo(x - 1, endY);  
+  }
+
+  displayCtx.stroke();
+
+}
+
 
 //
 //   drawWaveforms
@@ -585,6 +618,7 @@ function startStopWaveforms() {
     if (button.textContent === 'Pause Waveforms') {
         button.textContent = 'Restart Waveforms';
         pauseWaveformDrawing = 1 ;
+        //drawSpO2Waveform() ;
     } else {
         button.textContent = 'Pause Waveforms';
         redrawHomeScreen = 1 ;
