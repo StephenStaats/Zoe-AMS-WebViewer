@@ -10,8 +10,72 @@ window.DEVEVENT = function(...args) {
 
 window.LOGEVENT = function(...args) {
     console.log(args.join(' '));
+}
+
+window.LOGEVENTRED = function(...args) {
+
+    var argstring = args.join(' ');
+    var logstring = '\x1b[31m' + argstring + '\x1b[0m';
+
+    // console.log('\x1b[31mRed text\x1b[0m');
+    // console.log('\x1b[32mGreen text\x1b[0m');
+    // console.log('\x1b[33mYellow text\x1b[0m');
+    // console.log('\x1b[34mBlue text\x1b[0m');
+    // console.log('\x1b[35mMagenta text\x1b[0m');
+    // console.log('\x1b[36mCyan text\x1b[0m');
+ 
+    console.log(logstring);
+
 };
 
+window.LOGEVENTGREEN = function(...args) {
+
+    var argstring = args.join(' ');
+    var logstring = '\x1b[32m' + argstring + '\x1b[0m';
+
+    // console.log('\x1b[31mRed text\x1b[0m');
+    // console.log('\x1b[32mGreen text\x1b[0m');
+    // console.log('\x1b[33mYellow text\x1b[0m');
+    // console.log('\x1b[34mBlue text\x1b[0m');
+    // console.log('\x1b[35mMagenta text\x1b[0m');
+    // console.log('\x1b[36mCyan text\x1b[0m');
+ 
+    console.log(logstring);
+
+};
+
+window.LOGEVENTYELLOW = function(...args) {
+
+    var argstring = args.join(' ');
+    var logstring = '\x1b[33m' + argstring + '\x1b[0m';
+
+    // console.log('\x1b[31mRed text\x1b[0m');
+    // console.log('\x1b[32mGreen text\x1b[0m');
+    // console.log('\x1b[33mYellow text\x1b[0m');
+    // console.log('\x1b[34mBlue text\x1b[0m');
+    // console.log('\x1b[35mMagenta text\x1b[0m');
+    // console.log('\x1b[36mCyan text\x1b[0m');
+ 
+    console.log(logstring);
+
+};
+
+window.LOGEVENTMAGENTA = function(...args) {
+
+    var argstring = args.join(' ');
+    var logstring = '\x1b[35m' + argstring + '\x1b[0m';
+
+    // console.log('\x1b[31mRed text\x1b[0m');
+    // console.log('\x1b[32mGreen text\x1b[0m');
+    // console.log('\x1b[33mYellow text\x1b[0m');
+    // console.log('\x1b[34mBlue text\x1b[0m');
+    // console.log('\x1b[35mMagenta text\x1b[0m');
+    // console.log('\x1b[36mCyan text\x1b[0m');
+ 
+    console.log(logstring);
+
+};
+  
   
 window.Z_WAVEFORM_ID = {
     Z_WAVEFORM_ECGI: 0,
@@ -65,3 +129,116 @@ window.Z_WAVEFORM_ID = {
     Z_WAVEFORM_OFF: 48,
     Z_WAVEFORM_INVALID: 49
 };
+
+// Function to convert string to Z_WAVEFORM_ID enum value
+function getWaveformIdFromWaveformName(waveformName) {
+    // Convert string to uppercase to match enum keys
+    const key = waveformName.toUpperCase();
+
+    // Use if-else logic to determine the enum value
+    if (key === "ECGI") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGI;
+    } else if (key === "ECGII") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGII;
+    } else if (key === "ECGIII") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGIII;
+    } else if (key === "ECGV") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV;
+    } else if (key === "NCO") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_NCO;
+    } else if (key === "Z0NCO") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_Z0NCO;
+    } else if (key === "SPO2RED") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2RED;
+    } else if (key === "SPO2IR") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2IR;
+    } else if (key === "SPO2OHMS") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2OHMS;
+    } else if (key === "SPO2REDDC") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2REDDC;
+    } else if (key === "SPO2IRDC") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2IRDC;
+    } else if (key === "RESP") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_RESP;
+    } else if (key === "RESP_AUTO") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_RESP_AUTO;
+    } else if (key === "TEMP") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_TEMP;
+    } else if (key === "NBP") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_NBP;
+    } else if (key === "NBPAC") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_NBPAC;
+    } else if (key === "IBP") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP;
+    } else if (key === "IBP_DISPLAY") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP_DISPLAY;
+    } else if (key === "SPO2RED_NOAMB") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2RED_NOAMB;
+    } else if (key === "SPO2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2;
+    } else if (key === "CO2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_CO2;
+    } else if (key === "CO2_TREND") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_CO2_TREND;
+    } else if (key === "ECGAVL") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGAVL;
+    } else if (key === "ECGAVR") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGAVR;
+    } else if (key === "ECGAVF") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGAVF;
+    } else if (key === "IBP2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP2;
+    } else if (key === "IBP2_DISPLAY") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP2_DISPLAY;
+    } else if (key === "ECGV1") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV1;
+    } else if (key === "ECGV2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV2;
+    } else if (key === "ECGV3") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV3;
+    } else if (key === "ECGV4") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV4;
+    } else if (key === "ECGV5") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV5;
+    } else if (key === "ECGV6") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGV6;
+    } else if (key === "ECGTHUMB") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_ECGTHUMB;
+    } else if (key === "SPO2_SIGNAL_IQ") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_SPO2_SIGNAL_IQ;
+    } else if (key === "IBP3") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP3;
+    } else if (key === "IBP3_DISPLAY") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP3_DISPLAY;
+    } else if (key === "IBP4") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP4;
+    } else if (key === "IBP4_DISPLAY") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_IBP4_DISPLAY;
+    } else if (key === "CO") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_CO;
+    } else if (key === "CO_BT") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_CO_BT;
+    } else if (key === "CO_IT") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_CO_IT;
+    } else if (key === "TEMP2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_TEMP2;
+    } else if (key === "RRA") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_RRA;
+    } else if (key === "PULMONARY_AIR_FLOW") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_PULMONARY_AIR_FLOW;
+    } else if (key === "O2") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_O2;
+    } else if (key === "AGENT") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_AGENT;
+    } else if (key === "N2O") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_N2O;
+    } else if (key === "OFF") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_OFF;
+    } else if (key === "INVALID") {
+        return Z_WAVEFORM_ID.Z_WAVEFORM_INVALID;
+    }
+
+    // If the input string doesn't match any enum key, return INVALID
+    return Z_WAVEFORM_ID.Z_WAVE
+
+}
