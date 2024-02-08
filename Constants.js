@@ -33,13 +33,6 @@ window.LOGEVENTGREEN = function (...args) {
    var argstring = args.join(' ');
    var logstring = '\x1b[32m' + argstring + '\x1b[0m';
 
-   // console.log('\x1b[31mRed text\x1b[0m');
-   // console.log('\x1b[32mGreen text\x1b[0m');
-   // console.log('\x1b[33mYellow text\x1b[0m');
-   // console.log('\x1b[34mBlue text\x1b[0m');
-   // console.log('\x1b[35mMagenta text\x1b[0m');
-   // console.log('\x1b[36mCyan text\x1b[0m');
-
    console.log(logstring);
 
 };
@@ -49,13 +42,6 @@ window.LOGEVENTYELLOW = function (...args) {
    var argstring = args.join(' ');
    var logstring = '\x1b[33m' + argstring + '\x1b[0m';
 
-   // console.log('\x1b[31mRed text\x1b[0m');
-   // console.log('\x1b[32mGreen text\x1b[0m');
-   // console.log('\x1b[33mYellow text\x1b[0m');
-   // console.log('\x1b[34mBlue text\x1b[0m');
-   // console.log('\x1b[35mMagenta text\x1b[0m');
-   // console.log('\x1b[36mCyan text\x1b[0m');
-
    console.log(logstring);
 
 };
@@ -64,13 +50,6 @@ window.LOGEVENTMAGENTA = function (...args) {
 
    var argstring = args.join(' ');
    var logstring = '\x1b[35m' + argstring + '\x1b[0m';
-
-   // console.log('\x1b[31mRed text\x1b[0m');
-   // console.log('\x1b[32mGreen text\x1b[0m');
-   // console.log('\x1b[33mYellow text\x1b[0m');
-   // console.log('\x1b[34mBlue text\x1b[0m');
-   // console.log('\x1b[35mMagenta text\x1b[0m');
-   // console.log('\x1b[36mCyan text\x1b[0m');
 
    console.log(logstring);
 

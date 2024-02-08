@@ -166,34 +166,6 @@ class Waveform {
 
       }
 
-      // var wvfSamples = [];
-      // //if (this.waveformId == window.Z_WAVEFORM_ID.Z_WAVEFORM_SPO2) {
-      // if (this.waveformId == window.Z_WAVEFORM_ID.Z_WAVEFORM_INVALID) {
-      //     var s;
-      //     for (s = 0; s < window.simulatedWaveformSpO2.length - 1; s++) {
-      //         var thisSample = window.simulatedWaveformSpO2[s] ;
-      //         var nextSample = window.simulatedWaveformSpO2[s + 1] ;
-      //         var difference = nextSample - thisSample;
-      //         var m;
-      //         for (m = 0; m < 5; m++) {
-      //           wvfSamples[s * 5 + m] = thisSample + difference / 5 ;
-      //           //this.writeSample(thisSample + difference / 5) ;
-      //         }
-      //     }
-      //     this.samples = wvfSamples;
-      //     this.sampleRate = 250 ;
-      //     //this.maxSampleIndex = this.getNSamples();
-      //     this.maxSampleIndex = wvfSamples.length;
-      //   }
-      // else {
-      //   var s;
-      //   //for (s = 0; s < this.samples.length - 1; s++) {
-      //      //this.writeSample(this.samples[s]);
-      //   //}
-      //   //this.maxSampleIndex = this.getNSamples();
-      //   this.maxSampleIndex = this.samples.length;
-      // }
-
       if (this.autoScale) {
 
          var minY;
@@ -427,22 +399,18 @@ function resizeCanvas() {
    displayCtx.fillStyle = 'black';
    displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-   //  displayCanvas.width = window.innerWidth;
-   //  displayCanvas.height = 200; // Fixed height
+   bufferCanvas.width = displayCanvas.width;
+   bufferCanvas.height = displayCanvas.height;
 
-    bufferCanvas.width = displayCanvas.width;
-    bufferCanvas.height = displayCanvas.height;
-
-    // Initial clear for buffer canvas
-    bufferCtx.fillStyle = 'black';
-    bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+   // Initial clear for buffer canvas
+   bufferCtx.fillStyle = 'black';
+   bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
 }
 
 // Call resizeCanvas initially and on window resize
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-
 
 
 //
@@ -496,20 +464,16 @@ function drawHomeScreenAreas() {
    displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
    displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
 
-    // Initial clear for buffer canvas
-    bufferCtx.fillStyle = 'black';
-    bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+   // Initial clear for buffer canvas
+   bufferCtx.fillStyle = 'black';
+   bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
 }
 
 
-//
-//   drawWaveforms
-//
 
-let onlyDrawBufferedWaveforms = 0 ;
+
 let pauseWaveformDrawing = 0;
-let pauseBufferedWaveforms = 0 ;
 
 var framesPerSecond = 60;
 
@@ -523,166 +487,9 @@ const screenWidthMM = 500;
 const screenWidthPixels = 1920;
 const pixelsPerMM = screenWidthPixels / screenWidthMM;
 
-function drawWaveforms(elapsed) {
-
-   if (pauseWaveformDrawing == 1) return;
-
-   if (elapsed == 0) return;
-
-   var w;
-   for (w = 0; w < nWaveforms; w++) {
-
-      wvf = homeScreen.waveforms[w];
-      //LOGEVENT("w = :", w);
-      LOGEVENTRED("elapsed = :", elapsed);
-
-      wvf.pixelTime += elapsed;   // amount of time that has not been represented by drawn pixels
-      wvf.sampleTime += elapsed;  // amount of time that has not been represented by used samples
-
-      var sweepSpeedMMPerSecond = wvf.sweepSpeed;
-      var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
-      var pixelsPerMS = pixelsPerSecond / 1000;
-      var MSPerPixel = 1 / pixelsPerMS;
-      var MSPerSample = 1000 / wvf.sampleRate;
-      var sweepSpeedPixelsPerFrame = Math.round(elapsed / MSPerPixel);
-
-      const normalizeWaveform = value => wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
-
-      while (wvf.pixelTime > MSPerPixel) {
-
-         LOGEVENTYELLOW("   wvf.pixelTime:", wvf.pixelTime);
-         wvf.pixelTime -= MSPerPixel;
-
-         // Shift the waveform to the left, clear the rightmost part and set it to black again
-         displayCtx.fillStyle = 'black';
-         const imageData = displayCtx.getImageData(wvf.left + 1, wvf.top, wvf.width - 1, wvf.height);
-         //LOGEVENT("getImageData:", wvf.left + 1, ",", wvf.top, ",", wvf.width - 1, ",", wvf.height);
-         displayCtx.putImageData(imageData, wvf.left, wvf.top);
-         //LOGEVENT("putImageData:", wvf.left, ",", wvf.top);
-         displayCtx.fillRect(wvf.right - 1, wvf.top, 1, wvf.height);
-         //DEVEVENT("fillRect:", wvf.Width - 1, ",", wvf.Top, ",", 1, ",", wvf.Height);
-
-         LOGEVENT("   shifted left");
-
-         // Set line styles for waveform
-         displayCtx.strokeStyle = wvf.color;
-         displayCtx.lineWidth = 2;
-         displayCtx.lineJoin = 'round';
-         displayCtx.lineCap = 'round';
-
-         // Draw the new segment of the waveform at the right edge
-         displayCtx.beginPath();
-
-         //const startY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-
-         if (wvf.startY != Number.MIN_VALUE) {
-            displayCtx.moveTo(wvf.right - 1, wvf.startY);
-            LOGEVENTRED("      moveTo:", wvf.right - 1, ",", wvf.startY);
-         }
-
-         endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-         //LOGEVENT("endY = ", endY);
-         var averageNewSampleSum = 0;
-         var averageNewSampleCount = 0;
-         var iterations = Math.round(wvf.sampleTime - wvf.pixelTime) / MSPerSample;
-         var drewMidLine = 0;
-         while (wvf.sampleTime > wvf.pixelTime) {
-
-            LOGEVENTYELLOW("      wvf.sampleTime:", wvf.sampleTime);
-            wvf.sampleTime -= MSPerSample;
-
-            // averageNewSampleSum += normalizeWaveform(wvf.samples[wvf.tailIndex]);
-            // averageNewSampleCount += 1;
-            // endY = averageNewSampleSum / averageNewSampleCount;
-
-
-            // var incrementToNextSample = wvf.samples[(wvf.tailIndex + 1) % wvf.maxSampleIndex] - wvf.samples[wvf.tailIndex];
-            // endY = normalizeWaveform(wvf.samples[wvf.tailIndex] + incrementToNextSample / (iterations + 1));
-
-            wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-            LOGEVENTMAGENTA("      wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
-
-
-
-            var incrementToNextSample = wvf.samples[(wvf.tailIndex + 1) % wvf.maxSampleIndex] - wvf.samples[wvf.tailIndex];
-            LOGEVENTMAGENTA("      incrementToNextSample ", incrementToNextSample);
-
-            var midY = normalizeWaveform(wvf.samples[wvf.tailIndex] + incrementToNextSample / (iterations + 1));
-            displayCtx.lineTo(wvf.right - 1, midY);
-            wvf.startY = midY;
-
-            LOGEVENTGREEN("         mid lineTo:", wvf.right - 1, ",", midY);
-            drewMidLine = 1;
-
-
-         }
-
-         if (drewMidLine == 0) {
-            displayCtx.lineTo(wvf.right - 1, endY);
-            wvf.startY = endY;
-            LOGEVENTGREEN("         end lineTo:", wvf.right - 1, ",", endY);
-         }
-
-         if (wvf.fill) {
-            displayCtx.lineTo(wvf.right - 1, wvf.bottom - 1);
-            displayCtx.moveTo(wvf.right - 1, endY);
-            wvf.startY = endY;
-         }
-
-         displayCtx.stroke();
-
-
-
-         //       endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-
-         //       var drewMidLine = 0 ;
-
-         //       //LOGEVENT("   wvf.sampleTime, wvf.pixelTime:", wvf.sampleTime, ", ", wvf.pixelTime);
-
-         //       var iterations = Math.round(wvf.pixelTime / MSPerSample);
-         //       while (wvf.sampleTime > wvf.pixelTime) {
-
-         //         // console.log('\x1b[31mRed text\x1b[0m');
-         //         // console.log('\x1b[32mGreen text\x1b[0m');
-         //         // console.log('\x1b[33mYellow text\x1b[0m');
-         //         // console.log('\x1b[34mBlue text\x1b[0m');
-         //         // console.log('\x1b[35mMagenta text\x1b[0m');
-         //         // console.log('\x1b[36mCyan text\x1b[0m');
-
-
-         //         LOGEVENTYELLOW("      wvf.sampleTime:", wvf.sampleTime);
-         //         wvf.sampleTime -= MSPerSample;
-
-         //          var incrementToNextSample = wvf.samples[(wvf.tailIndex + 1) % wvf.maxSampleIndex] - wvf.samples[wvf.tailIndex];
-         //          midY = normalizeWaveform(wvf.samples[wvf.tailIndex] + incrementToNextSample / iterations);
-         //          displayCtx.lineTo(wvf.right - 1, midY);  
-         //          LOGEVENTRED("         mid lineTo:", wvf.right - 1, ",", midY);
-         //          wvf.startY = midY ;
-
-         //          drewMidLine = 1 ;
-
-         //          wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-         //          LOGEVENT("   wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
-         //       }
-         //       if (drewMidLine == 0) {
-         //         endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-         //         displayCtx.lineTo(wvf.right - 1, endY);  
-         //         LOGEVENTRED("         end lineTo:", wvf.right - 1, ",", endY);
-         //         wvf.startY = endY ;
-
-         //       }
-
-         // }
-
-         // displayCtx.stroke();
-
-      }
-
-   }
-
-   //debugger;
-
-}
+//
+//   startStopWaveforms
+//
 
 function startStopWaveforms() {
 
@@ -699,28 +506,12 @@ function startStopWaveforms() {
       pauseWaveformDrawing = 0;
    }
 
-   // if (onlyDrawBufferedWaveforms) {
-   //    if (pauseBufferedWaveforms == 0) {
-   //       button.textContent = 'Restart Waveforms';
-   //       pauseBufferedWaveforms = 1 ;
-   //    } else {
-   //       button.textContent = 'Pause Waveforms';
-   //       pauseBufferedWaveforms = 0 ;
-   //    }
-   // }
-   // else {
-   //    if (pauseWaveformDrawing == 0) {
-   //       button.textContent = 'Restart Waveforms';
-   //       pauseWaveformDrawing = 1;
-   //    } else {
-   //       button.textContent = 'Pause Waveforms';
-   //       //redrawHomeScreen = 1;
-   //       pauseWaveformDrawing = 0;
-   //    }
-   // }
-
 }
 
+
+//
+//   resetWaveforms
+//
 
 var waveformSetIndex = 0;
 
@@ -743,19 +534,17 @@ function resetWaveforms() {
 
    pauseWaveformDrawing = 1;
 
-   //setupWaveforms(currentWaveformNames[randomInteger]) ;
    setupWaveforms(currentWaveformNames[waveformSetIndex]);
 
    redrawHomeScreen = 1;
    pauseWaveformDrawing = 0;
+
 }
 
 
-
-
-
-
-
+//
+//   drawNextWaveformSegmentInBuffer
+//
 
 function drawNextWaveformSegmentInBuffer(w) {
 
@@ -783,15 +572,15 @@ function drawNextWaveformSegmentInBuffer(w) {
    wvf.pixelTimeBuffer = 0;
    wvf.sampleTimeBuffer = 0;
 
-   wvf.samplesDrawn = 0 ;
+   wvf.samplesDrawn = 0;
 
-   wvf.pixelsDrawnToBuffer = 0 ;
-   wvf.pixelBufferIndex = 0 ;
+   wvf.pixelsDrawnToBuffer = 0;
+   wvf.pixelBufferIndex = 0;
 
    var x = wvf.right + 1
    bufferCtx.moveTo(x, wvf.endY);
    LOGEVENT("moveTo:", x, ",", wvf.endY);
-   x++ ;
+   x++;
 
    var firstMove = 0;
    while (1) {
@@ -802,18 +591,18 @@ function drawNextWaveformSegmentInBuffer(w) {
 
       if (MSPerPixel > MSPerSample) {
 
-         var avgYSum = 0 ;
-         var avgYCount = 0 ;
+         var avgYSum = 0;
+         var avgYCount = 0;
          while (wvf.sampleTimeBuffer < wvf.pixelTimeBuffer) {
 
             avgYSum += normalizeWaveform(wvf.samples[wvf.tailIndex]);
-            avgYCount++ ;
+            avgYCount++;
             wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
             LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
             wvf.sampleTimeBuffer += MSPerSample;
 
          }
-         wvf.endY = avgYSum / avgYCount ;
+         wvf.endY = avgYSum / avgYCount;
 
          bufferCtx.lineTo(x, wvf.endY);
          LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
@@ -823,13 +612,13 @@ function drawNextWaveformSegmentInBuffer(w) {
             bufferCtx.moveTo(x, wvf.endY);
          }
 
-         x++ ;
-         wvf.pixelsDrawnToBuffer++ 
+         x++;
+         wvf.pixelsDrawnToBuffer++
 
-         wvf.samplesDrawn++ ;
+         wvf.samplesDrawn++;
 
          if (wvf.samplesDrawn >= wvf.samplesToDraw) {
-            break ;
+            break;
          }
 
       }
@@ -853,12 +642,12 @@ function drawNextWaveformSegmentInBuffer(w) {
                bufferCtx.moveTo(x, wvf.endY);
             }
 
-            x++ ;
-            wvf.pixelsDrawnToBuffer++ ;
+            x++;
+            wvf.pixelsDrawnToBuffer++;
 
             drewMidLine = 1;
 
-            wvf.samplesDrawn++ ;
+            wvf.samplesDrawn++;
 
             wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
             LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
@@ -876,8 +665,8 @@ function drawNextWaveformSegmentInBuffer(w) {
             bufferCtx.lineTo(x, wvf.endY);
             LOGEVENTGREEN("end lineTo:", x, ",", wvf.endY);
 
-            x++ ;
-            wvf.pixelsDrawnToBuffer++ ;
+            x++;
+            wvf.pixelsDrawnToBuffer++;
          }
 
          if (wvf.fill) {
@@ -886,7 +675,7 @@ function drawNextWaveformSegmentInBuffer(w) {
          }
 
          if (wvf.samplesDrawn >= wvf.samplesToDraw) {
-            break ;
+            break;
          }
 
       }
@@ -898,8 +687,11 @@ function drawNextWaveformSegmentInBuffer(w) {
 }
 
 
+//
+//   drawWaveforms
+//
 
-function shiftBufferedWaveforms(elapsed) {
+function drawWaveforms(elapsed) {
 
    if (pauseWaveformDrawing == 1) return;
 
@@ -912,7 +704,7 @@ function shiftBufferedWaveforms(elapsed) {
 
       LOGEVENTRED("elapsed = :", elapsed);
 
-      wvf.pixelTime += elapsed;    
+      wvf.pixelTime += elapsed;
 
       var sweepSpeedMMPerSecond = wvf.sweepSpeed;
       var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
@@ -942,14 +734,14 @@ function shiftBufferedWaveforms(elapsed) {
          displayCtx.putImageData(imageData, wvf.right - 1, wvf.top);
          LOGEVENT("putImageData:", wvf.right);
 
-         wvf.pixelBufferIndex++ ;
+         wvf.pixelBufferIndex++;
          //drawnImageIndex = (drawnImageIndex + 1) % maxDrawnImageIndex;
          if (wvf.pixelBufferIndex > wvf.pixelsDrawnToBuffer) {
             LOGEVENTYELLOW("   pixelBufferIndex >= pixelsDrawnToBuffer", wvf.pixelBufferIndex);
          }
 
-         wvf.samplesShiftedTime += MSPerPixel ;
-         wvf.samplesShifted = Math.round(wvf.samplesShiftedTime / MSPerSample) ;
+         wvf.samplesShiftedTime += MSPerPixel;
+         wvf.samplesShifted = Math.round(wvf.samplesShiftedTime / MSPerSample);
 
          LOGEVENTYELLOW("   samplesShiftedTime:", wvf.samplesShiftedTime);
          LOGEVENTYELLOW("   samplesShifted:", wvf.samplesShifted);
@@ -959,11 +751,11 @@ function shiftBufferedWaveforms(elapsed) {
 
          //if ((drawnImageIndex >= maxDrawnImageIndex) || (samplesShifted >= samplesDrawn)) {
          if (wvf.pixelBufferIndex >= wvf.pixelsDrawnToBuffer) {
-            wvf.pixelBufferIndex = 0 ;
-            wvf.pixelsDrawnToBuffer = 0 ;
-            wvf.samplesShifted = 0 ;
-            wvf.samplesShiftedTime = 0 ;
-            drawNextWaveformSegmentInBuffer(w) ;
+            wvf.pixelBufferIndex = 0;
+            wvf.pixelsDrawnToBuffer = 0;
+            wvf.samplesShifted = 0;
+            wvf.samplesShiftedTime = 0;
+            drawNextWaveformSegmentInBuffer(w);
          }
 
       }
@@ -973,15 +765,6 @@ function shiftBufferedWaveforms(elapsed) {
    //debugger;
 
 }
-
-
-
-function onClickDrawBufferedWaveform() {
-
-   onlyDrawBufferedWaveforms = 1 ;
-
-}
-
 
 
 //
@@ -1021,12 +804,7 @@ function drawHomeScreen(timestamp) {
          framesPerSecond = 1000 / elapsedTime; // Calculate frames per second
          fpsDisplay.textContent = `Frame Rate: ${Math.round(framesPerSecond)} FPS`;
 
-         //if (onlyDrawBufferedWaveforms) {
-            shiftBufferedWaveforms(elapsedTime) ;
-         // }
-         // else {
-         //    drawWaveforms(elapsedTime);
-         // }
+         drawWaveforms(elapsedTime);
 
       }
 
