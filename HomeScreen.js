@@ -341,27 +341,28 @@ class HomeScreen {
       this.messageAreaBottom = this.messageAreaTop + this.messageAreaHeight;
    }
 
-   setupWaveforms(jsonWaveformNames) {
+   setupWaveforms(waveformDataMessage) {
 
       this.clearWaveformList();
 
-      // Parse the JSON string into JavaScript array
-      const waveformNamesData = JSON.parse(jsonWaveformNames);
+      // Parse the JSON string into JavaScript object
+      const waveformData = JSON.parse(waveformDataMessage);
 
-      nWaveforms = waveformNamesData.length;
+      nWaveforms = waveformData.waveforms.length;
       waveformHeight = Math.round(this.waveformAreaHeight / nWaveforms);
 
       // Add waveforms from the parsed data
-      var order = 0;
-      waveformNamesData.forEach(waveformName => {
+      var order = 0 ;
+      waveformData.waveforms.forEach(waveform => {
          // Create an instance of Waveform class
-         const wvf = new Waveform(waveformName, order);
+         const wvf = new Waveform(waveform.waveformName, order);
          homeScreen.addWaveform(wvf);
          order++;
       });
 
    }
 
+ 
    clearWaveformList() {
       this.waveforms = [];
    }
@@ -419,12 +420,38 @@ window.addEventListener('resize', resizeCanvas);
 //
 
 // JSON string containing waveform Names  'waveformSetup'
-const waveformSetupMessageBody = '["ECGII", "CO2", "SpO2", "RESP"]';
+//const waveformSetupMessageBody = '["ECGII", "CO2", "SpO2", "RESP"]';
 //const waveformSetupMessageBody = '["ECGII"]';
+const waveformDataMessage = `
+{
+   "messageType": "waveformData",
+   "waveforms":
+   [
+      {
+         "waveformName": "ECGII",
+         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+      },
+      {
+         "waveformName": "CO2",
+         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+      },
+      {
+         "waveformName": "SpO2",
+         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+      },
+      {
+         "waveformName": "RESP",
+         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+      }
+   ]
+}`;
+
+
+
 
 homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
 homeScreen.initializeAreas();
-homeScreen.setupWaveforms(waveformSetupMessageBody);
+homeScreen.setupWaveforms(waveformDataMessage);
 
 //
 //   setupWaveforms - call when a new waveformSetup message is received from the REST API
@@ -433,8 +460,8 @@ homeScreen.setupWaveforms(waveformSetupMessageBody);
 var nWaveforms;
 var waveformHeight;
 
-function setupWaveforms(waveformSetupMessageBody) {
-   homeScreen.setupWaveforms(waveformSetupMessageBody);
+function setupWaveforms(waveformDataMessage) {
+   homeScreen.setupWaveforms(waveformDataMessage);
 }
 
 //
@@ -518,24 +545,231 @@ var waveformSetIndex = 0;
 
 function resetWaveforms() {
 
-   const currentWaveformNames = [
-      //'["SpO2"]',
-      '["ECGII", "CO2", "SpO2", "RESP"]',
-      '["RESP", "ECGII", "CO2", "SpO2"]',
-      '["SpO2", "RESP", "ECGII", "CO2"]',
-      '["CO2", "SpO2", "RESP", "ECGII"]',
-   ]
+   // const currentWaveforms = [
+   //    //'["SpO2"]',
+   //    '["ECGII", "CO2", "SpO2", "RESP"]',
+   //    '["RESP", "ECGII", "CO2", "SpO2"]',
+   //    '["SpO2", "RESP", "ECGII", "CO2"]',
+   //    '["CO2", "SpO2", "RESP", "ECGII"]',
+   // ]
 
-   const randomInteger = Math.floor(Math.random() * 4);
+
+   // const currentWaveforms = `[
+   //    [
+   //       {
+   //          "messageType": "waveformData",
+   //          "waveforms":
+   //          [
+   //             {
+   //                "waveformName": "ECGII",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "CO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "SpO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "RESP",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             }
+   //          ]
+   //       }
+   //    ],
+   //    [
+   //       {
+   //          "messageType": "waveformData",
+   //          "waveforms":
+   //          [
+   //             {
+   //                "waveformName": "RESP",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "ECGII",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "CO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "SpO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             }
+   //          ]
+   //       }
+   //    ],
+   //    [
+   //       {
+   //          "messageType": "waveformData",
+   //          "waveforms":
+   //          [
+   //             {
+   //                "waveformName": "SpO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "RESP",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "ECGII",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "CO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             }
+   //          ]
+   //       }
+   //    ],
+   //    [
+   //       {
+   //          "messageType": "waveformData",
+   //          "waveforms":
+   //          [
+   //             {
+   //                "waveformName": "CO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "SpO2",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "RESP",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             },
+   //             {
+   //                "waveformName": "ECGII",
+   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+   //             }
+   //          ]
+   //       }
+   //    ]
+   // ]`;
+
+
+
+const currentWaveforms = [
+  `
+    {
+       "messageType": "waveformData",
+       "waveforms":
+       [
+          {
+             "waveformName": "ECGII",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "CO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "SpO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "RESP",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          }
+       ]
+    }
+  `,
+  `
+    {
+       "messageType": "waveformData",
+       "waveforms":
+       [
+          {
+             "waveformName": "RESP",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "ECGII",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "CO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "SpO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          }
+       ]
+    }
+  `,
+
+  `
+    {
+       "messageType": "waveformData",
+       "waveforms":
+       [
+          {
+             "waveformName": "SpO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "RESP",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "ECGII",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "CO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          }
+       ]
+    }
+  `,
+
+  `
+    {
+       "messageType": "waveformData",
+       "waveforms":
+       [
+          {
+             "waveformName": "CO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "SpO2",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "RESP",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          },
+          {
+             "waveformName": "ECGII",
+             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
+          }
+       ]
+    }
+  `
+
+];
+
+
+
+
+   const randomInteger = Math.floor(Math.random() * 2);
 
    waveformSetIndex++
-   if (waveformSetIndex >= currentWaveformNames.length) {
+   if (waveformSetIndex >= currentWaveforms.length) {
       waveformSetIndex = 0;
    }
 
    pauseWaveformDrawing = 1;
 
-   setupWaveforms(currentWaveformNames[waveformSetIndex]);
+   setupWaveforms(currentWaveforms[waveformSetIndex]);
 
    redrawHomeScreen = 1;
    pauseWaveformDrawing = 0;
@@ -566,8 +800,6 @@ function drawNextWaveformSegmentInBuffer(w) {
    var MSPerPixel = 1 / pixelsPerMS;
    var MSPerSample = 1000 / wvf.sampleRate;
 
-   //const normalizeWaveform = value => wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
-
    const normalizeWaveform = (value) => {
       
       normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height) ;
@@ -580,7 +812,6 @@ function drawNextWaveformSegmentInBuffer(w) {
       }
       return normalizedValue;
    };
-
 
    bufferCtx.beginPath();
 
