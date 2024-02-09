@@ -305,14 +305,14 @@ class HomeScreen {
    initializeAreas() {
 
       this.headerWidth = this.width;
-      this.headerHeight = this.height * 15 / 100;
+      this.headerHeight = Math.round(this.height * 15 / 100);
       this.headerLeft = 0;
       this.headerRight = this.headerLeft + this.headerWidth;
       this.headerTop = 0;
       this.headerBottom = this.headerTop + this.headerHeight;
 
       this.waveformAreaWidth = Math.round(this.width * 80 / 100);
-      this.waveformAreaHeight = this.height * 65 / 100;
+      this.waveformAreaHeight = Math.round(this.height * 65 / 100);
       this.waveformAreaLeft = 0;
       this.waveformAreaRight = this.waveformAreaLeft + this.waveformAreaWidth;
       this.waveformAreaTop = this.headerBottom;
@@ -348,7 +348,7 @@ class HomeScreen {
       const waveformNamesData = JSON.parse(jsonWaveformNames);
 
       nWaveforms = waveformNamesData.length;
-      waveformHeight = this.waveformAreaHeight / nWaveforms;
+      waveformHeight = Math.round(this.waveformAreaHeight / nWaveforms);
 
       // Add waveforms from the parsed data
       var order = 0;
@@ -565,7 +565,21 @@ function drawNextWaveformSegmentInBuffer(w) {
    var MSPerPixel = 1 / pixelsPerMS;
    var MSPerSample = 1000 / wvf.sampleRate;
 
-   const normalizeWaveform = value => wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
+   //const normalizeWaveform = value => wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
+
+   const normalizeWaveform = (value) => {
+      
+      normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height) ;
+      
+      if (normalizedValue < wvf.top) {
+         normalizedValue = wvf.top;
+      }
+      else if (normalizedValue > wvf.bottom ) {
+         normalizedValue = wvf.bottom ;
+      }
+      return normalizedValue;
+   };
+
 
    bufferCtx.beginPath();
 
@@ -781,6 +795,14 @@ let lastTime;
 let elapsedTime;
 
 function drawHomeScreen(timestamp) {
+
+   // var w;
+   // for (w = 0; w < homeScreen.waveforms.length; w++) {
+   //    wvf = homeScreen.waveforms[w];
+   //    LOGEVENT("waveform ", w, "top ", wvf.top, "bottom ", wvf.bottom) ;
+   // }
+
+   // debugger;
 
    if (redrawHomeScreen == 1) {
       redrawHomeScreen = 0;
