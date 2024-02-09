@@ -593,7 +593,7 @@ function drawNextWaveformSegmentInBuffer(w) {
 
    var x = wvf.right + 1
    bufferCtx.moveTo(x, wvf.endY);
-   LOGEVENT("moveTo:", x, ",", wvf.endY);
+   //LOGEVENT("moveTo:", x, ",", wvf.endY);
    x++;
 
    var firstMove = 0;
@@ -612,14 +612,14 @@ function drawNextWaveformSegmentInBuffer(w) {
             avgYSum += normalizeWaveform(wvf.samples[wvf.tailIndex]);
             avgYCount++;
             wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-            LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
+            //LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
             wvf.sampleTimeBuffer += MSPerSample;
 
          }
          wvf.endY = avgYSum / avgYCount;
 
          bufferCtx.lineTo(x, wvf.endY);
-         LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
+         //LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
 
          if (wvf.fill) {
             bufferCtx.lineTo(x, wvf.bottom - 1);
@@ -645,11 +645,11 @@ function drawNextWaveformSegmentInBuffer(w) {
             if (firstMove) {
                firstMove = 0;
                bufferCtx.moveTo(x, wvf.endY);
-               LOGEVENTGREEN("mid moveTo:", x, ",", wvf.endY);
+               //LOGEVENTGREEN("mid moveTo:", x, ",", wvf.endY);
             }
 
             bufferCtx.lineTo(x, wvf.endY);
-            LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
+            //LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
 
             if (wvf.fill) {
                bufferCtx.lineTo(x, wvf.bottom - 1);
@@ -664,7 +664,7 @@ function drawNextWaveformSegmentInBuffer(w) {
             wvf.samplesDrawn++;
 
             wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-            LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
+            //LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
             wvf.sampleTimeBuffer += MSPerSample;
 
          }
@@ -674,10 +674,10 @@ function drawNextWaveformSegmentInBuffer(w) {
             if (firstMove) {
                firstMove = 0;
                bufferCtx.moveTo(wvf.right, wvf.endY);
-               LOGEVENTGREEN("end moveTo:", wvf.right, ",", wvf.endY);
+               //LOGEVENTGREEN("end moveTo:", wvf.right, ",", wvf.endY);
             }
             bufferCtx.lineTo(x, wvf.endY);
-            LOGEVENTGREEN("end lineTo:", x, ",", wvf.endY);
+            //LOGEVENTGREEN("end lineTo:", x, ",", wvf.endY);
 
             x++;
             wvf.pixelsDrawnToBuffer++;
@@ -716,7 +716,7 @@ function drawWaveforms(elapsed) {
 
       wvf = homeScreen.waveforms[w];
 
-      LOGEVENTRED("elapsed = :", elapsed);
+      //LOGEVENTRED("elapsed = :", elapsed);
 
       wvf.pixelTime += elapsed;
 
@@ -729,7 +729,7 @@ function drawWaveforms(elapsed) {
 
       while (wvf.pixelTime > MSPerPixel) {
 
-         LOGEVENTYELLOW("   wvf.pixelTime:", wvf.pixelTime);
+         //LOGEVENTYELLOW("   wvf.pixelTime:", wvf.pixelTime);
          wvf.pixelTime -= MSPerPixel;
 
          // Shift the waveform to the left, clear the rightmost part and set it to black again
@@ -741,26 +741,26 @@ function drawWaveforms(elapsed) {
          displayCtx.fillRect(wvf.right - 1, wvf.top, 1, wvf.height);
          //DEVEVENT("fillRect:", wvf.Width - 1, ",", wvf.Top, ",", 1, ",", wvf.Height);
 
-         LOGEVENT("   shifted left");
+         //LOGEVENT("   shifted left");
 
          imageData = bufferCtx.getImageData(wvf.right + 1 + wvf.pixelBufferIndex, wvf.top, 1, wvf.height);
-         LOGEVENT("getImageData:", wvf.right + 1 + wvf.pixelBufferIndex);
+         //LOGEVENT("getImageData:", wvf.right + 1 + wvf.pixelBufferIndex);
          displayCtx.putImageData(imageData, wvf.right - 1, wvf.top);
-         LOGEVENT("putImageData:", wvf.right);
+         //LOGEVENT("putImageData:", wvf.right);
 
          wvf.pixelBufferIndex++;
          //drawnImageIndex = (drawnImageIndex + 1) % maxDrawnImageIndex;
          if (wvf.pixelBufferIndex > wvf.pixelsDrawnToBuffer) {
-            LOGEVENTYELLOW("   pixelBufferIndex >= pixelsDrawnToBuffer", wvf.pixelBufferIndex);
+            //LOGEVENTYELLOW("   pixelBufferIndex >= pixelsDrawnToBuffer", wvf.pixelBufferIndex);
          }
 
          wvf.samplesShiftedTime += MSPerPixel;
          wvf.samplesShifted = Math.round(wvf.samplesShiftedTime / MSPerSample);
 
-         LOGEVENTYELLOW("   samplesShiftedTime:", wvf.samplesShiftedTime);
-         LOGEVENTYELLOW("   samplesShifted:", wvf.samplesShifted);
+         //LOGEVENTYELLOW("   samplesShiftedTime:", wvf.samplesShiftedTime);
+         //LOGEVENTYELLOW("   samplesShifted:", wvf.samplesShifted);
          if (wvf.samplesShifted >= wvf.samplesDrawn) {
-            LOGEVENTYELLOW("   samplesShifted >= samplesDrawn", wvf.samplesShifted);
+            //LOGEVENTYELLOW("   samplesShifted >= samplesDrawn", wvf.samplesShifted);
          }
 
          //if ((drawnImageIndex >= maxDrawnImageIndex) || (samplesShifted >= samplesDrawn)) {
