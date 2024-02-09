@@ -85,10 +85,11 @@ class Waveform {
 
       this.left = homeScreen.waveformAreaLeft;
       this.top = homeScreen.waveformAreaTop + order * waveformHeight;
-      this.bottom = homeScreen.waveformAreaTop + (order + 1) * waveformHeight;
       this.right = homeScreen.waveformAreaLeft + homeScreen.waveformAreaWidth;
       this.width = homeScreen.waveformAreaWidth;
-      this.height = waveformHeight;
+      this.height = waveformHeight - 1;
+      this.bottom = this.top + this.height;
+
       this.drawXValue = 0;
       this.eraseXValue = homeScreen.eraseBarWidth;
       this.drawYValue = 0;
@@ -132,7 +133,7 @@ class Waveform {
             this.sampleRate = 50;
             this.sweepSpeed = 6.25;
             this.autoScale = false;
-            this.yMin = -100;
+            this.yMin = 0;
             this.yMax = 4000;
             this.maxSampleIndex = window.simulatedWaveformCO2.length;
             this.samples = window.simulatedWaveformCO2;
@@ -607,16 +608,23 @@ function drawNextWaveformSegmentInBuffer(w) {
 
          var avgYSum = 0;
          var avgYCount = 0;
+         var highestY = Number.MIN_VALUE;
+         var lowestY = Number.MAX_VALUE;
          while (wvf.sampleTimeBuffer < wvf.pixelTimeBuffer) {
 
-            avgYSum += normalizeWaveform(wvf.samples[wvf.tailIndex]);
+            var thisY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
+            avgYSum += thisY;
             avgYCount++;
             wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
             //LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
             wvf.sampleTimeBuffer += MSPerSample;
+            if (thisY < lowestY) {
+               lowestY = thisY;
+            }
 
          }
-         wvf.endY = avgYSum / avgYCount;
+         //wvf.endY = avgYSum / avgYCount;
+         wvf.endY = lowestY;
 
          bufferCtx.lineTo(x, wvf.endY);
          //LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
