@@ -1,6 +1,10 @@
-window.simulatedDataMode = 1;
+window.simulatedDataMode = 0;
 
 window.developmentMode = 0;
+
+window.autoscaleOffsetPercentage = 10;
+
+window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;
 
 window.DEVEVENT = function (...args) {
    if (window.DevelopmentMode == 1) {
@@ -31,7 +35,12 @@ window.LOGEVENTRED = function (...args) {
 window.LOGEVENTGREEN = function (...args) {
 
    var argstring = args.join(' ');
-   var logstring = '\x1b[32m' + argstring + '\x1b[0m';
+//timestring = new Date().toISOString();
+
+timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
+timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+
+   var logstring = '\x1b[32m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
    console.log(logstring);
 
@@ -50,6 +59,15 @@ window.LOGEVENTMAGENTA = function (...args) {
 
    var argstring = args.join(' ');
    var logstring = '\x1b[35m' + argstring + '\x1b[0m';
+
+   console.log(logstring);
+
+};
+
+window.LOGEVENTCYAN = function (...args) {
+
+   var argstring = args.join(' ');
+   var logstring = '\x1b[36m' + argstring + '\x1b[0m';
 
    console.log(logstring);
 

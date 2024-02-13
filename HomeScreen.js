@@ -1,6 +1,6 @@
 //
 //   Define basic objects
-// TEST
+//   
 
 class RingBuffer {
 
@@ -11,7 +11,8 @@ class RingBuffer {
    // Methods like isEmpty, isFull, getSize, and getCapacity provide information about the buffer.
    // The toArray method converts the buffer to an array for easier inspection.
 
-   constructor(capacity) {
+   constructor(name, capacity) {
+      this.name = name;
       this.capacity = capacity;
       this.buffer = new Array(capacity);
       this.head = 0; // Points to the next available position for adding a sample
@@ -23,7 +24,8 @@ class RingBuffer {
    enqueue(sample) {
       // Check if the buffer is full
       if (this.size === this.capacity) {
-         throw new Error("Buffer is full");
+         //throw new Error(this.name + " Buffer is full");
+         LOGEVENTRED(this.name + " Buffer is full");
       }
       this.buffer[this.head] = sample;
       this.head = (this.head + 1) % this.capacity;
@@ -34,11 +36,37 @@ class RingBuffer {
    dequeue() {
       // Check if the buffer is empty
       if (this.size === 0) {
-         throw new Error("Buffer is empty");
+         //throw new Error(this.name + " Buffer is empty");
+         LOGEVENTRED(this.name + " Buffer is empty (dequeue)");
+         return (window.LEAD_OFF_OR_UNPLUGGED);
       }
       const sample = this.buffer[this.tail];
       this.tail = (this.tail + 1) % this.capacity;
       this.size--;
+      return sample;
+   }
+
+   // Method to peek at current sample 
+   peek() {
+      // Check if the buffer is empty
+      if (this.size === 0) {
+         //throw new Error(this.name + " Buffer is empty");
+         LOGEVENTRED(this.name + " Buffer is empty (peek)");
+         return (window.LEAD_OFF_OR_UNPLUGGED);
+      }
+      const sample = this.buffer[this.tail];
+      return sample;
+   }
+
+   // Method to peek at next sample 
+   peekNext() {
+      // Check if the buffer is empty
+      if (this.size === 0) {
+         //throw new Error(this.name + " Buffer is empty");
+         LOGEVENTRED(this.name + " Buffer is empty (peekNext)");
+         return (window.LEAD_OFF_OR_UNPLUGGED);
+      }
+      const sample = this.buffer[(this.tail + 1) % this.capacity];
       return sample;
    }
 
@@ -80,8 +108,9 @@ class Waveform {
    constructor(waveformName, order) {
 
       this.waveformName = waveformName;
-      this.capacity = 10000;
-      this.buffer = new RingBuffer(this.capacity);
+      this.capacity = 20000;
+      this.buffer = new RingBuffer(this.waveformName, this.capacity);
+      this.bufferReadCount = 0;
 
       this.left = homeScreen.waveformAreaLeft;
       this.top = homeScreen.waveformAreaTop + order * waveformHeight;
@@ -90,79 +119,89 @@ class Waveform {
       this.height = waveformHeight - 1;
       this.bottom = this.top + this.height;
 
-      this.drawXValue = 0;
-      this.eraseXValue = homeScreen.eraseBarWidth;
-      this.drawYValue = 0;
+      this.drawX = this.left;
+      this.drawXTime = 0;
+      this.eraseX = this.drawX + homeScreen.eraseBarWidth;
+      this.drawY = 0;
+      this.drawXLast = 0;
+      this.drawYLast = 0;
       this.startY = Number.MIN_VALUE;
       this.headIndex = 0;
       this.tailIndex = 0;
-      this.pixelTime = 0;
-      this.sampleTime = 0;
-      this.pixelTimeBuffer = 0;
-      this.sampleTimeBuffer = 0;
+
+      this.elapsedTime = 0;       // total elapsed time in MS (as clocked by the browser)
+      this.drawnPixelTime = 0;    // total time represented by drawn pixels
+      this.shiftedPixelTime = 0;  // total time represented by shifted pixels
+      this.readSampleTime = 0;    // total time represented by read samples
+      this.readSampleTime = 0;    // total time represented by read samples
 
       this.pixelsDrawnToBuffer = 0;
-      this.pixelsToDrawInBuffer = 0;
       this.pixelBufferIndex = 0;
 
       this.samplesDrawn = 0;
-      this.samplesToDraw = 50;
-      this.samplesShiftedTime = 0;
-      this.samplesShifted = 0;
+      this.samplesToDraw = this.width;
 
       switch (this.waveformName) {
 
          case 'ECGII':
-            //this.waveformId = window.Z_WAVEFORM_ID.Z_WAVEFORM_ECGII;
             this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
             this.color = window.colors.ECGColor;
             this.fill = false;
+            this.sampleRateIn = 250;
             this.sampleRate = 250;
             this.sweepSpeed = 25.0;
             this.autoScale = false;
             this.yMin = -500;
             this.yMax = 500;
-            this.maxSampleIndex = window.simulatedWaveformECG.length;
-            this.samples = window.simulatedWaveformECG;
+            this.maxSimulatedSampleIndex = window.simulatedWaveformECGII.length;
+            this.simulatedSamples = window.simulatedWaveformECGII;
             break;
 
          case 'CO2':
             this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
             this.color = window.colors.CO2Color;
             this.fill = true;
-            this.sampleRate = 50;
+            this.sampleRateIn = 50;
+            this.sampleRate = 250;
             this.sweepSpeed = 6.25;
             this.autoScale = false;
-            this.yMin = 0;
+            this.yMin = -100;
             this.yMax = 4000;
-            this.maxSampleIndex = window.simulatedWaveformCO2.length;
-            this.samples = window.simulatedWaveformCO2;
+            this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
+            this.simulatedSamples = window.simulatedWaveformCO2;
             break;
 
          case 'SpO2':
             this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
             this.color = window.colors.SpO2Color;
             this.fill = false;
-            this.sampleRate = 50;
+            if (window.simulatedDataMode) {
+               this.sampleRateIn = 250;
+            }
+            else {
+               this.sampleRateIn = 50;
+            }
+            this.sampleRate = 250;
             this.sweepSpeed = 25.0;
             this.autoScale = true;
             this.yMin = 0;
             this.yMax = 0;
-            this.maxSampleIndex = window.simulatedWaveformSpO2.length;
-            this.samples = window.simulatedWaveformSpO2;
+            this.maxSimulatedSampleIndex = window.simulatedWaveformSpO2At250Hz.length;
+            this.simulatedSamples = window.simulatedWaveformSpO2At250Hz;
             break;
 
          case 'RESP':
             this.waveformId = window.Z_WAVEFORM_ID.Z_WAVEFORM_RESP;
             this.color = window.colors.RESPColor;
             this.fill = false;
-            this.sampleRate = 50;
+            this.sampleRateIn = 50;
+            this.sampleRate = 250;
             this.sweepSpeed = 6.25;
             this.autoScale = true;
             this.yMin = 0;
             this.yMax = 0;
-            this.maxSampleIndex = window.simulatedWaveformRESP.length;
-            this.samples = window.simulatedWaveformRESP;
+            this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
+            this.simulatedSamples = window.simulatedWaveformRESP;
             break;
 
       }
@@ -175,18 +214,18 @@ class Waveform {
          minY = Number.MAX_VALUE;
          maxY = Number.MIN_VALUE;
          var s;
-         for (s = 0; s < this.maxSampleIndex; s++) {
-            if (this.samples[s] < minY) {
-               minY = this.samples[s];
+         for (s = 0; s < this.maxSimulatedSampleIndex; s++) {
+            if (this.simulatedSamples[s] < minY) {
+               minY = this.simulatedSamples[s];
             }
-            if (this.samples[s] > maxY) {
-               maxY = this.samples[s];
+            if (this.simulatedSamples[s] > maxY) {
+               maxY = this.simulatedSamples[s];
             }
          }
          var amplitude = maxY - minY;
 
-         this.yMin = minY - amplitude * .10;
-         this.yMax = maxY + amplitude * .10;
+         this.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100 ;
+         this.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100 ;
 
       }
 
@@ -202,7 +241,20 @@ class Waveform {
 
    // Method to read a sample from the waveform ring buffer
    readSample() {
+      this.bufferReadCount++;
       const sample = this.buffer.dequeue();
+      return sample;
+   }
+
+   // Method to peek at current sample from the waveform ring buffer without dequeuing it
+   peekThisSample() {
+      const sample = this.buffer.peek();
+      return sample;
+   }
+
+   // Method to peek at sample beyond current sample from the waveform ring buffer without dequeuing it
+   peekNextSample() {
+      const sample = this.buffer.peekNext();
       return sample;
    }
 
@@ -301,6 +353,7 @@ class HomeScreen {
 
       this.waveforms = [];
 
+
    }
 
    initializeAreas() {
@@ -341,28 +394,6 @@ class HomeScreen {
       this.messageAreaBottom = this.messageAreaTop + this.messageAreaHeight;
    }
 
-   setupWaveforms(waveformDataMessage) {
-
-      this.clearWaveformList();
-
-      // Parse the JSON string into JavaScript object
-      const waveformData = JSON.parse(waveformDataMessage);
-
-      nWaveforms = waveformData.waveforms.length;
-      waveformHeight = Math.round(this.waveformAreaHeight / nWaveforms);
-
-      // Add waveforms from the parsed data
-      var order = 0 ;
-      waveformData.waveforms.forEach(waveform => {
-         // Create an instance of Waveform class
-         const wvf = new Waveform(waveform.waveformName, order);
-         homeScreen.addWaveform(wvf);
-         order++;
-      });
-
-   }
-
- 
    clearWaveformList() {
       this.waveforms = [];
    }
@@ -374,7 +405,6 @@ class HomeScreen {
    getNWaveforms() {
       return (this.waveforms.length);
    }
-
 
 }
 
@@ -408,50 +438,117 @@ function resizeCanvas() {
    bufferCtx.fillStyle = 'black';
    bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
+   redrawHomeScreen = 1;
+
 }
 
-// Call resizeCanvas initially and on window resize
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
 
 //
-//   Create and initialize home screen
+//   Simulated waveform data messages
 //
 
-// JSON string containing waveform Names  'waveformSetup'
-//const waveformSetupMessageBody = '["ECGII", "CO2", "SpO2", "RESP"]';
-//const waveformSetupMessageBody = '["ECGII"]';
-const waveformDataMessage = `
-{
-   "messageType": "waveformData",
-   "waveforms":
-   [
-      {
+const currentWaveforms = [
+   `
+   {
+      "messageType": "waveformData",
+      "waveforms":
+      [
+         {
          "waveformName": "ECGII",
-         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-      },
-      {
+         "waveformSamples": [0,10,20,30,40,50,60,70,79,89,99,109,118,128,137,147,156,165,174,183,192,201,210,218,226,235,243,251,258,266,273,281,288,295,301,308,314,320,326,332,337,343,348,352,357,361,366,370,373,377,380,383,386,388,390,392,394,396,397,398,399,399,399,399,399,399,398,397,396,394,392,390,388,386,383,380,377,373,370,366,361,357,352,348,343,337,332,326,320,314,308,301,295,288,281,273,266,258,251,243,235,226,218,210,201,192,183,174,165,156,147,137,128,118,109,99,89,79,70,60,50,40,30,20,10,0,-11,-21,-31,-41,-51,-61,-71,-80,-90,-100,-110,-119,-129,-138,-148,-157,-166,-175,-184,-193,-202,-211,-219,-227,-236,-244,-252,-259,-267,-274,-282,-289,-296,-302,-309,-315,-321,-327,-333,-338,-344,-349,-353,-358,-362,-367,-371,-374,-378,-381,-384,-387,-389,-391,-393,-395,-397,-398,-399,-400,-400,-400,-400,-400,-400,-399,-398,-397,-395,-393,-391,-389,-387,-384,-381,-378,-374,-371,-367,-362,-358,-353,-349,-344,-338,-333,-327,-321,-315,-309,-302,-296,-289,-282,-274,-267,-259,-252,-244,-236,-227,-219,-211,-202,-193,-184,-175,-166,-157,-148,-138,-129,-119,-110,-100,-90,-80,-71,-61,-51,-41,-31,-21,-11]
+         },
+         {
          "waveformName": "CO2",
-         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-      },
-      {
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
          "waveformName": "SpO2",
-         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-      },
-      {
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
          "waveformName": "RESP",
-         "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-      }
-   ]
-}`;
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         }
+      ]
+   }
+`,
+   `
+   {
+      "messageType": "waveformData",
+      "waveforms":
+      [
+         {
+         "waveformName": "RESP",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "ECGII",
+         "waveformSamples": [0,10,20,30,40,50,60,70,79,89,99,109,118,128,137,147,156,165,174,183,192,201,210,218,226,235,243,251,258,266,273,281,288,295,301,308,314,320,326,332,337,343,348,352,357,361,366,370,373,377,380,383,386,388,390,392,394,396,397,398,399,399,399,399,399,399,398,397,396,394,392,390,388,386,383,380,377,373,370,366,361,357,352,348,343,337,332,326,320,314,308,301,295,288,281,273,266,258,251,243,235,226,218,210,201,192,183,174,165,156,147,137,128,118,109,99,89,79,70,60,50,40,30,20,10,0,-11,-21,-31,-41,-51,-61,-71,-80,-90,-100,-110,-119,-129,-138,-148,-157,-166,-175,-184,-193,-202,-211,-219,-227,-236,-244,-252,-259,-267,-274,-282,-289,-296,-302,-309,-315,-321,-327,-333,-338,-344,-349,-353,-358,-362,-367,-371,-374,-378,-381,-384,-387,-389,-391,-393,-395,-397,-398,-399,-400,-400,-400,-400,-400,-400,-399,-398,-397,-395,-393,-391,-389,-387,-384,-381,-378,-374,-371,-367,-362,-358,-353,-349,-344,-338,-333,-327,-321,-315,-309,-302,-296,-289,-282,-274,-267,-259,-252,-244,-236,-227,-219,-211,-202,-193,-184,-175,-166,-157,-148,-138,-129,-119,-110,-100,-90,-80,-71,-61,-51,-41,-31,-21,-11]
+         },
+         {
+         "waveformName": "CO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "SpO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         }
+      ]
+   }
+`,
 
+   `
+   {
+      "messageType": "waveformData",
+      "waveforms":
+      [
+         {
+         "waveformName": "SpO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "RESP",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "ECGII",
+         "waveformSamples": [0,10,20,30,40,50,60,70,79,89,99,109,118,128,137,147,156,165,174,183,192,201,210,218,226,235,243,251,258,266,273,281,288,295,301,308,314,320,326,332,337,343,348,352,357,361,366,370,373,377,380,383,386,388,390,392,394,396,397,398,399,399,399,399,399,399,398,397,396,394,392,390,388,386,383,380,377,373,370,366,361,357,352,348,343,337,332,326,320,314,308,301,295,288,281,273,266,258,251,243,235,226,218,210,201,192,183,174,165,156,147,137,128,118,109,99,89,79,70,60,50,40,30,20,10,0,-11,-21,-31,-41,-51,-61,-71,-80,-90,-100,-110,-119,-129,-138,-148,-157,-166,-175,-184,-193,-202,-211,-219,-227,-236,-244,-252,-259,-267,-274,-282,-289,-296,-302,-309,-315,-321,-327,-333,-338,-344,-349,-353,-358,-362,-367,-371,-374,-378,-381,-384,-387,-389,-391,-393,-395,-397,-398,-399,-400,-400,-400,-400,-400,-400,-399,-398,-397,-395,-393,-391,-389,-387,-384,-381,-378,-374,-371,-367,-362,-358,-353,-349,-344,-338,-333,-327,-321,-315,-309,-302,-296,-289,-282,-274,-267,-259,-252,-244,-236,-227,-219,-211,-202,-193,-184,-175,-166,-157,-148,-138,-129,-119,-110,-100,-90,-80,-71,-61,-51,-41,-31,-21,-11]
+         },
+         {
+         "waveformName": "CO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         }
+      ]
+   }
+`,
 
+   `
+   {
+      "messageType": "waveformData",
+      "waveforms":
+      [
+         {
+         "waveformName": "CO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "SpO2",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "RESP",
+         "waveformSamples": [2000,2250,2497,2736,2963,3175,3369,3541,3688,3809,3902,3964,3996,3996,3964,3902,3809,3688,3541,3369,3175,2963,2736,2497,2250,2000,1749,1502,1263,1036,824,630,458,311,190,97,35,3,3,35,97,190,311,458,630,824,1036,1263,1502,1749]
+         },
+         {
+         "waveformName": "ECGII",
+         "waveformSamples": [0,10,20,30,40,50,60,70,79,89,99,109,118,128,137,147,156,165,174,183,192,201,210,218,226,235,243,251,258,266,273,281,288,295,301,308,314,320,326,332,337,343,348,352,357,361,366,370,373,377,380,383,386,388,390,392,394,396,397,398,399,399,399,399,399,399,398,397,396,394,392,390,388,386,383,380,377,373,370,366,361,357,352,348,343,337,332,326,320,314,308,301,295,288,281,273,266,258,251,243,235,226,218,210,201,192,183,174,165,156,147,137,128,118,109,99,89,79,70,60,50,40,30,20,10,0,-11,-21,-31,-41,-51,-61,-71,-80,-90,-100,-110,-119,-129,-138,-148,-157,-166,-175,-184,-193,-202,-211,-219,-227,-236,-244,-252,-259,-267,-274,-282,-289,-296,-302,-309,-315,-321,-327,-333,-338,-344,-349,-353,-358,-362,-367,-371,-374,-378,-381,-384,-387,-389,-391,-393,-395,-397,-398,-399,-400,-400,-400,-400,-400,-400,-399,-398,-397,-395,-393,-391,-389,-387,-384,-381,-378,-374,-371,-367,-362,-358,-353,-349,-344,-338,-333,-327,-321,-315,-309,-302,-296,-289,-282,-274,-267,-259,-252,-244,-236,-227,-219,-211,-202,-193,-184,-175,-166,-157,-148,-138,-129,-119,-110,-100,-90,-80,-71,-61,-51,-41,-31,-21,-11]
+         }
+      ]
+   }
+`
 
+];
 
-homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
-homeScreen.initializeAreas();
-homeScreen.setupWaveforms(waveformDataMessage);
 
 //
 //   setupWaveforms - call when a new waveformSetup message is received from the REST API
@@ -460,9 +557,73 @@ homeScreen.setupWaveforms(waveformDataMessage);
 var nWaveforms;
 var waveformHeight;
 
-function setupWaveforms(waveformDataMessage) {
-   homeScreen.setupWaveforms(waveformDataMessage);
+function setupWaveforms(setupWaveformDataMessage) {
+
+   //homeScreen.setupWaveforms(setupWaveformDataMessage);
+
+   homeScreen.clearWaveformList();
+
+   // Parse the JSON string into JavaScript object
+   const waveformData = JSON.parse(setupWaveformDataMessage);
+
+   nWaveforms = waveformData.waveforms.length;
+   waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
+
+   // Add waveforms from the parsed data
+   var order = 0;
+   waveformData.waveforms.forEach(waveform => {
+      // Create an instance of Waveform class
+      const wvf = new Waveform(waveform.waveformName, order);
+      homeScreen.addWaveform(wvf);
+      order++;
+   });
+
 }
+
+
+//
+//   resetWaveforms
+//
+
+var waveformSetIndex = 0;
+
+function resetWaveforms(shiftWaveforms) {
+
+   //const randomInteger = Math.floor(Math.random() * 2);
+
+   if (shiftWaveforms) {
+      waveformSetIndex++
+      if (waveformSetIndex >= currentWaveforms.length) {
+         waveformSetIndex = 0;
+      }
+   }
+
+   pauseWaveformDrawing = 1;
+
+   setupWaveforms(currentWaveforms[waveformSetIndex]);
+
+   pauseWaveformDrawing = 0;
+
+   if (window.simulatedDataMode == 0) {
+      simulateArrivalOfWaveformMessage();
+      simulateArrivalOfWaveformMessage();
+   }
+
+   redrawHomeScreen = 1;
+
+}
+
+
+//
+//   shiftWaveforms  
+//
+
+function shiftWaveforms() {
+
+   resetWaveforms(1);
+
+}
+
 
 //
 //   drawHomeScreenAreas
@@ -499,22 +660,6 @@ function drawHomeScreenAreas() {
 }
 
 
-
-
-let pauseWaveformDrawing = 0;
-
-var framesPerSecond = 60;
-
-//
-//   Compute parameters used for waveform drawing
-//
-//   Adjust these values based on the display
-//
-
-const screenWidthMM = 500;
-const screenWidthPixels = 1920;
-const pixelsPerMM = screenWidthPixels / screenWidthMM;
-
 //
 //   startStopWaveforms
 //
@@ -531,411 +676,156 @@ function startStopWaveforms() {
    } else {
       button.textContent = 'Pause Waveforms';
       redrawHomeScreen = 1;
-      pauseWaveformDrawing = 0;
+      //pauseWaveformDrawing = 0;
+      resetWaveforms(0);
    }
 
 }
 
 
 //
-//   resetWaveforms
+//   drawWaveform
 //
 
-var waveformSetIndex = 0;
-
-function resetWaveforms() {
-
-   // const currentWaveforms = [
-   //    //'["SpO2"]',
-   //    '["ECGII", "CO2", "SpO2", "RESP"]',
-   //    '["RESP", "ECGII", "CO2", "SpO2"]',
-   //    '["SpO2", "RESP", "ECGII", "CO2"]',
-   //    '["CO2", "SpO2", "RESP", "ECGII"]',
-   // ]
-
-
-   // const currentWaveforms = `[
-   //    [
-   //       {
-   //          "messageType": "waveformData",
-   //          "waveforms":
-   //          [
-   //             {
-   //                "waveformName": "ECGII",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "CO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "SpO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "RESP",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             }
-   //          ]
-   //       }
-   //    ],
-   //    [
-   //       {
-   //          "messageType": "waveformData",
-   //          "waveforms":
-   //          [
-   //             {
-   //                "waveformName": "RESP",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "ECGII",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "CO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "SpO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             }
-   //          ]
-   //       }
-   //    ],
-   //    [
-   //       {
-   //          "messageType": "waveformData",
-   //          "waveforms":
-   //          [
-   //             {
-   //                "waveformName": "SpO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "RESP",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "ECGII",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "CO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             }
-   //          ]
-   //       }
-   //    ],
-   //    [
-   //       {
-   //          "messageType": "waveformData",
-   //          "waveforms":
-   //          [
-   //             {
-   //                "waveformName": "CO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "SpO2",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "RESP",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             },
-   //             {
-   //                "waveformName": "ECGII",
-   //                "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-   //             }
-   //          ]
-   //       }
-   //    ]
-   // ]`;
-
-
-
-const currentWaveforms = [
-  `
-    {
-       "messageType": "waveformData",
-       "waveforms":
-       [
-          {
-             "waveformName": "ECGII",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "CO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "SpO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "RESP",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          }
-       ]
-    }
-  `,
-  `
-    {
-       "messageType": "waveformData",
-       "waveforms":
-       [
-          {
-             "waveformName": "RESP",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "ECGII",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "CO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "SpO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          }
-       ]
-    }
-  `,
-
-  `
-    {
-       "messageType": "waveformData",
-       "waveforms":
-       [
-          {
-             "waveformName": "SpO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "RESP",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "ECGII",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "CO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          }
-       ]
-    }
-  `,
-
-  `
-    {
-       "messageType": "waveformData",
-       "waveforms":
-       [
-          {
-             "waveformName": "CO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "SpO2",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "RESP",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          },
-          {
-             "waveformName": "ECGII",
-             "waveformSamples": "1,2,3,4,5,6,7,8,9,10"
-          }
-       ]
-    }
-  `
-
-];
-
-
-
-
-   const randomInteger = Math.floor(Math.random() * 2);
-
-   waveformSetIndex++
-   if (waveformSetIndex >= currentWaveforms.length) {
-      waveformSetIndex = 0;
-   }
-
-   pauseWaveformDrawing = 1;
-
-   setupWaveforms(currentWaveforms[waveformSetIndex]);
-
-   redrawHomeScreen = 1;
-   pauseWaveformDrawing = 0;
-
-}
-
-
-//
-//   drawNextWaveformSegmentInBuffer
-//
-
-function drawNextWaveformSegmentInBuffer(w) {
+function drawWaveform(w) {
 
    wvf = homeScreen.waveforms[w];
-
-   bufferCtx.fillStyle = "#000000";
-   bufferCtx.clearRect(wvf.right, wvf.top, 100, wvf.height);
-   bufferCtx.fillRect(wvf.right, wvf.top, 100, wvf.height);
-
-   bufferCtx.strokeStyle = wvf.color;
-   bufferCtx.lineWidth = 2;
-   bufferCtx.lineJoin = 'round';
-   bufferCtx.lineCap = 'round';
 
    var sweepSpeedMMPerSecond = wvf.sweepSpeed;
    var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
    var pixelsPerMS = pixelsPerSecond / 1000;
    var MSPerPixel = 1 / pixelsPerMS;
    var MSPerSample = 1000 / wvf.sampleRate;
+   if (window.simulatedDataMode) {
+      var MSPerSample = 1000 / wvf.sampleRateIn;
+   }
 
+   if (w == 2) {
+      var q = 0;
+   }
    const normalizeWaveform = (value) => {
-      
-      normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height) ;
-      
-      if (normalizedValue < wvf.top) {
-         normalizedValue = wvf.top;
+
+      normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
+
+      if (normalizedValue < wvf.top + 1) {
+         normalizedValue = wvf.top + 1;
       }
-      else if (normalizedValue > wvf.bottom ) {
-         normalizedValue = wvf.bottom ;
+      else if (normalizedValue > wvf.bottom - 1) {
+         normalizedValue = wvf.bottom - 1;
       }
       return normalizedValue;
    };
 
-   bufferCtx.beginPath();
+   //
+   //   Draw new samples
+   //
 
-   wvf.pixelTimeBuffer = 0;
-   wvf.sampleTimeBuffer = 0;
+   var NewSamplePixelsDrawn = 0 ;
 
-   wvf.samplesDrawn = 0;
+   displayCtx.beginPath();
 
-   wvf.pixelsDrawnToBuffer = 0;
-   wvf.pixelBufferIndex = 0;
+   displayCtx.strokeStyle = wvf.color;
+   displayCtx.lineWidth = 2;
+   displayCtx.lineJoin = 'round';
+   displayCtx.lineCap = 'round';
 
-   var x = wvf.right + 1
-   bufferCtx.moveTo(x, wvf.endY);
-   //LOGEVENT("moveTo:", x, ",", wvf.endY);
-   x++;
+   //displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
 
-   var firstMove = 0;
-   while (1) {
+   while (wvf.drawXTime < wvf.elapsedTime) {
 
-      wvf.pixelTimeBuffer += MSPerPixel;
+      //if (MSPerPixel > MSPerSample) {   we now upsample 50Hz waveform so that this is always true
 
-      var drewMidLine = 0;
+      var avgYSum = 0;
+      var avgYCount = 0;
+      var lowestY = Number.MAX_VALUE;
 
-      if (MSPerPixel > MSPerSample) {
+      while (wvf.drawnPixelTime > wvf.readSampleTime) {
 
-         var avgYSum = 0;
-         var avgYCount = 0;
-         var highestY = Number.MIN_VALUE;
-         var lowestY = Number.MAX_VALUE;
-         while (wvf.sampleTimeBuffer < wvf.pixelTimeBuffer) {
-
-            var thisY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-            avgYSum += thisY;
-            avgYCount++;
-            wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-            //LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
-            wvf.sampleTimeBuffer += MSPerSample;
-            if (thisY < lowestY) {
-               lowestY = thisY;
-            }
-
-         }
-         //wvf.endY = avgYSum / avgYCount;
-         wvf.endY = lowestY;
-
-         bufferCtx.lineTo(x, wvf.endY);
-         //LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
-
-         if (wvf.fill) {
-            bufferCtx.lineTo(x, wvf.bottom - 1);
-            bufferCtx.moveTo(x, wvf.endY);
-         }
-
-         x++;
-         wvf.pixelsDrawnToBuffer++
-
-         wvf.samplesDrawn++;
-
-         if (wvf.samplesDrawn >= wvf.samplesToDraw) {
-            break;
-         }
-
-      }
-      else {
-
-         while (wvf.sampleTimeBuffer < wvf.pixelTimeBuffer) {
-
-            var incrementToNextSample = wvf.samples[(wvf.tailIndex + 1) % wvf.maxSampleIndex] - wvf.samples[wvf.tailIndex];
-            wvf.endY = normalizeWaveform(wvf.samples[wvf.tailIndex] + incrementToNextSample / 2);
-            if (firstMove) {
-               firstMove = 0;
-               bufferCtx.moveTo(x, wvf.endY);
-               //LOGEVENTGREEN("mid moveTo:", x, ",", wvf.endY);
-            }
-
-            bufferCtx.lineTo(x, wvf.endY);
-            //LOGEVENTGREEN("mid lineTo:", x, ",", wvf.endY);
-
-            if (wvf.fill) {
-               bufferCtx.lineTo(x, wvf.bottom - 1);
-               bufferCtx.moveTo(x, wvf.endY);
-            }
-
-            x++;
-            wvf.pixelsDrawnToBuffer++;
-
-            drewMidLine = 1;
-
+         if (window.simulatedDataMode) {
+            var thisY = normalizeWaveform(wvf.simulatedSamples[wvf.tailIndex]);
+            wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSimulatedSampleIndex;
             wvf.samplesDrawn++;
-
-            wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSampleIndex;
-            //LOGEVENTGREEN("wvf.tailIndex ", wvf.tailIndex, " = ", wvf.samples[wvf.tailIndex]);
-            wvf.sampleTimeBuffer += MSPerSample;
-
+            wvf.readSampleTime += MSPerSample;
+         }
+         else {
+            var thisY = normalizeWaveform(wvf.readSample());
+            //LOGEVENTYELLOW("1 readSample from ", wvf.waveformName, " = ", thisY) ;
+            wvf.samplesDrawn++;
+            wvf.readSampleTime += MSPerSample;
          }
 
-         if (drewMidLine == 0) {
-            wvf.endY = normalizeWaveform(wvf.samples[wvf.tailIndex]);
-            if (firstMove) {
-               firstMove = 0;
-               bufferCtx.moveTo(wvf.right, wvf.endY);
-               //LOGEVENTGREEN("end moveTo:", wvf.right, ",", wvf.endY);
-            }
-            bufferCtx.lineTo(x, wvf.endY);
-            //LOGEVENTGREEN("end lineTo:", x, ",", wvf.endY);
+         avgYSum += thisY;
+         avgYCount++;
 
-            x++;
-            wvf.pixelsDrawnToBuffer++;
-         }
-
-         if (wvf.fill) {
-            bufferCtx.lineTo(x, wvf.bottom - 1);
-            bufferCtx.moveTo(x, wvf.endY);
-         }
-
-         if (wvf.samplesDrawn >= wvf.samplesToDraw) {
-            break;
+         if (thisY < lowestY) {
+            lowestY = thisY;
          }
 
       }
+
+      //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
+      const index = wvf.waveformName.indexOf("ECG");
+      if (index !== -1) {
+         wvf.drawY = lowestY;
+      } else {
+         wvf.drawY = avgYSum / avgYCount;
+      }
+
+      //if (wvf.drawX > wvf.drawXLast) {
+         displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
+         displayCtx.lineTo(wvf.drawX, wvf.drawY);
+         if (wvf.fill) {
+            displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
+            //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+         }
+      //}
+      wvf.drawXLast = wvf.drawX ;
+      wvf.drawYLast = wvf.drawY ;
+
+      NewSamplePixelsDrawn++ ;
+
+      wvf.drawX++;
+      if (wvf.drawX >= wvf.right) {
+         wvf.drawX = wvf.left ;
+      }
+      wvf.drawXLast = wvf.drawX ;
+
+      wvf.drawXTime += MSPerPixel ;
+      wvf.drawnPixelTime += MSPerPixel ;
 
    }
 
-   bufferCtx.stroke();
+   displayCtx.stroke();
+ 
+   //
+   //   Draw erase bar
+   //
+
+   displayCtx.beginPath();
+
+   displayCtx.strokeStyle = "#000000";
+   displayCtx.lineWidth = 2;
+   displayCtx.lineJoin = 'round';
+   displayCtx.lineCap = 'round';
+
+   displayCtx.moveTo(wvf.eraseX, wvf.top);
+
+   var eraseBarPixelsDrawn = 0 ;
+   while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
+
+      displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+      displayCtx.lineTo(wvf.eraseX, wvf.bottom - 1);
+
+      wvf.eraseX++;
+      if (wvf.eraseX >= wvf.right) {
+         wvf.eraseX = wvf.left ;
+      }
+
+      eraseBarPixelsDrawn++ ;
+
+   }
+
+   displayCtx.stroke();
 
 }
 
@@ -955,63 +845,9 @@ function drawWaveforms(elapsed) {
 
       wvf = homeScreen.waveforms[w];
 
-      //LOGEVENTRED("elapsed = :", elapsed);
+      wvf.elapsedTime += elapsed;
 
-      wvf.pixelTime += elapsed;
-
-      var sweepSpeedMMPerSecond = wvf.sweepSpeed;
-      var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
-      var pixelsPerMS = pixelsPerSecond / 1000;
-      var MSPerPixel = 1 / pixelsPerMS;
-      var MSPerSample = 1000 / wvf.sampleRate;
-      //var sweepSpeedPixelsPerFrame = Math.round(elapsed / MSPerPixel);
-
-      while (wvf.pixelTime > MSPerPixel) {
-
-         //LOGEVENTYELLOW("   wvf.pixelTime:", wvf.pixelTime);
-         wvf.pixelTime -= MSPerPixel;
-
-         // Shift the waveform to the left, clear the rightmost part and set it to black again
-         displayCtx.fillStyle = 'black';
-         imageData = displayCtx.getImageData(wvf.left + 1, wvf.top, wvf.width - 1, wvf.height);
-         //LOGEVENT("getImageData:", wvf.left + 1, ",", wvf.top, ",", wvf.width - 1, ",", wvf.height);
-         displayCtx.putImageData(imageData, wvf.left, wvf.top);
-         //LOGEVENT("putImageData:", wvf.left, ",", wvf.top);
-         displayCtx.fillRect(wvf.right - 1, wvf.top, 1, wvf.height);
-         //DEVEVENT("fillRect:", wvf.Width - 1, ",", wvf.Top, ",", 1, ",", wvf.Height);
-
-         //LOGEVENT("   shifted left");
-
-         imageData = bufferCtx.getImageData(wvf.right + 1 + wvf.pixelBufferIndex, wvf.top, 1, wvf.height);
-         //LOGEVENT("getImageData:", wvf.right + 1 + wvf.pixelBufferIndex);
-         displayCtx.putImageData(imageData, wvf.right - 1, wvf.top);
-         //LOGEVENT("putImageData:", wvf.right);
-
-         wvf.pixelBufferIndex++;
-         //drawnImageIndex = (drawnImageIndex + 1) % maxDrawnImageIndex;
-         if (wvf.pixelBufferIndex > wvf.pixelsDrawnToBuffer) {
-            //LOGEVENTYELLOW("   pixelBufferIndex >= pixelsDrawnToBuffer", wvf.pixelBufferIndex);
-         }
-
-         wvf.samplesShiftedTime += MSPerPixel;
-         wvf.samplesShifted = Math.round(wvf.samplesShiftedTime / MSPerSample);
-
-         //LOGEVENTYELLOW("   samplesShiftedTime:", wvf.samplesShiftedTime);
-         //LOGEVENTYELLOW("   samplesShifted:", wvf.samplesShifted);
-         if (wvf.samplesShifted >= wvf.samplesDrawn) {
-            //LOGEVENTYELLOW("   samplesShifted >= samplesDrawn", wvf.samplesShifted);
-         }
-
-         //if ((drawnImageIndex >= maxDrawnImageIndex) || (samplesShifted >= samplesDrawn)) {
-         if (wvf.pixelBufferIndex >= wvf.pixelsDrawnToBuffer) {
-            wvf.pixelBufferIndex = 0;
-            wvf.pixelsDrawnToBuffer = 0;
-            wvf.samplesShifted = 0;
-            wvf.samplesShiftedTime = 0;
-            drawNextWaveformSegmentInBuffer(w);
-         }
-
-      }
+      drawWaveform(w);
 
    }
 
@@ -1035,19 +871,10 @@ let elapsedTime;
 
 function drawHomeScreen(timestamp) {
 
-   // var w;
-   // for (w = 0; w < homeScreen.waveforms.length; w++) {
-   //    wvf = homeScreen.waveforms[w];
-   //    LOGEVENT("waveform ", w, "top ", wvf.top, "bottom ", wvf.bottom) ;
-   // }
-
-   // debugger;
-
    if (redrawHomeScreen == 1) {
       redrawHomeScreen = 0;
       drawHomeScreenAreas();
    }
-
 
    if (!lastTime) {
       lastTime = timestamp;
@@ -1055,16 +882,15 @@ function drawHomeScreen(timestamp) {
 
    if (timestamp) {
 
-      //onst elapsed = timestamp - lastTime;
       elapsedTime = timestamp - lastTime;
       lastTime = timestamp;
 
       if (elapsedTime) {
-         //const fps = Math.round(1000 / elapsed); // Calculate frames per second
-         //fpsDisplay.textContent = `Frame Rate: ${fps} FPS`;
+
          framesPerSecond = 1000 / elapsedTime; // Calculate frames per second
          fpsDisplay.textContent = `Frame Rate: ${Math.round(framesPerSecond)} FPS`;
 
+         //drawMovingWaveforms(elapsedTime);
          drawWaveforms(elapsedTime);
 
       }
@@ -1074,17 +900,183 @@ function drawHomeScreen(timestamp) {
    frameCount++;
 
    //if (frameCount < 300) {
-   requestAnimationFrame(drawHomeScreen);
+      requestAnimationFrame(drawHomeScreen);
    //}
 
 }
 
+function processWaveformDataMessage(newWaveformDataMessage) {
+
+   if (pauseWaveformDrawing == 1) return;
+
+   waveformDataMessageCount++
+   LOGEVENT(" ");
+   LOGEVENTGREEN('in processWaveformDataMessage, count = ', waveformDataMessageCount);
+
+   // Parse the JSON string into JavaScript object
+   const waveformData = JSON.parse(newWaveformDataMessage);
+
+   // See if the waveform setup is changing
+   var somethingChanged = 0;
+   var nWaveformswaveformDataMessage = waveformData.waveforms.length;
+   if (nWaveformswaveformDataMessage != nWaveforms) {
+      somethingChanged = 1;
+   }
+   else {
+      var w;
+      for (w = 0; w < waveformData.waveforms.length; w++) {
+         if (waveformData.waveforms[w].waveformName != homeScreen.waveforms[w].waveformName) {
+            somethingChanged = 1;
+            break;
+         }
+      }
+   }
+
+   if (somethingChanged) {
+      setupWaveforms(newWaveformDataMessage);
+   }
+   else {
+
+      // Write samples from this message into waveform ring buffers
+      var w;
+      for (w = 0; w < waveformData.waveforms.length; w++) {
+         var foundMatch = 0;
+         var cw;
+         for (cw = 0; w < homeScreen.waveforms.length; cw++) {
+            if (waveformData.waveforms[w].waveformName == homeScreen.waveforms[cw].waveformName) {
+               foundMatch = 1;
+               break;
+            }
+         }
+         if (foundMatch) {
+
+            var wvf = homeScreen.waveforms[cw];
+
+            var minY;
+            var maxY;
+
+            minY = Number.MAX_VALUE;
+            maxY = Number.MIN_VALUE;
+
+            //samples = waveformData.waveforms[cw].waveformSamples.split(',');
+            samplesIn = waveformData.waveforms[cw].waveformSamples ;
+            var samplesWritten = 0;
+            var s;
+            // upsample to simplify waveform drawing
+            if (wvf.sampleRateIn == 50) { 
+               for (s = 0; s < samplesIn.length; s++) {
+                  var thisSample = samplesIn[s] ;
+                  var difference = thisSample - wvf.lastSample ;
+                  var increment  = difference / 5 ;
+                  var i;
+                  for (i = 0; i < 5; i++) {
+                     var valueToWrite = thisSample + increment * i ;
+                     wvf.writeSample(valueToWrite);
+                     samplesWritten++;
+                     if (valueToWrite < minY) {
+                        minY = valueToWrite ;
+                     }
+                     else if (valueToWrite > maxY) {
+                        maxY = valueToWrite ;
+                     }
+                  }
+                  wvf.lastSample = thisSample ;
+               }
+            }
+            else {
+               for (s = 0; s < samplesIn.length; s++) {
+                  wvf.writeSample(samplesIn[s]);
+                  samplesWritten++;
+                  if (valueToWrite < minY) {
+                     minY = valueToWrite ;
+                  }
+                  else if (valueToWrite > maxY) {
+                     maxY = valueToWrite ;
+                  }
+               }
+            }
+
+            if (wvf.autoScale) {
+
+               var amplitude = maxY - minY;
+
+               wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100 ;
+               wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100 ;
+
+            }
+
+            LOGEVENTGREEN("Read ", homeScreen.waveforms[cw].bufferReadCount, " samples from ", homeScreen.waveforms[cw].waveformName);
+            homeScreen.waveforms[cw].bufferReadCount = 0;
+
+            LOGEVENTGREEN("Wrote ", samplesWritten, " samples to ", homeScreen.waveforms[cw].waveformName);
+         }
+      }
+   }
+
+   var w;
+   for (w = 0; w < homeScreen.waveforms.length; w++) {
+
+      LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
+
+   }
+
+}
+
+// Define the function to be executed at each interval
+function simulateArrivalOfWaveformMessage() {
+
+   processWaveformDataMessage(currentWaveforms[waveformSetIndex]);
+
+}
+
+
+
+// Call resizeCanvas initially and on window resize
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
 // Set the background of the canvas to black
 displayCtx.fillStyle = 'black';
 displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
+
+//
+//   Compute parameters used for waveform drawing
+//
+//   Adjust these values based on the display
+//
+
+const screenWidthMM = 500;
+const screenWidthPixels = 1920;
+const pixelsPerMM = screenWidthPixels / screenWidthMM ;
+
+//
+//   Create and initialize home screen
+//
+
+let pauseWaveformDrawing = 0;
+var framesPerSecond = 60;
+
+homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
+homeScreen.initializeAreas();
+//homeScreen.setupWaveforms(waveformDataMessage);
+
+resetWaveforms(0) ;
+
 // Start drawing
 drawHomeScreen();
 
+var waveformDataMessageCount = 0;
+
+// Set the interval to execute the function every 1000 milliseconds (1 second)
+if (window.simulatedDataMode == 0) {
+   const intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+}
+
+// To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
+// setTimeout(() => {
+//    clearInterval(intervalId); // This stops the interval
+//    console.log('Interval stopped.');
+// }, 10000);
 

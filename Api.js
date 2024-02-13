@@ -2,34 +2,34 @@
 // Fetch API 
 //
 // Function to fetch waveform data from Joe's REST API and reset waveforms accordingly
-window.fetchAndResetWaveforms() = async function(){
-    try {
-       // Specify the URL of Joe's REST API
-       const apiUrl = 'http://joe-api.example.com/waveforms'; // Replace with the actual API URL
+// window.fetchAndResetWaveforms() = async function(){
+//     try {
+//        // Specify the URL of Joe's REST API
+//        const apiUrl = 'http://joe-api.example.com/waveforms'; // Replace with the actual API URL
  
-       // Make an asynchronous GET request to the API
-       const response = await fetch(apiUrl);
+//        // Make an asynchronous GET request to the API
+//        const response = await fetch(apiUrl);
  
-       // Check if the request was successful
-       if (!response.ok) {
-          throw new Error(`API call failed with status: ${response.status}`);
-       }
+//        // Check if the request was successful
+//        if (!response.ok) {
+//           throw new Error(`API call failed with status: ${response.status}`);
+//        }
  
-       // Parse the JSON response
-       const data = await response.json();
+//        // Parse the JSON response
+//        const data = await response.json();
  
-       // Assuming the API returns a JSON object with a property 'waveforms' that contains an array of waveform names
-       const waveformNames = JSON.stringify(data.waveforms);
+//        // Assuming the API returns a JSON object with a property 'waveforms' that contains an array of waveform names
+//        const waveformNames = JSON.stringify(data.waveforms);
  
-       // Call the resetWaveforms function with the received waveform names
-       resetWaveforms(waveformNames);
+//        // Call the resetWaveforms function with the received waveform names
+//        resetWaveforms(waveformNames);
  
-       // Optionally, log the received data for debugging
-       console.log("Received waveform data from API:", data);
-    } catch (error) {
-       console.error("Failed to fetch waveform data from API:", error);
-    }
- }
+//        // Optionally, log the received data for debugging
+//        console.log("Received waveform data from API:", data);
+//     } catch (error) {
+//        console.error("Failed to fetch waveform data from API:", error);
+//     }
+//  }
  
 
 //
