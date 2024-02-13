@@ -6,9 +6,21 @@
 </head>
 
 <body>
-   <p id="fps-display">Frame Rate: </p>
+   <p id="fps-display" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">Frame Rate: </p>
+   <p></p>
+
+   <label for="simulationTypeDropdown" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt; margin-right: 10px;">Select simulation type:</label>
+   <select id="simulationTypeDropdown" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">
+   <option value="simulateWaveformMessages">Simulate Waveform Messages</option>
+   <option value="simulateWaveformData">Simulated Waveform Data</option>
+   </select>
+   <p></p>
    <p><button id=StartStopWaveformsButton onclick="startStopWaveforms()">Pause Waveforms</button></p>
    <p><button id=ShiftWaveformsButton onclick="shiftWaveforms()">Shift Waveforms</button></p>
+
+
+
+
 </body>
 
 </html>

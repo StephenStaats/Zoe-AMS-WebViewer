@@ -224,8 +224,8 @@ class Waveform {
          }
          var amplitude = maxY - minY;
 
-         this.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100 ;
-         this.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100 ;
+         this.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
+         this.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
 
       }
 
@@ -614,6 +614,31 @@ function resetWaveforms(shiftWaveforms) {
 }
 
 
+
+//
+//   startStopWaveforms
+//
+
+function startStopWaveforms() {
+
+   // Get the button element by its ID
+   var button = document.getElementById('StartStopWaveformsButton');
+
+   //Check the current label and update it
+   if (button.textContent === 'Pause Waveforms') {
+      button.textContent = 'Restart Waveforms';
+      pauseWaveformDrawing = 1;
+   } else {
+      button.textContent = 'Pause Waveforms';
+      redrawHomeScreen = 1;
+      //pauseWaveformDrawing = 0;
+      resetWaveforms(0);
+   }
+
+}
+
+
+
 //
 //   shiftWaveforms  
 //
@@ -623,6 +648,65 @@ function shiftWaveforms() {
    resetWaveforms(1);
 
 }
+
+
+//
+//   toggleSimulationType
+//
+
+var intervalId = 0;
+
+// function toggleSimulationType() {
+
+//    // Get the button element by its ID
+//    var button = document.getElementById('ToggleSimulationTypeButton');
+
+//    if (button.textContent === 'Simulate Waveform Messages') {
+//       button.textContent = 'Draw Canned Data';
+//       window.simulatedDataMode = 0;
+//       if (window.simulatedDataMode == 0) {
+//          intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+//       }
+//    } else {
+//       button.textContent = 'Simulate Waveform Messages';
+//       window.simulatedDataMode = 1;
+//       clearInterval(intervalId); // This stops the interval
+//    }
+
+//    resetWaveforms(0);
+
+// }
+
+
+// Access the select element
+const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
+
+// Add an event listener to listen for changes in the dropdown
+simulationTypeDropdown.addEventListener("change", function () {
+
+   // Access the current value of the dropdown
+   const selectedValue = simulationTypeDropdown.value;
+
+   // Use the selected value as needed
+   //console.log("Selected value:", selectedValue);
+
+   // Get the button element by its ID
+   var button = document.getElementById('ToggleSimulationTypeButton');
+
+   if (selectedValue == 'simulateWaveformData') {
+      window.simulatedDataMode = 1;
+      clearInterval(intervalId); // This stops the interval
+   }
+   else {
+      window.simulatedDataMode = 0;
+      intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);   
+   }
+
+   resetWaveforms(0);
+
+});
+
+
 
 
 //
@@ -656,29 +740,6 @@ function drawHomeScreenAreas() {
    // Initial clear for buffer canvas
    bufferCtx.fillStyle = 'black';
    bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
-
-}
-
-
-//
-//   startStopWaveforms
-//
-
-function startStopWaveforms() {
-
-   // Get the button element by its ID
-   var button = document.getElementById('StartStopWaveformsButton');
-
-   //Check the current label and update it
-   if (button.textContent === 'Pause Waveforms') {
-      button.textContent = 'Restart Waveforms';
-      pauseWaveformDrawing = 1;
-   } else {
-      button.textContent = 'Pause Waveforms';
-      redrawHomeScreen = 1;
-      //pauseWaveformDrawing = 0;
-      resetWaveforms(0);
-   }
 
 }
 
@@ -720,7 +781,7 @@ function drawWaveform(w) {
    //   Draw new samples
    //
 
-   var NewSamplePixelsDrawn = 0 ;
+   var NewSamplePixelsDrawn = 0;
 
    displayCtx.beginPath();
 
@@ -772,31 +833,31 @@ function drawWaveform(w) {
       }
 
       //if (wvf.drawX > wvf.drawXLast) {
-         displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
-         displayCtx.lineTo(wvf.drawX, wvf.drawY);
-         if (wvf.fill) {
-            displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
-            //displayCtx.moveTo(wvf.drawX, wvf.drawY);
-         }
+      displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
+      displayCtx.lineTo(wvf.drawX, wvf.drawY);
+      if (wvf.fill) {
+         displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
+         //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+      }
       //}
-      wvf.drawXLast = wvf.drawX ;
-      wvf.drawYLast = wvf.drawY ;
+      wvf.drawXLast = wvf.drawX;
+      wvf.drawYLast = wvf.drawY;
 
-      NewSamplePixelsDrawn++ ;
+      NewSamplePixelsDrawn++;
 
       wvf.drawX++;
       if (wvf.drawX >= wvf.right) {
-         wvf.drawX = wvf.left ;
+         wvf.drawX = wvf.left;
       }
-      wvf.drawXLast = wvf.drawX ;
+      wvf.drawXLast = wvf.drawX;
 
-      wvf.drawXTime += MSPerPixel ;
-      wvf.drawnPixelTime += MSPerPixel ;
+      wvf.drawXTime += MSPerPixel;
+      wvf.drawnPixelTime += MSPerPixel;
 
    }
 
    displayCtx.stroke();
- 
+
    //
    //   Draw erase bar
    //
@@ -810,7 +871,7 @@ function drawWaveform(w) {
 
    displayCtx.moveTo(wvf.eraseX, wvf.top);
 
-   var eraseBarPixelsDrawn = 0 ;
+   var eraseBarPixelsDrawn = 0;
    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
 
       displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
@@ -818,10 +879,10 @@ function drawWaveform(w) {
 
       wvf.eraseX++;
       if (wvf.eraseX >= wvf.right) {
-         wvf.eraseX = wvf.left ;
+         wvf.eraseX = wvf.left;
       }
 
-      eraseBarPixelsDrawn++ ;
+      eraseBarPixelsDrawn++;
 
    }
 
@@ -900,10 +961,15 @@ function drawHomeScreen(timestamp) {
    frameCount++;
 
    //if (frameCount < 300) {
-      requestAnimationFrame(drawHomeScreen);
+   requestAnimationFrame(drawHomeScreen);
    //}
 
 }
+
+
+//
+//   processWaveformDataMessage
+//
 
 function processWaveformDataMessage(newWaveformDataMessage) {
 
@@ -959,28 +1025,28 @@ function processWaveformDataMessage(newWaveformDataMessage) {
             maxY = Number.MIN_VALUE;
 
             //samples = waveformData.waveforms[cw].waveformSamples.split(',');
-            samplesIn = waveformData.waveforms[cw].waveformSamples ;
+            samplesIn = waveformData.waveforms[cw].waveformSamples;
             var samplesWritten = 0;
             var s;
             // upsample to simplify waveform drawing
-            if (wvf.sampleRateIn == 50) { 
+            if (wvf.sampleRateIn == 50) {
                for (s = 0; s < samplesIn.length; s++) {
-                  var thisSample = samplesIn[s] ;
-                  var difference = thisSample - wvf.lastSample ;
-                  var increment  = difference / 5 ;
+                  var thisSample = samplesIn[s];
+                  var difference = thisSample - wvf.lastSample;
+                  var increment = difference / 5;
                   var i;
                   for (i = 0; i < 5; i++) {
-                     var valueToWrite = thisSample + increment * i ;
+                     var valueToWrite = thisSample + increment * i;
                      wvf.writeSample(valueToWrite);
                      samplesWritten++;
                      if (valueToWrite < minY) {
-                        minY = valueToWrite ;
+                        minY = valueToWrite;
                      }
                      else if (valueToWrite > maxY) {
-                        maxY = valueToWrite ;
+                        maxY = valueToWrite;
                      }
                   }
-                  wvf.lastSample = thisSample ;
+                  wvf.lastSample = thisSample;
                }
             }
             else {
@@ -988,10 +1054,10 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                   wvf.writeSample(samplesIn[s]);
                   samplesWritten++;
                   if (valueToWrite < minY) {
-                     minY = valueToWrite ;
+                     minY = valueToWrite;
                   }
                   else if (valueToWrite > maxY) {
-                     maxY = valueToWrite ;
+                     maxY = valueToWrite;
                   }
                }
             }
@@ -1000,8 +1066,8 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                var amplitude = maxY - minY;
 
-               wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100 ;
-               wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100 ;
+               wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
+               wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
 
             }
 
@@ -1049,7 +1115,7 @@ displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
 const screenWidthMM = 500;
 const screenWidthPixels = 1920;
-const pixelsPerMM = screenWidthPixels / screenWidthMM ;
+const pixelsPerMM = screenWidthPixels / screenWidthMM;
 
 //
 //   Create and initialize home screen
@@ -1062,7 +1128,7 @@ homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
 homeScreen.initializeAreas();
 //homeScreen.setupWaveforms(waveformDataMessage);
 
-resetWaveforms(0) ;
+resetWaveforms(0);
 
 // Start drawing
 drawHomeScreen();
@@ -1071,7 +1137,7 @@ var waveformDataMessageCount = 0;
 
 // Set the interval to execute the function every 1000 milliseconds (1 second)
 if (window.simulatedDataMode == 0) {
-   const intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+   intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
 }
 
 // To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
