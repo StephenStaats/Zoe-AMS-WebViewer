@@ -681,6 +681,46 @@ simulationTypeDropdown.addEventListener("change", function () {
 });
 
 
+
+
+//  Increment / decrement MS per pixel 
+var dialMSPerPixel = document.getElementById('dialMSPerPixel');
+
+function incrementMSPerPixel() {
+   if (parseFloat(dialMSPerPixel.value) < parseFloat(dialMSPerPixel.max)) {
+      dialMSPerPixel.value = (parseFloat(dialMSPerPixel.value) + 0.1).toFixed(1); // Increase by 0.1 and round to 1 decimal place
+      enteredMSPerPixel = parseFloat(dialMSPerPixel.value);
+   }
+}
+
+function decrementMSPerPixel() {
+   if (parseFloat(dialMSPerPixel.value) > parseFloat(dialMSPerPixel.min)) {
+      dialMSPerPixel.value = (parseFloat(dialMSPerPixel.value) - 0.1).toFixed(1); // Decrease by 0.1 and round to 1 decimal place
+      enteredMSPerPixel = parseFloat(dialMSPerPixel.value);
+   }
+}
+
+
+
+//  Increment / decrement MS per sample 
+var dialMSPerSample = document.getElementById('dialMSPerSample');
+
+function incrementMSPerSample() {
+   if (parseFloat(dialMSPerSample.value) < parseFloat(dialMSPerSample.max)) {
+      dialMSPerSample.value = (parseFloat(dialMSPerSample.value) + 0.1).toFixed(1); // Increase by 0.1 and round to 1 decimal place
+      enteredMSPerSample = parseFloat(dialMSPerSample.value);
+   }
+}
+
+function decrementMSPerSample() {
+   if (parseFloat(dialMSPerSample.value) > parseFloat(dialMSPerSample.min)) {
+      dialMSPerSample.value = (parseFloat(dialMSPerSample.value) - 0.1).toFixed(1); // Decrease by 0.1 and round to 1 decimal place
+      enteredMSPerSample = parseFloat(dialMSPerSample.value);
+   }
+}
+
+
+
 //
 //   drawHomeScreenAreas
 //
@@ -717,6 +757,19 @@ function drawHomeScreenAreas() {
 
 
 //
+//   Compute parameters used for waveform drawing
+//
+//   Adjust these values based on the display
+//
+
+const screenWidthMM = 500;
+const screenWidthPixels = 1920;
+const pixelsPerMM = screenWidthPixels / screenWidthMM;
+
+var enteredMSPerPixel = 1 / (25 * pixelsPerMM / 1000) ;
+var enteredMSPerSample = 4.0 ;
+
+//
 //   drawWaveform
 //
 
@@ -728,14 +781,16 @@ function drawWaveform(w) {
    var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
    var pixelsPerMS = pixelsPerSecond / 1000;
    var MSPerPixel = 1 / pixelsPerMS;
-   var MSPerSample = 1000 / wvf.sampleRate;
+   var MSPerSample = 0;
    if (window.simulatedDataMode) {
-      var MSPerSample = 1000 / wvf.sampleRateIn;
+      //MSPerPixel = 1 / pixelsPerMS;
+      MSPerSample = 1000 / wvf.sampleRateIn;
+   }
+   else {   
+      //MSPerPixel = enteredMSPerPixel;
+      MSPerSample = enteredMSPerSample;
    }
 
-   if (w == 2) {
-      var q = 0;
-   }
    const normalizeWaveform = (value) => {
 
       normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
@@ -1078,16 +1133,6 @@ window.addEventListener('resize', resizeCanvas);
 displayCtx.fillStyle = 'black';
 displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-
-//
-//   Compute parameters used for waveform drawing
-//
-//   Adjust these values based on the display
-//
-
-const screenWidthMM = 500;
-const screenWidthPixels = 1920;
-const pixelsPerMM = screenWidthPixels / screenWidthMM;
 
 //
 //   Create and initialize home screen
