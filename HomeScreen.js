@@ -609,6 +609,11 @@ function resetWaveforms(shiftWaveforms) {
       simulateArrivalOfWaveformMessage();
    }
 
+   // Get the button element by its ID
+   var button = document.getElementById('StartStopWaveformsButton');
+
+   button.textContent = 'Pause Waveforms';
+
    redrawHomeScreen = 1;
 
 }
@@ -651,47 +656,16 @@ function shiftWaveforms() {
 
 
 //
-//   toggleSimulationType
+//   Event listener for changing simulation type dropdown
 //
 
 var intervalId = 0;
 
-// function toggleSimulationType() {
-
-//    // Get the button element by its ID
-//    var button = document.getElementById('ToggleSimulationTypeButton');
-
-//    if (button.textContent === 'Simulate Waveform Messages') {
-//       button.textContent = 'Draw Canned Data';
-//       window.simulatedDataMode = 0;
-//       if (window.simulatedDataMode == 0) {
-//          intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
-//       }
-//    } else {
-//       button.textContent = 'Simulate Waveform Messages';
-//       window.simulatedDataMode = 1;
-//       clearInterval(intervalId); // This stops the interval
-//    }
-
-//    resetWaveforms(0);
-
-// }
-
-
-// Access the select element
 const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
 
-// Add an event listener to listen for changes in the dropdown
 simulationTypeDropdown.addEventListener("change", function () {
 
-   // Access the current value of the dropdown
    const selectedValue = simulationTypeDropdown.value;
-
-   // Use the selected value as needed
-   //console.log("Selected value:", selectedValue);
-
-   // Get the button element by its ID
-   var button = document.getElementById('ToggleSimulationTypeButton');
 
    if (selectedValue == 'simulateWaveformData') {
       window.simulatedDataMode = 1;
@@ -705,8 +679,6 @@ simulationTypeDropdown.addEventListener("change", function () {
    resetWaveforms(0);
 
 });
-
-
 
 
 //
