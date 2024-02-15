@@ -166,7 +166,7 @@ class Waveform {
             this.sweepSpeed = 6.25;
             this.autoScale = false;
             this.yMin = -100;
-            this.yMax = 4000;
+            this.yMax = 4500;
             this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
             this.simulatedSamples = window.simulatedWaveformCO2;
             break;
@@ -606,7 +606,7 @@ function resetWaveforms(shiftWaveforms) {
 
    if (window.simulatedDataMode == 0) {
       simulateArrivalOfWaveformMessage();
-      simulateArrivalOfWaveformMessage();
+      //simulateArrivalOfWaveformMessage();
    }
 
    // Get the button element by its ID
@@ -796,10 +796,12 @@ function drawWaveform(w) {
       normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
 
       if (normalizedValue < wvf.top + 1) {
-         normalizedValue = wvf.top + 1;
+         //normalizedValue = wvf.top + 1;
+         normalizedValue = LEAD_OFF_OR_UNPLUGGED;
       }
       else if (normalizedValue > wvf.bottom - 1) {
-         normalizedValue = wvf.bottom - 1;
+         //normalizedValue = wvf.bottom - 1;
+         normalizedValue = LEAD_OFF_OR_UNPLUGGED;
       }
       return normalizedValue;
    };
@@ -827,6 +829,7 @@ function drawWaveform(w) {
       var avgYCount = 0;
       var lowestY = Number.MAX_VALUE;
 
+      var skipPixel = 0 ;
       while (wvf.drawnPixelTime > wvf.readSampleTime) {
 
          if (window.simulatedDataMode) {
@@ -836,10 +839,20 @@ function drawWaveform(w) {
             wvf.readSampleTime += MSPerSample;
          }
          else {
-            var thisY = normalizeWaveform(wvf.readSample());
+            var thisSample = wvf.readSample() ;
             //LOGEVENTYELLOW("1 readSample from ", wvf.waveformName, " = ", thisY) ;
             wvf.samplesDrawn++;
             wvf.readSampleTime += MSPerSample;
+            if (thisSample == LEAD_OFF_OR_UNPLUGGED) {
+               skipPixel = 1 ;
+            }
+            else {
+               var thisY = normalizeWaveform(thisSample);
+               if (thisY == LEAD_OFF_OR_UNPLUGGED) {
+                  skipPixel = 1 ;
+               }
+            }
+
          }
 
          avgYSum += thisY;
@@ -860,15 +873,20 @@ function drawWaveform(w) {
       }
 
       //if (wvf.drawX > wvf.drawXLast) {
-      displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
-      displayCtx.lineTo(wvf.drawX, wvf.drawY);
-      if (wvf.fill) {
-         displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
-         //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+      if (skipPixel) {
+         var q = 0 ;
+      }
+      else {
+         displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
+         displayCtx.lineTo(wvf.drawX, wvf.drawY);
+         if (wvf.fill) {
+            displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
+            //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+         }
+         wvf.drawXLast = wvf.drawX;
+         wvf.drawYLast = wvf.drawY;
       }
       //}
-      wvf.drawXLast = wvf.drawX;
-      wvf.drawYLast = wvf.drawY;
 
       NewSamplePixelsDrawn++;
 
