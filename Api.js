@@ -36,31 +36,31 @@
 //   resetWaveforms
 //
 
-// resetWaveforms function that accepts a JSON string with waveform names and sets up waveforms accordingly
-window.resetWaveforms = function(jsonWaveformNames) {
-    try {
-        // Clear the current waveforms on the home screen to prepare for new ones
-        homeScreen.clearWaveformList();
+// // resetWaveforms function that accepts a JSON string with waveform names and sets up waveforms accordingly
+// window.resetWaveforms = function(jsonWaveformNames) {
+//     try {
+//         // Clear the current waveforms on the home screen to prepare for new ones
+//         homeScreen.clearWaveformList();
 
-        // Parse the JSON string into a JavaScript array of waveform names
-        const waveformNames = JSON.parse(jsonWaveformNames);
+//         // Parse the JSON string into a JavaScript array of waveform names
+//         const waveformNames = JSON.parse(jsonWaveformNames);
 
-        // Determine the number of waveforms and calculate the height for each waveform based on the available area
-        const nWaveforms = waveformNames.length;
-        const waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
+//         // Determine the number of waveforms and calculate the height for each waveform based on the available area
+//         const nWaveforms = waveformNames.length;
+//         const waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
 
-        // Loop through each waveform name, create a new Waveform instance, and add it to the home screen
-        waveformNames.forEach((waveformName, index) => {
-            const waveform = new Waveform(waveformName, index, waveformHeight);
-            homeScreen.addWaveform(waveform);
-        });
+//         // Loop through each waveform name, create a new Waveform instance, and add it to the home screen
+//         waveformNames.forEach((waveformName, index) => {
+//             const waveform = new Waveform(waveformName, index, waveformHeight);
+//             homeScreen.addWaveform(waveform);
+//         });
 
-        // Set flag to redraw the home screen with the new waveforms
-        redrawHomeScreen = 1;
+//         // Set flag to redraw the home screen with the new waveforms
+//         redrawHomeScreen = 1;
 
-        // Optionally, log the updated waveforms for debugging
-        console.log("Waveforms reset with names:", waveformNames);
-    } catch (error) {
-        console.error('Error resetting waveforms with the provided names:', error);
-    }
-}
+//         // Optionally, log the updated waveforms for debugging
+//         console.log("Waveforms reset with names:", waveformNames);
+//     } catch (error) {
+//         console.error('Error resetting waveforms with the provided names:', error);
+//     }
+// }
