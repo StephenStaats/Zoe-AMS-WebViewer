@@ -81,7 +81,7 @@ function Waveform(waveformName, order) {
 
       case 'SPO2':
          this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
-         this.color = window.colors.SpO2Color;
+         this.color = window.colors.SPO2Color;
          this.fill = false;
          this.sampleRateIn = 250;
          this.sampleRate = 250;
