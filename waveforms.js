@@ -454,7 +454,7 @@ function drawWaveform(w) {
 
    displayCtx.beginPath();
 
-   displayCtx.strokeStyle = "#000000";
+   displayCtx.strokeStyle = window.colors.ZBLACK;
    displayCtx.lineWidth = 2;
    displayCtx.lineJoin = 'round';
    displayCtx.lineCap = 'round';

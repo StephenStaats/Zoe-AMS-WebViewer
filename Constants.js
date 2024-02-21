@@ -1,3 +1,7 @@
+//
+//   Global constants
+//
+
 window.simulatedDataMode = 0;
 
 window.developmentMode = 0;
@@ -6,75 +10,11 @@ window.graphicsDebug = 0;
 
 window.autoscaleOffsetPercentage = 10;
 
+//
+//   Note:  The following enums and constants must be kept in sync with CVM10
+//
+
 window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;
-
-window.DEVEVENT = function (...args) {
-   if (window.DevelopmentMode == 1) {
-      console.log(args.join(' '));
-   }
-};
-
-window.LOGEVENT = function (...args) {
-   console.log(args.join(' '));
-}
-
-window.LOGEVENTRED = function (...args) {
-
-   var argstring = args.join(' ');
-   var logstring = '\x1b[31m' + argstring + '\x1b[0m';
-
-   // console.log('\x1b[31mRed text\x1b[0m');
-   // console.log('\x1b[32mGreen text\x1b[0m');
-   // console.log('\x1b[33mYellow text\x1b[0m');
-   // console.log('\x1b[34mBlue text\x1b[0m');
-   // console.log('\x1b[35mMagenta text\x1b[0m');
-   // console.log('\x1b[36mCyan text\x1b[0m');
-
-   console.log(logstring);
-
-};
-
-window.LOGEVENTGREEN = function (...args) {
-
-   var argstring = args.join(' ');
-//timestring = new Date().toISOString();
-
-timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
-
-   var logstring = '\x1b[32m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
-
-   console.log(logstring);
-
-};
-
-window.LOGEVENTYELLOW = function (...args) {
-
-   var argstring = args.join(' ');
-   var logstring = '\x1b[33m' + argstring + '\x1b[0m';
-
-   console.log(logstring);
-
-};
-
-window.LOGEVENTMAGENTA = function (...args) {
-
-   var argstring = args.join(' ');
-   var logstring = '\x1b[35m' + argstring + '\x1b[0m';
-
-   console.log(logstring);
-
-};
-
-window.LOGEVENTCYAN = function (...args) {
-
-   var argstring = args.join(' ');
-   var logstring = '\x1b[36m' + argstring + '\x1b[0m';
-
-   console.log(logstring);
-
-};
-
 
 window.Z_WAVEFORM_ID = {
    Z_WAVEFORM_ECGI: 0,
@@ -128,6 +68,8 @@ window.Z_WAVEFORM_ID = {
    Z_WAVEFORM_OFF: 48,
    Z_WAVEFORM_INVALID: 49
 };
+
+const NZWAVEFORMS = Object.keys(Z_WAVEFORM_ID).length;
 
 // Function to convert string to Z_WAVEFORM_ID enum value
 function getWaveformIdFromWaveformName(waveformName) {
@@ -241,3 +183,100 @@ function getWaveformIdFromWaveformName(waveformName) {
    return Z_WAVEFORM_ID.Z_WAVE
 
 }
+
+window.Z_PARAM_ALARM_STATUS = {
+   Z_PARAM_ALARM_STATUS_NORMAL_NONE: 0,
+   Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE: 1,
+   Z_PARAM_ALARM_STATUS_LATCHED_NONE: 2,
+   Z_PARAM_ALARM_STATUS_LATCHED_LOW: 3,
+   Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM: 4,
+   Z_PARAM_ALARM_STATUS_LATCHED_HIGH: 5,
+   Z_PARAM_ALARM_STATUS_ACTIVE_NONE: 6,
+   Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW: 7,
+   Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM: 8,
+   Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH: 9,
+   Z_PARAM_ALARM_STATUS_ACTIVE_LOW: 10,
+   Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM: 11,
+   Z_PARAM_ALARM_STATUS_ACTIVE_HIGH: 12
+};
+
+const NZPARAMALARMSTATUSES = Object.keys(Z_PARAM_ALARM_STATUS).length;
+
+//
+//  Alarm suspend modes 
+//
+
+window.Z_ALL_ALARMS_OFF_TRUE  = 0x1898 ;
+window.Z_ALL_ALARMS_OFF_FALSE = 0x1914 ;
+
+
+//
+//   Event logging
+//
+
+window.DEVEVENT = function (...args) {
+   if (window.DevelopmentMode == 1) {
+      console.log(args.join(' '));
+   }
+};
+
+window.LOGEVENT = function (...args) {
+   console.log(args.join(' '));
+}
+
+window.LOGEVENTRED = function (...args) {
+
+   var argstring = args.join(' ');
+   var logstring = '\x1b[31m' + argstring + '\x1b[0m';
+
+   // console.log('\x1b[31mRed text\x1b[0m');
+   // console.log('\x1b[32mGreen text\x1b[0m');
+   // console.log('\x1b[33mYellow text\x1b[0m');
+   // console.log('\x1b[34mBlue text\x1b[0m');
+   // console.log('\x1b[35mMagenta text\x1b[0m');
+   // console.log('\x1b[36mCyan text\x1b[0m');
+
+   console.log(logstring);
+
+};
+
+window.LOGEVENTGREEN = function (...args) {
+
+   var argstring = args.join(' ');
+//timestring = new Date().toISOString();
+
+timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
+timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+
+   var logstring = '\x1b[32m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
+
+   console.log(logstring);
+
+};
+
+window.LOGEVENTYELLOW = function (...args) {
+
+   var argstring = args.join(' ');
+   var logstring = '\x1b[33m' + argstring + '\x1b[0m';
+
+   console.log(logstring);
+
+};
+
+window.LOGEVENTMAGENTA = function (...args) {
+
+   var argstring = args.join(' ');
+   var logstring = '\x1b[35m' + argstring + '\x1b[0m';
+
+   console.log(logstring);
+
+};
+
+window.LOGEVENTCYAN = function (...args) {
+
+   var argstring = args.join(' ');
+   var logstring = '\x1b[36m' + argstring + '\x1b[0m';
+
+   console.log(logstring);
+
+};

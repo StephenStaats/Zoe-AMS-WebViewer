@@ -3,6 +3,8 @@
 //   processWaveformDataMessage
 //
 
+var waveformDataMessageCount = 0;
+
 function processWaveformDataMessage(newWaveformDataMessage) {
 
    if (pauseWaveformDrawing == 1) return;

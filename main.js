@@ -129,11 +129,16 @@ function simulateArrivalOfWaveformMessage() {
 
 }
 
-var waveformDataMessageCount = 0;
+function periodicUpdate() {
 
-// Set the interval to execute the function every 1000 milliseconds (1 second)
+   updateBlinkState() ;
+
+}
+
+// Set the interval to execute the function every 250 milliseconds  
 if (window.simulatedDataMode == 0) {
-   intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+   //intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+   intervalId = setInterval(periodicUpdate, 250);
 }
 
 // To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout

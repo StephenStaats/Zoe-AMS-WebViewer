@@ -2,23 +2,21 @@
 <html>
 
 <head>
-   <title>Live EKG Chart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live EKG Chart</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
    <p id="fps-display" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">Frame Rate: </p>
-   <p></p>
-   <p><button id=playStartupToneButton onclick="playStartupTone()">Play Startup Tone</button></p>
 
    <label for="simulationTypeDropdown" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt; margin-right: 10px;">Select simulation type:</label>
    <select id="simulationTypeDropdown" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">
    <option value="simulateWaveformMessages">Simulate Waveform Messages</option>
    <option value="simulateWaveformData">Simulated Waveform Data</option>
    </select>
-   <p></p>
-   <p><button id=startStopWaveformsButton onclick="startStopWaveforms()">Pause Waveforms</button></p>
-   <p><button id=shiftWaveformsButton onclick="shiftWaveforms()">Shift Waveforms</button></p>
    <p></p>
 
    <table>
@@ -44,6 +42,23 @@
       </tr>
    </table>
    <p></p>
+
+   <div class="button-container">
+   <div class="column">
+      <p><button id="playStartupToneButton" onclick="playStartupTone()">Play Startup Tone</button></p>
+      <p><button id="setAlarmStatusHIGHButton" onclick="setAlarmStatusHIGH()">Set alarm status HIGH</button></p>
+      <p><button id="setAlarmStatusMEDIUMButton" onclick="setAlarmStatusMEDIUM()">Set alarm status MEDIUM</button></p>
+      <p><button id="setAlarmStatusLOWButton" onclick="setAlarmStatusLOW()">Set alarm status LOW</button></p>
+      <p><button id="setAlarmStatusNONEButton" onclick="setAlarmStatusNONE()">Set alarm status NONE</button></p>
+      <p><button id="silenceAlarmsButton" onclick="silenceAlarms()">Silence alarms</button></p>
+   </div>
+   <div class="column">
+      <p><button id="startStopWaveformsButton" onclick="startStopWaveforms()">Pause Waveforms</button></p>
+      <p><button id="shiftWaveformsButton" onclick="shiftWaveforms()">Shift Waveforms</button></p>
+   </div>
+   </div>
+   <p></p>
+
  
    <!-- On-screen Canvas -->
    <!-- <canvas id="displayCanvas" width="1366" height="768"></canvas> -->
@@ -55,6 +70,7 @@
    <script src="ringBuffer.js"></script>
    <script src="waveforms.js"></script>
    <script src="api.js"></script>
+   <script src="alarms.js"></script>
    <script src="homeScreen.js"></script>
    <script src="messageHandlers.js"></script>
    <script src="main.js"></script>

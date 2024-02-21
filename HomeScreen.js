@@ -55,7 +55,7 @@ function HomeScreen(width, height) {
 
 }
 
-HomeScreen.prototype.initializeAreas = function() {
+HomeScreen.prototype.initializeAreas = function () {
 
    this.headerWidth = this.width;
    this.headerHeight = Math.round(this.height * 10 / 100);
@@ -97,9 +97,9 @@ HomeScreen.prototype.initializeAreas = function() {
    this.messageAreaRight = this.messageAreaLeft + this.messageAreaWidth;
    this.messageAreaTop = this.bottomParamAreaBottom + 1;
    this.messageAreaBottom = this.messageAreaTop + this.messageAreaHeight;
-   this.messageAreaHeight = this.bottom ;
+   this.messageAreaHeight = this.bottom;
 
-///////////////////////////////////////////////
+   ///////////////////////////////////////////////
 
    this.HRParamAreaWidth = this.middleParamAreaWidth;
    this.HRParamAreaHeight = Math.round(this.middleParamAreaHeight * 45 / 100);
@@ -151,7 +151,7 @@ HomeScreen.prototype.initializeAreas = function() {
    this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
 
    this.NIBPParamAreaLeft = this.bottomParamAreaLeft;
-   this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100 ;
+   this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
    this.NIBPParamAreaWidth = this.NIBPParamAreaRight - this.NIBPParamAreaLeft;
    this.NIBPParamAreaTop = this.bottomParamAreaTop;
    this.NIBPParamAreaBottom = this.bottomParamAreaBottom;
@@ -159,15 +159,15 @@ HomeScreen.prototype.initializeAreas = function() {
 
 };
 
-HomeScreen.prototype.clearWaveformList = function() {
+HomeScreen.prototype.clearWaveformList = function () {
    this.waveforms = [];
 };
 
-HomeScreen.prototype.addWaveform = function(wvf) {
+HomeScreen.prototype.addWaveform = function (wvf) {
    this.waveforms.push(wvf);
 };
 
-HomeScreen.prototype.getNWaveforms = function() {
+HomeScreen.prototype.getNWaveforms = function () {
    return (this.waveforms.length);
 };
 
@@ -180,11 +180,11 @@ function drawHomeScreenAreas() {
 
    // Assuming this.ctx is a CanvasRenderingContext2D or a similar object
 
-   displayCtx.fillStyle = "#000000";
+   displayCtx.fillStyle = window.colors.ZBLACK;
    displayCtx.clearRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
    displayCtx.fillRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
 
-   displayCtx.fillStyle = "#444444";
+   displayCtx.fillStyle = window.colors.ZGRAY4;
    displayCtx.clearRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
    displayCtx.fillRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
 
@@ -196,38 +196,177 @@ function drawHomeScreenAreas() {
    // displayCtx.clearRect(homeScreen.bottomParamAreaLeft, homeScreen.bottomParamAreaTop, homeScreen.bottomParamAreaWidth, homeScreen.bottomParamAreaHeight);
    // displayCtx.fillRect(homeScreen.bottomParamAreaLeft, homeScreen.bottomParamAreaTop, homeScreen.bottomParamAreaWidth, homeScreen.bottomParamAreaHeight);
 
-   displayCtx.fillStyle = "#555555";
+   displayCtx.fillStyle = window.colors.ZGRAY5;
    displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
    displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
 
-   var HRpointSize = 50 ;
-   var ETCO2pointSize = 50 ;
-   var FICO2pointSize = 20 ;
-   var SPO2pointSize = 50 ;
-   var RRCpointSize = 50 ;
-   var TEMPpointSize = 30 ;
-   var NIBPpointSize = 45 ;
+   drawParameterAreas();
+
+   // if (window.graphicsDebug) {
+   //    drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   // }
+   // else {
+   //    drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   //    drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   // }
+
+}
+
+//
+//  drawParameterAreas
+//
+
+function drawParameterAreas() {
+
+   drawHRParameterArea();
+   drawETCO2ParameterArea();
+   drawFICO2ParameterArea();
+   drawSPO2ParameterArea();
+   drawRRCParameterArea();
+   drawTEMPParameterArea();
+   drawNIBPParameterArea();
+
+}
+
+
+var HRpointSize = 50;
+var ETCO2pointSize = 50;
+var FICO2pointSize = 20;
+var SPO2pointSize = 50;
+var RRCpointSize = 50;
+var TEMPpointSize = 30;
+var NIBPpointSize = 45;
+
+function drawHRParameterArea() {
+
+   textForegroundColor = window.colors.HRColor ;
+   textBackgroundColor = window.colors.ZBLACK;
+
+   // var needToColor  = 1 ;
+   // var alarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH ;
+   var needToColor  = window.monitorNeedToColor ;
+   var alarmStatus = window.monitorAlarmStatus ;
+
+   LOGEVENTYELLOW("In drawHRParameterArea, needToColor = ", needToColor, " alarmStatus = ", alarmStatus);
+
+   if (alarmStatus == window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW) {
+      var q = 0;
+   }
+
+   if (needToColor) {
+      textForegroundColor = getTextForegroundColorFromAlarmStatus(alarmStatus, window.blinkState) ;
+      textBackgroundColor = getTextBackgroundColorFromAlarmStatus(alarmStatus, window.blinkState) ;
+   }
+
+   displayCtx.fillStyle = textBackgroundColor;
+   displayCtx.clearRect(homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight);
+   displayCtx.fillRect(homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight);
 
    if (window.graphicsDebug) {
-      drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "HR", "333", textForegroundColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "HR", "80", textForegroundColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawETCO2ParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawFICO2ParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawSPO2ParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawRRCParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawTEMPParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+
+}
+
+function drawNIBPParameterArea() {
+
+   if (window.graphicsDebug) {
       drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
    }
    else {
-      drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-      drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-      drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-      drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-      drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-      drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
       drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
    }
 
 }
+
+
+// if (window.graphicsDebug) {
+//    drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+// }
+// else {
+//    drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+//    drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+// }
 
 
 function drawParameterArea(displayCtx, label, value, labelColor, font, fontSize, x, y, width, height) {
@@ -245,11 +384,11 @@ function drawParameterArea(displayCtx, label, value, labelColor, font, fontSize,
 
    // var labelX = x + width * 10 / 100 ;
    // var labelY = y + height * 15 / 100 ;
-   var labelX = x + 8 ;
-   var labelY = y + 20 ;
+   var labelX = x + 8;
+   var labelY = y + 20;
 
-   var valueX = x + width * 50 / 100 ;
-   var valueY = y + height * 70 / 100 ;
+   var valueX = x + width * 50 / 100;
+   var valueY = y + height * 70 / 100;
 
    // Add label in the upper left corner
    // Set the font and font size
@@ -263,10 +402,10 @@ function drawParameterArea(displayCtx, label, value, labelColor, font, fontSize,
    displayCtx.textAlign = 'center';
    displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed
 
-//     // Reset the styles to default values
-//     displayCtx.strokeStyle = '#000000'; // Reset to default black
-//     displayCtx.fillStyle = '#000000'; // Reset to default black
-//     displayCtx.font = '10px Arial'; // Reset to default font and size
+   //     // Reset the styles to default values
+   //     displayCtx.strokeStyle = '#000000'; // Reset to default black
+   //     displayCtx.fillStyle = '#000000'; // Reset to default black
+   //     displayCtx.font = '10px Arial'; // Reset to default font and size
 
 }
 
