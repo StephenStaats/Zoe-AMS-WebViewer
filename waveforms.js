@@ -259,7 +259,7 @@ function resetWaveforms(shiftWaveforms) {
    }
 
    // Get the button element by its ID
-   var button = document.getElementById('StartStopWaveformsButton');
+   var button = document.getElementById('startStopWaveformsButton');
 
    button.textContent = 'Pause Waveforms';
 
@@ -275,7 +275,7 @@ function resetWaveforms(shiftWaveforms) {
 function startStopWaveforms() {
 
    // Get the button element by its ID
-   var button = document.getElementById('StartStopWaveformsButton');
+   var button = document.getElementById('startStopWaveformsButton');
 
    //Check the current label and update it
    if (button.textContent === 'Pause Waveforms') {

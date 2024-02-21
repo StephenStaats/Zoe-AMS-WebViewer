@@ -2,6 +2,8 @@ window.simulatedDataMode = 0;
 
 window.developmentMode = 0;
 
+window.graphicsDebug = 0;
+
 window.autoscaleOffsetPercentage = 10;
 
 window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;

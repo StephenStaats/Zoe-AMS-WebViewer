@@ -208,220 +208,26 @@ function drawHomeScreenAreas() {
    var TEMPpointSize = 30 ;
    var NIBPpointSize = 45 ;
 
-   drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //drawParameterArea(displayCtx, "", "", window.colors.blankColor, "Arial", 10, homeScreen.blankParamAreaLeft, homeScreen.blankParamAreaTop, homeScreen.blankParamAreaWidth, homeScreen.blankParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-
-   //example();
-
-   // console.log('Start');
-   // playSound();
-   // console.log('End');
-
-
-// // Usage
-// loadSound('Startup.wav')
-//   .then(buffer => {
-//     console.log('Sound loaded');
-//     playSound(buffer);
-//   })
-//   .catch(error => {
-//     console.error('Error loading sound:', error);
-//   });
-
-
+   if (window.graphicsDebug) {
+      drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
+   else {
+      drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+      drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
+   }
 
 }
-
-// <audio id="myAudio" src="sound.mp3"></audio>
-// <button onclick="playSound()">Play Sound</button>
-
- 
-// function playSound() {
-//   const audio = document.getElementById("myAudio");
-//   audio.play();
-// }
- 
-
-
-// const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-// const oscillator = audioContext.createOscillator();
-
-// function playSound() {
-//   oscillator.connect(audioContext.destination);
-//   oscillator.start();
-//   setTimeout(() => {
-//     oscillator.stop();
-//   }, 2000); // Stop the oscillator after 2 seconds
-// }
-
-
-
-
-
-
-// function sleep(ms) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
-
-// async function example() {
-//   //console.log('Start');
-
-// // Create an AudioContext instance
-// const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// // Create an OscillatorNode, which represents a periodic waveform.
-// const oscillator = audioContext.createOscillator();
-
-// // Set the type of oscillator to 'sine' wave
-// oscillator.type = 'sine';
-
-// // Set the frequency of the oscillator (in Hz)
-// oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // 440 Hz is the frequency of A4 note
-
-// // Connect the oscillator to the destination (output)
-// oscillator.connect(audioContext.destination);
-
-// // Start the oscillator
-// oscillator.start();
-
-//   await sleep(2000); // Sleep for 2 seconds (non-blocking)
-
-//   //console.log('End');
-// oscillator.stop();
-
-// }
-
-
-
-// // Create an AudioContext instance
-// const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// // Load the sound file
-// function loadSound(url) {
-//   return fetch(url)
-//     .then(response => response.arrayBuffer())
-//     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer));
-// }
-
-// // // Play the sound
-// // function playSound(buffer) {
-// //   const source = audioContext.createBufferSource();
-// //   source.buffer = buffer;
-// //   source.connect(audioContext.destination);
-// //   source.start();
-// // }
-
-
-
-
-
-// // const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-// const fileInput = document.getElementById('fileInput');
-// const playButton = document.getElementById('playButton');
-
-// fileInput.addEventListener('change', handleFileSelect);
-
-// function handleFileSelect(event) {
-//   const file = event.target.files[0];
-//   const reader = new FileReader();
-//   reader.onload = function(event) {
-//     const arrayBuffer = event.target.result;
-//     audioContext.decodeAudioData(arrayBuffer)
-//       .then(buffer => {
-//         console.log('Sound loaded');
-//         playSound(buffer);
-//       })
-//       .catch(error => {
-//         console.error('Error decoding audio data:', error);
-//       });
-//   };
-//   reader.readAsArrayBuffer(file);
-// }
-
-// function playSound(buffer) {
-//   const source = audioContext.createBufferSource();
-//   source.buffer = buffer;
-//   source.connect(audioContext.destination);
-//   source.start();
-// }
-
-
-
-
- 
-// const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-// const fileInput = document.getElementById('fileInput');
-// const playButton = document.getElementById('playButton');
-
-// fileInput.addEventListener('change', handleFileSelect);
-// playButton.addEventListener('click', handlePlayButtonClick);
-
-// function handleFileSelect(event) {
-//   const file = event.target.files[0];
-//   const reader = new FileReader();
-//   reader.onload = function(event) {
-//     const arrayBuffer = event.target.result;
-//     audioContext.decodeAudioData(arrayBuffer)
-//       .then(buffer => {
-//         console.log('Sound loaded');
-//         playSound(buffer);
-//       })
-//       .catch(error => {
-//         console.error('Error decoding audio data:', error);
-//       });
-//   };
-//   reader.readAsArrayBuffer(file);
-
-//   // Clear the value of the file input to allow subsequent selections
-//   fileInput.value = '';
-// }
-
-// function handlePlayButtonClick() {
-//   playSound(buffer); // Assuming buffer is a global variable containing the audio buffer
-// }
-
-// function playSound(buffer) {
-//   const source = audioContext.createBufferSource();
-//   source.buffer = buffer;
-//   source.connect(audioContext.destination);
-//   source.start();
-// }
- 
-
-// <button id="playButton">Play Sound</button>
-
-
-// const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-// const playButton = document.getElementById('playButton');
-
-// playButton.addEventListener('click', playSound);
-
-// function playSound() {
-//   const soundUrl = 'Startup.wav'; // Hardcoded file name
-//   fetch(soundUrl)
-//     .then(response => response.arrayBuffer())
-//     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-//     .then(buffer => {
-//       console.log('Sound loaded');
-//       const source = audioContext.createBufferSource();
-//       source.buffer = buffer;
-//       source.connect(audioContext.destination);
-//       source.start();
-//     })
-//     .catch(error => {
-//       console.error('Error loading sound:', error);
-//     });
-// }
-
-
-
-
 
 
 function drawParameterArea(displayCtx, label, value, labelColor, font, fontSize, x, y, width, height) {
