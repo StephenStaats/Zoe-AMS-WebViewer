@@ -1,4 +1,19 @@
 //
+//   Play playStartupToneWithBeep tone
+//
+
+function playStartupToneWithBeep() {
+
+   playStartupTone() ;
+
+   setTimeout(() => {
+      playAlertToneOK() ;
+   }, 1250); 
+
+}
+
+
+//
 //   Play startup tone
 //
 
