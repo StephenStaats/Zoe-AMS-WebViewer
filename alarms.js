@@ -399,7 +399,7 @@ function updateBlinkState() {
 
       if ((blinkState % 4) == 1) {
          simulateArrivalOfWaveformDataMessage() ;
-         //simulateArrivalOfParameterDataMessage() ;
+         simulateArrivalOfParameterDataMessage() ;
       }
 
    }

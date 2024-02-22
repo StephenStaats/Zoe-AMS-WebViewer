@@ -122,13 +122,29 @@ resetWaveforms(0);
 drawHomeScreen();
 
 
-// Define the function to be executed at each interval
+//
+//   simulateArrivalOfWaveformDataMessage
+//
+
 function simulateArrivalOfWaveformDataMessage() {
 
    processWaveformDataMessage(currentWaveforms[waveformSetIndex]);
 
 }
 
+
+//
+//   simulateArrivalOfParameterDataMessage
+//
+
+function simulateArrivalOfParameterDataMessage() {
+
+   processParameterDataMessage(currentParameters[parameterSetIndex]);
+
+}
+
+
+// Define the function to be executed at each interval
 function periodicUpdate() {
 
    updateBlinkState() ;

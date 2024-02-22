@@ -1,8 +1,4 @@
 //
-//   RingBuffer
-//   
-
-//
 //   Waveform
 //   
 
@@ -200,7 +196,7 @@ Waveform.prototype.getCapacity = function() {
 
 
 //
-//   setupWaveforms - call when a new waveformSetup message is received from the REST API
+//   setupWaveforms - call when a new waveformDataMessage is received from the REST API
 //
 
 var nWaveforms;

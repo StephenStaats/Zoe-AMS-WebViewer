@@ -1,4 +1,3 @@
-
 //
 //   processWaveformDataMessage
 //
@@ -34,6 +33,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
    if (somethingChanged) {
       setupWaveforms(newWaveformDataMessage);
+      resetWaveforms(0);
    }
    else {
 

@@ -52,6 +52,7 @@ function HomeScreen(width, height) {
 
    this.waveforms = [];
 
+   this.parameters = [];
 
 }
 
@@ -169,6 +170,18 @@ HomeScreen.prototype.addWaveform = function (wvf) {
 
 HomeScreen.prototype.getNWaveforms = function () {
    return (this.waveforms.length);
+};
+
+HomeScreen.prototype.clearParameterList = function () {
+   this.parameters = [];
+};
+
+HomeScreen.prototype.addParameter = function (param) {
+   this.parameters.push(param);
+};
+
+HomeScreen.prototype.getNParameters = function () {
+   return (this.parameters.length);
 };
 
 
@@ -428,3 +441,4 @@ function drawHomeScreen(timestamp) {
    //}
 
 }
+
