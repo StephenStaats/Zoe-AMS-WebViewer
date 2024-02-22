@@ -46,11 +46,11 @@ simulationTypeDropdown.addEventListener("change", function () {
 
    if (selectedValue == 'simulateWaveformData') {
       window.simulatedDataMode = 1;
-      clearInterval(intervalId); // This stops the interval
+      //clearInterval(intervalId); // This stops the interval
    }
    else {
       window.simulatedDataMode = 0;
-      intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);   
+      //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);   
    }
 
    resetWaveforms(0);
@@ -123,7 +123,7 @@ drawHomeScreen();
 
 
 // Define the function to be executed at each interval
-function simulateArrivalOfWaveformMessage() {
+function simulateArrivalOfWaveformDataMessage() {
 
    processWaveformDataMessage(currentWaveforms[waveformSetIndex]);
 
@@ -137,7 +137,7 @@ function periodicUpdate() {
 
 // Set the interval to execute the function every 250 milliseconds  
 if (window.simulatedDataMode == 0) {
-   //intervalId = setInterval(simulateArrivalOfWaveformMessage, 1000);
+   //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);
    intervalId = setInterval(periodicUpdate, 250);
 }
 

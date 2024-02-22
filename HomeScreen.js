@@ -202,26 +202,17 @@ function drawHomeScreenAreas() {
 
    drawParameterAreas();
 
-   // if (window.graphicsDebug) {
-   //    drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   // }
-   // else {
-   //    drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   //    drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-   // }
-
 }
+
+
+
+var HRpointSize = 50;
+var ETCO2pointSize = 50;
+var FICO2pointSize = 20;
+var SPO2pointSize = 50;
+var RRCpointSize = 50;
+var TEMPpointSize = 30;
+var NIBPpointSize = 45;
 
 //
 //  drawParameterAreas
@@ -239,14 +230,9 @@ function drawParameterAreas() {
 
 }
 
-
-var HRpointSize = 50;
-var ETCO2pointSize = 50;
-var FICO2pointSize = 20;
-var SPO2pointSize = 50;
-var RRCpointSize = 50;
-var TEMPpointSize = 30;
-var NIBPpointSize = 45;
+//
+//  drawHRParameterArea
+//
 
 function drawHRParameterArea() {
 
@@ -258,7 +244,7 @@ function drawHRParameterArea() {
    var needToColor  = window.monitorNeedToColor ;
    var alarmStatus = window.monitorAlarmStatus ;
 
-   LOGEVENTYELLOW("In drawHRParameterArea, needToColor = ", needToColor, " alarmStatus = ", alarmStatus);
+   //LOGEVENTYELLOW("In drawHRParameterArea, needToColor = ", needToColor, " alarmStatus = ", alarmStatus);
 
    if (alarmStatus == window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW) {
       var q = 0;
@@ -348,26 +334,9 @@ function drawNIBPParameterArea() {
 
 }
 
-
-// if (window.graphicsDebug) {
-//    drawParameterArea(displayCtx, "HR", "333", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-// }
-// else {
-//    drawParameterArea(displayCtx, "HR", "80", window.colors.HRColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-// }
-
+//
+//  drawParameterArea
+//
 
 function drawParameterArea(displayCtx, label, value, labelColor, font, fontSize, x, y, width, height) {
 

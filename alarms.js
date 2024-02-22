@@ -232,6 +232,9 @@ function updateAlarmTones() {
 
 }
 
+//
+//  updateBlinkState
+//
 
 function updateBlinkState() {
 
@@ -241,13 +244,16 @@ function updateBlinkState() {
       blinkState = 0 ; 
    }
 
-   if ((blinkState % 4) == 1) {
+   if (window.simulatedDataMode == 0) {
 
-      simulateArrivalOfWaveformMessage() ;
-
-      //simulateArrivalOfParameterDataMessage() ;
+      if ((blinkState % 4) == 1) {
+         simulateArrivalOfWaveformDataMessage() ;
+         //simulateArrivalOfParameterDataMessage() ;
+      }
 
    }
+
+   //return ;
   
    var needToBlinkMessage        = 0 ;
    var needToBlinkParameterBoxes = 0 ;
