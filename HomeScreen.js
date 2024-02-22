@@ -245,6 +245,7 @@ function drawHRParameterArea() {
    var alarmStatus = window.monitorAlarmStatus ;
 
    //LOGEVENTYELLOW("In drawHRParameterArea, needToColor = ", needToColor, " alarmStatus = ", alarmStatus);
+   //LOGEVENTYELLOW("In drawHRParameterArea") ;
 
    if (alarmStatus == window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW) {
       var q = 0;

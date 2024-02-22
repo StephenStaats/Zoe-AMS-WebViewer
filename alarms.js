@@ -2,12 +2,17 @@
 //   Alarm logic
 //
 
-window.blinkState = 0 ;
-
 window.monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
 window.lastMonitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
 
+window.monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
+window.lastMonitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
+
 window.monitorNeedToColor = 0 ;
+
+window.toneToggleState = 0 ;
+
+window.blinkState = 0 ;
 
 //
 //   setAlarmStatusHIGH  
@@ -61,10 +66,10 @@ function silenceAlarms() {
 
 
 //
-//  getMonitorNeedToColorFromAlarmStatus
+//  getMonitorNeedToColorFromMonitorAlarmStatus
 //
 
-function getMonitorNeedToColorFromAlarmStatus() {
+function getMonitorNeedToColorFromMonitorAlarmStatus() {
 
    switch (monitorAlarmStatus) {
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
@@ -92,6 +97,152 @@ function getMonitorNeedToColorFromAlarmStatus() {
    }
 
 }
+
+ 
+//
+//  getMonitorAlarmToneFromMonitorAlarmStatus
+//
+
+function getMonitorAlarmToneFromMonitorAlarmStatus() {
+
+   switch (monitorAlarmStatus) {
+
+      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH :
+         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH ;
+         break ;
+
+      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM :
+         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM ;
+         break ;
+
+      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW :
+         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_LOW ;
+         break ;
+
+      default :
+         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
+         break ;
+
+   }
+
+}
+
+
+//
+//  soundalarmTone
+//
+
+function soundalarmTone() {
+
+   // called every 250 ms
+
+   //LOGALARMEVENT("In SoundalarmTone") ;
+
+   if (monitorAlarmTone != lastMonitorAlarmTone) {
+
+      lastMonitorAlarmTone = monitorAlarmTone ;
+
+      toneToggleState = 0 ;
+
+      //LOGALARMEVENT("New alarm tone requested: ", monitorAlarmTone) ;
+
+      switch (monitorAlarmTone)  {
+
+         case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
+            //LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
+            break ;
+
+         case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
+            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_LOW)) ;
+            break ;
+
+         case window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM :
+            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_MEDIUM)) ;
+            break ;
+
+         case window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH :
+            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_HIGH)) ;
+            break ;
+
+      }
+
+   }
+
+   switch (monitorAlarmTone) {
+
+      case window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH :
+         //
+         //   Two bursts of five chime tones (three, pause, two) at 8 second intervals
+         //
+         switch (toneToggleState) {
+            case 0 :
+               playAlarmToneHIGH() ;
+               LOGEVENT("playAlarmToneHIGH") ;
+               monitorAlarmToneInProgress = 1 ;
+               break ;
+            case 16 :
+               monitorAlarmToneInProgress = 0 ;   // high alarm tone .wav file is 4 seconds long
+               break ;
+         }
+         toneToggleState++ ;
+         if (toneToggleState >= 32) toneToggleState = 0 ;
+         break ;
+
+      case window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM :
+
+         //
+         //   Three tones at 15 second intervals
+         //
+         switch (toneToggleState) {
+            case 0 :
+               playAlarmToneMEDIUM() ;
+               LOGEVENT("playAlarmToneMEDIUM") ;
+               monitorAlarmToneInProgress = 1 ;
+               break ;
+            case 8 :
+               monitorAlarmToneInProgress = 0 ;   // medium alarm tone .wav file is 2 seconds long 
+               break ;
+         }
+         toneToggleState++ ;
+         if (toneToggleState >= 60) toneToggleState = 0 ;
+         break ;
+
+      case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
+
+         //
+         //   One tone at 20 second intervals
+         //
+         switch (toneToggleState) {
+            case 0 :
+               playAlarmToneLOW() ;
+               LOGEVENT("playAlarmToneLOW") ;
+               monitorAlarmToneInProgress = 1 ;
+               break ;
+            case 8 :
+               monitorAlarmToneInProgress = 0 ;   // low alarm tone .wav file is 2 seconds long 
+               break ;
+         }
+         toneToggleState++ ;
+         if (toneToggleState >= 80) toneToggleState = 0 ;
+
+         break ;
+
+      case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
+
+         //LOGEVENT("SOUND_TONE_NONE") ;
+         monitorAlarmToneInProgress = 0 ;
+
+         break ;
+
+      default :
+
+         break ;
+
+   }
+
+}
+
+
 
 //
 //  getTextBackgroundColorFromAlarmStatus
@@ -253,7 +404,7 @@ function updateBlinkState() {
 
    }
 
-   //return ;
+   soundalarmTone() ;
   
    var needToBlinkMessage        = 0 ;
    var needToBlinkParameterBoxes = 0 ;
@@ -263,9 +414,11 @@ function updateBlinkState() {
 
       lastMonitorAlarmStatus = monitorAlarmStatus ;
 
-      getMonitorNeedToColorFromAlarmStatus() ;
+      getMonitorAlarmToneFromMonitorAlarmStatus() ;
 
-      updateAlarmTones() ;
+      getMonitorNeedToColorFromMonitorAlarmStatus() ;
+
+      //updateAlarmTones() ;
 
       drawHRParameterArea() ;
 
@@ -346,4 +499,5 @@ function updateBlinkState() {
    }
 
 }
+
 
