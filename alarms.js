@@ -66,17 +66,19 @@ function silenceAlarms() {
 
 
 //
-//  getMonitorNeedToColorFromMonitorAlarmStatus
+//  getNeedToColorFromAlarmStatus
 //
 
-function getMonitorNeedToColorFromMonitorAlarmStatus() {
+function getNeedToColorFromAlarmStatus(alarmStatus) {
 
-   switch (monitorAlarmStatus) {
+   var needToColor = 0;
+
+   switch (alarmStatus) {
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE:
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE:
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE:
-         monitorNeedToColor = 0;
+         needToColor = 0;
          break;
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW:
@@ -88,13 +90,15 @@ function getMonitorNeedToColorFromMonitorAlarmStatus() {
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH:
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH:
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
-         monitorNeedToColor = 1;
+         needToColor = 1;
          break;
 
       default:
-         monitorNeedToColor = 0;
+         needToColor = 0;
          break;
    }
+
+   return(needToColor) ;
 
 }
 
@@ -416,7 +420,7 @@ function updateBlinkState() {
 
       getMonitorAlarmToneFromMonitorAlarmStatus() ;
 
-      getMonitorNeedToColorFromMonitorAlarmStatus() ;
+      monitorNeedToColor = getNeedToColorFromAlarmStatus(monitorAlarmStatus) ;
 
       //updateAlarmTones() ;
 
@@ -460,44 +464,23 @@ function updateBlinkState() {
 
    }
 
-   if (needToBlinkParameterBoxes) {
+   // if (needToBlinkParameterBoxes) {
 
-	   //
-	   //   Do this to blink parameter boxes
-	   //
+	//    //
+	//    //   Do this to blink parameter boxes
+	//    //
 
-      if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
+   //    if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
 
-         // if ((mNBPs.NeedToColor()) || (mNBPm.NeedToColor()) || (mNBPd.NeedToColor())) {
-         //    drawNBPParameterBoxText(pDC) ;
-         // }
 
-         // if (mSpO2.NeedToColor()) {
-         //   drawSpO2ParameterBoxText(pDC) ;
-         // }
+   //       // if (mHR.NeedToColor()) {
+   //          // drawHRParameterArea() ;
+   //       // }
 
-         // if (mHR.NeedToColor()) {
-             drawHRParameterArea() ;
-         // }
 
-         // if (mTEMP.NeedToColor()) {
-         //    drawTEMPParameterBoxText(pDC) ;
-         // }
+   //    }
 
-         // if (mETCO2.NeedToColor()) {
-         //    drawETCO2ParameterBoxText(pDC) ;
-         // }
-         // if (mFICO2.NeedToColor()) {
-         //    drawFICO2ParameterBoxText(pDC) ;
-         // }
-         // if (mRRC.NeedToColor()) {
-         //    drawRRCParameterBoxText(pDC) ;
-         // }
-
-      }
-
-   }
+   // }
 
 }
-
 

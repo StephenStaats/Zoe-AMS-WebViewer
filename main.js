@@ -118,6 +118,9 @@ homeScreen.initializeAreas();
 
 resetWaveforms(0);
 
+simulateArrivalOfParameterDataMessage();
+simulateArrivalOfParameterDataMessage();
+
 // Start drawing
 drawHomeScreen();
 

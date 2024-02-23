@@ -42,7 +42,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
       for (w = 0; w < waveformData.waveforms.length; w++) {
          var foundMatch = 0;
          var cw;
-         for (cw = 0; w < homeScreen.waveforms.length; cw++) {
+         for (cw = 0; cw < homeScreen.waveforms.length; cw++) {
             if (waveformData.waveforms[w].waveformName == homeScreen.waveforms[cw].waveformName) {
                foundMatch = 1;
                break;

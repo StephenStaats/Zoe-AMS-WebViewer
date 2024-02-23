@@ -10,37 +10,37 @@ window,currentParameters = [
       {
         "parameterName": "HR",
         "parameterValue": "80",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "SPO2",
         "parameterValue": "100",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "ETCO2",
         "parameterValue": "33.3",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "FICO2",
         "parameterValue": "2.0",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "RRC",
         "parameterValue": "12",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "TEMP",
         "parameterValue": "98.6",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "NIBP",
         "parameterValue": "120 / 80 (100)",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       }
     ]
   }`,
@@ -49,38 +49,38 @@ window,currentParameters = [
     "parameters": [
       {
         "parameterName": "HR",
-        "parameterValue": "80",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "79",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "SPO2",
-        "parameterValue": "100",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "99",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "ETCO2",
-        "parameterValue": "33.3",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "33.2",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "FICO2",
-        "parameterValue": "2.0",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "1.9",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "RRC",
-        "parameterValue": "12",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "11",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "TEMP",
-        "parameterValue": "98.6",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "98.5",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       },
       {
         "parameterName": "NIBP",
-        "parameterValue": "120 / 80 (100)",
-        "parameterAlarmState": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterValue": "119 / 79 (99)",
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
       }
     ]
   }`
