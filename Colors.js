@@ -1,6 +1,24 @@
 window.colors = {
+   ZBLACK: "#000000",
+   ZGRAY4: "#444444",
+   ZGRAY5: "#555555",
+   ZWHITE: "#FFFFFF",
+   ZRED: "#FF0000",
+   ZYELLOW: "#FFFF00",
+   ZCYAN: "#00FFFF",
+   ZBLINK_RED_ON: "#FF0032",
+   ZBLINK_RED_OFF: "#B40000",
+   ZBLINK_YELLOW_ON: "#FEF600",
+   ZBLINK_YELLOW_OFF: "#B4B400",
    ECGColor: "#00FF00",
    CO2Color: "#FFFF00",
-   SpO2Color: "#00FFFF",
-   RESPColor: "#00ADFF"
+   SPO2Color: "#00FFFF",
+   RESPColor: "#00ADFF",
+   HRColor: "#00FF00",
+   ETCO2Color: "#FFFF00",
+   FICO2Color: "#FFFF00",
+   RRCColor: "#00ADFF",
+   TEMPColor: "#FFFFFF",
+   NIBPColor: "#FF9900",
+   AreaSeparatorColor: "#DDDDDD"
 };

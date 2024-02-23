@@ -1,0 +1,27 @@
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 50px; /* Adjust as needed for offset from the left margin */
+  width: calc(100% - 100px); /* Adjust as needed for the width of the container */
+}
+
+.column {
+  flex: 1;
+  margin-right: 0px; /* Adjust as needed for space between columns */
+}
+
+.column:last-child {
+  margin-right: 0; /* Remove margin from last column */
+}
+
+.column p {
+  margin: 15px 0; /* Adjust as needed for space between rows */
+}
+
+.column button {
+  width: 60%;
+}
+
+
+
+ 
