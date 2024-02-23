@@ -50,17 +50,17 @@ window,currentParameters = [
       {
         "parameterName": "HR",
         "parameterValue": "79",
-        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_ACTIVE_HIGH"
       },
       {
         "parameterName": "SPO2",
         "parameterValue": "99",
-        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM"
       },
       {
         "parameterName": "ETCO2",
         "parameterValue": "33.2",
-        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_NORMAL_NONE"
+        "parameterAlarmStatus": "Z_PARAM_ALARM_STATUS_ACTIVE_LOW"
       },
       {
         "parameterName": "FICO2",

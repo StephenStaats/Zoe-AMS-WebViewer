@@ -490,19 +490,24 @@ Parameter.prototype.getHeightFromParameterName = function() {
 //  drawParameterArea
 //
 
-// Method to get parameter alarm status
 Parameter.prototype.drawParameterArea = function() {
 
    textForegroundColor = this.getColorFromParameterName(this.parameterName) ;
    textBackgroundColor = window.colors.ZBLACK;
 
-   var needToColor  = getNeedToColorFromAlarmStatus(this.parameterAlarmStatus) ;
+   var numericAlarmStatus = getNumericAlarmStatusFromParameterAlarmStatus(this.parameterAlarmStatus) ;
+
+   var needToColor  = getNeedToColorFromAlarmStatus(numericAlarmStatus) ;
 
    //LOGEVENTYELLOW("In drawParameterArea, needToColor = ", needToColor, " this.parameterAlarmStatus = ", this.parameterAlarmStatus);
 
+   if (this.parameterName == "SPO2") {
+      var p = 0;
+   }
+
    if (needToColor) {
-      textForegroundColor = getTextForegroundColorFromAlarmStatus(this.parameterAlarmStatus, window.blinkState) ;
-      textBackgroundColor = getTextBackgroundColorFromAlarmStatus(this.parameterAlarmStatus, window.blinkState) ;
+      textForegroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
+      textBackgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
    }
 
    displayCtx.fillStyle = textBackgroundColor;

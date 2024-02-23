@@ -66,6 +66,35 @@ function silenceAlarms() {
 
 
 //
+//  getNumericAlarmStatusFromParameterAlarmStatus
+//
+
+function getNumericAlarmStatusFromParameterAlarmStatus(alarmStatus) {
+
+   var numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
+
+   switch (alarmStatus) {
+      case "Z_PARAM_ALARM_STATUS_NORMAL_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE; break ;
+      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE; break ;
+      case "Z_PARAM_ALARM_STATUS_LATCHED_NONE" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE; break ;
+      case "Z_PARAM_ALARM_STATUS_ACTIVE_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE; break ;
+      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW; break ;
+      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM; break ;
+      case "Z_PARAM_ALARM_STATUS_LATCHED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_LOW; break ;
+      case "Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM; break ;
+      case "Z_PARAM_ALARM_STATUS_ACTIVE_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW; break ;
+      case "Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM; break ;
+      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH; break ;
+      case "Z_PARAM_ALARM_STATUS_LATCHED_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH; break ;
+      case "Z_PARAM_ALARM_STATUS_ACTIVE_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH; break ;
+   }
+
+   return(numericAlarmStatus) ;
+
+}
+
+
+//
 //  getNeedToColorFromAlarmStatus
 //
 
@@ -104,30 +133,34 @@ function getNeedToColorFromAlarmStatus(alarmStatus) {
 
  
 //
-//  getMonitorAlarmToneFromMonitorAlarmStatus
+//  getAlarmToneFromAlarmStatus
 //
 
-function getMonitorAlarmToneFromMonitorAlarmStatus() {
+function getAlarmToneFromAlarmStatus(alarmStatus) {
 
-   switch (monitorAlarmStatus) {
+   var alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
+
+   switch (alarmStatus) {
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH :
-         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH ;
+         alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH ;
          break ;
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM :
-         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM ;
+         alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM ;
          break ;
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW :
-         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_LOW ;
+         alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_LOW ;
          break ;
 
       default :
-         monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
+         alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
          break ;
 
    }
+
+   return (alarmTone);
 
 }
 
@@ -141,6 +174,26 @@ function soundalarmTone() {
    // called every 250 ms
 
    //LOGALARMEVENT("In SoundalarmTone") ;
+ 
+   var highestAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
+
+   for (p = 0; p < homeScreen.parameters.length; p++) {
+
+      var param = homeScreen.parameters[p];
+
+      var thisNumericAlarmStatus = getNumericAlarmStatusFromParameterAlarmStatus(param.parameterAlarmStatus) ;
+
+      if (thisNumericAlarmStatus > highestAlarmStatus) {
+
+         highestAlarmStatus = thisNumericAlarmStatus ;
+
+      }
+
+   }
+
+   monitorAlarmStatus = highestAlarmStatus;
+
+   monitorAlarmTone = getAlarmToneFromAlarmStatus(monitorAlarmStatus) ;
 
    if (monitorAlarmTone != lastMonitorAlarmTone) {
 
@@ -285,21 +338,7 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
          break;
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
-         switch (blinkState) {
-            case 0:
-            case 1:
-            case 4:
-            case 5:
-               returnColor = window.colors.ZBLINK_RED_ON;
-               break;
-
-            case 2:
-            case 3:
-            case 6:
-            case 7:
-               returnColor = window.colors.ZBLINK_RED_OFF;
-               break;
-         }
+         returnColor = (blinkState < 2) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
          break;
 
       default:
@@ -414,19 +453,19 @@ function updateBlinkState() {
    var needToBlinkParameterBoxes = 0 ;
    var suspendTimerRunning       = 0 ;
 
-   if (monitorAlarmStatus != lastMonitorAlarmStatus) {
+   //if (monitorAlarmStatus != lastMonitorAlarmStatus) {
 
-      lastMonitorAlarmStatus = monitorAlarmStatus ;
+      //lastMonitorAlarmStatus = monitorAlarmStatus ;
 
-      getMonitorAlarmToneFromMonitorAlarmStatus() ;
+      //getMonitorAlarmToneFromMonitorAlarmStatus() ;
 
-      monitorNeedToColor = getNeedToColorFromAlarmStatus(monitorAlarmStatus) ;
+      //monitorNeedToColor = getNeedToColorFromAlarmStatus(monitorAlarmStatus) ;
 
       //updateAlarmTones() ;
 
-      drawHRParameterArea() ;
+      //drawHRParameterArea() ;
 
-   }
+   //}
 
    // if (monitorNeedToColor) {
    //    needToBlinkMessage        = 1 ;
@@ -464,23 +503,24 @@ function updateBlinkState() {
 
    }
 
-   // if (needToBlinkParameterBoxes) {
+   if (needToBlinkParameterBoxes) {
 
-	//    //
-	//    //   Do this to blink parameter boxes
-	//    //
+	   //
+	   //   Do this to blink parameter boxes
+	   //
 
-   //    if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
+      if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
+
+         drawParameterAreas();
+
+         // if (mHR.NeedToColor()) {
+            // drawHRParameterArea() ;
+         // }
 
 
-   //       // if (mHR.NeedToColor()) {
-   //          // drawHRParameterArea() ;
-   //       // }
+      }
 
-
-   //    }
-
-   // }
+   }
 
 }
 
