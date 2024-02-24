@@ -60,7 +60,11 @@ function setAlarmStatusNONE() {
 
 function silenceAlarms() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
+   //monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
+   if (window.monitorAlarmTone != window.Z_ALARM_TONE.Z_ALARM_TONE_NONE) {
+      window.alarmsSilenced = 1 ;
+      window.audio.pause();
+   }
 
 }
 
@@ -207,6 +211,7 @@ function soundalarmTone() {
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
             //LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
+            window.alarmsSilenced = 0 ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
@@ -233,9 +238,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneHIGH() ;
-               LOGEVENT("playAlarmToneHIGH") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneHIGH() ;
+                  LOGEVENT("playAlarmToneHIGH") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 16 :
                monitorAlarmToneInProgress = 0 ;   // high alarm tone .wav file is 4 seconds long
@@ -252,9 +259,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneMEDIUM() ;
-               LOGEVENT("playAlarmToneMEDIUM") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneMEDIUM() ;
+                  LOGEVENT("playAlarmToneMEDIUM") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 8 :
                monitorAlarmToneInProgress = 0 ;   // medium alarm tone .wav file is 2 seconds long 
@@ -271,9 +280,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneLOW() ;
-               LOGEVENT("playAlarmToneLOW") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneLOW() ;
+                  LOGEVENT("playAlarmToneLOW") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 8 :
                monitorAlarmToneInProgress = 0 ;   // low alarm tone .wav file is 2 seconds long 
@@ -338,7 +349,7 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
          break;
 
       case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
-         returnColor = (blinkState < 2) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
+         returnColor = (blinkState < 4) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
          break;
 
       default:

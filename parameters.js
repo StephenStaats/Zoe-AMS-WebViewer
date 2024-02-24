@@ -69,7 +69,7 @@ function processParameterDataMessage(newParameterDataMessage) {
 
    parameterDataMessageCount++
    LOGEVENT(" ");
-   LOGEVENTGREEN('in processParameterDataMessage, count = ', parameterDataMessageCount);
+   LOGEVENTYELLOW('in processParameterDataMessage, count = ', parameterDataMessageCount);
 
    // Parse the JSON string into JavaScript object
    const parameterData = JSON.parse(newParameterDataMessage);

@@ -10,6 +10,8 @@ window.graphicsDebug = 0;
 
 window.autoscaleOffsetPercentage = 10;
 
+window.alarmsSilenced = 0 ;
+
 //
 //   Note:  The following enums and constants must be kept in sync with CVM10
 //

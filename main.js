@@ -126,7 +126,7 @@ document.getElementById("setAlarmStatusHIGHButton").disabled = true;
 document.getElementById("setAlarmStatusMEDIUMButton").disabled = true;
 document.getElementById("setAlarmStatusLOWButton").disabled = true;
 document.getElementById("setAlarmStatusNONEButton").disabled = true;
-document.getElementById("silenceAlarmsButton").disabled = true;
+//document.getElementById("silenceAlarmsButton").disabled = true;
 
 
 // Start drawing
