@@ -97,8 +97,10 @@ HomeScreen.prototype.initializeAreas = function () {
    this.messageAreaLeft = 0;
    this.messageAreaRight = this.messageAreaLeft + this.messageAreaWidth;
    this.messageAreaTop = this.bottomParamAreaBottom + 1;
-   this.messageAreaBottom = this.messageAreaTop + this.messageAreaHeight;
-   this.messageAreaHeight = this.bottom;
+   this.messageAreaBottom = this.bottom;
+   this.messageAreaHeight = this.messageAreaBottom - this.messageAreaTop;
+
+
 
    ///////////////////////////////////////////////
 
@@ -194,11 +196,11 @@ function drawHomeScreenAreas() {
    // Assuming this.ctx is a CanvasRenderingContext2D or a similar object
 
    displayCtx.fillStyle = window.colors.ZBLACK;
-   displayCtx.clearRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
+   //displayCtx.clearRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
    displayCtx.fillRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
 
    displayCtx.fillStyle = window.colors.ZGRAY4;
-   displayCtx.clearRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
+   //displayCtx.clearRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
    displayCtx.fillRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
 
    // displayCtx.fillStyle = "#ff0000";
@@ -209,11 +211,13 @@ function drawHomeScreenAreas() {
    // displayCtx.clearRect(homeScreen.bottomParamAreaLeft, homeScreen.bottomParamAreaTop, homeScreen.bottomParamAreaWidth, homeScreen.bottomParamAreaHeight);
    // displayCtx.fillRect(homeScreen.bottomParamAreaLeft, homeScreen.bottomParamAreaTop, homeScreen.bottomParamAreaWidth, homeScreen.bottomParamAreaHeight);
 
-   displayCtx.fillStyle = window.colors.ZGRAY5;
-   displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
-   displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
+   // displayCtx.fillStyle = window.colors.ZGRAY5;
+   // displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
+   // displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
 
    drawParameterAreas();
+
+   drawBottomLineMessageArea() ;
 
 }
 
@@ -267,3 +271,37 @@ function drawHomeScreen(timestamp) {
 
 }
 
+//
+//   drawBottomLineMessageArea
+//
+
+function drawBottomLineMessageArea() {
+
+   var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(window.bottomLineMessageAlarmStatus) ;
+
+   var foregroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus) ;
+   var backgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus);
+
+   var messageX       = homeScreen.messageAreaLeft ;
+   var messageY       = homeScreen.messageAreaTop ;
+   var messageWidth   = homeScreen.messageAreaWidth ;
+
+   messageY  = messageY + homeScreen.messageAreaHeight * 20 / 100;  // adjust since values in NIBP font can go below the parameter area
+
+   var messageHeight  = homeScreen.messageAreaBottom - messageY ;
+
+   displayCtx.fillStyle = backgroundColor;
+   //displayCtx.clearRect(messageX, messageY, messageWidth, messageHeight);
+   displayCtx.fillRect(messageX, messageY, messageWidth, messageHeight);
+
+   var centerX  = messageX + messageWidth / 2;
+   var centerY  = messageY + messageHeight / 2;
+
+   displayCtx.fillStyle = foregroundColor;
+   displayCtx.font = '20pt Arial';  
+   displayCtx.textAlign = 'center';
+   displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
+
+   displayCtx.fillText(window.bottomLineMessage, centerX, centerY); // Adjust the positioning as needed
+
+}

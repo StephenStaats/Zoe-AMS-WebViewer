@@ -31,241 +31,9 @@ Parameter.prototype.getAlarmStatus = function() {
    return this.parameterAlarmStatus;
 };
 
-
 //
-//   setupParameters - call when a new parameterDataMessage is received from the REST API
+//   getColorFromParameterName  
 //
-
-var nParameters = 0 ;
-
-function setupParameters(setupParameterDataMessage) {
-
-   homeScreen.clearParameterList();
-
-   // Parse the JSON string into JavaScript object
-   const parameterData = JSON.parse(setupParameterDataMessage);
-
-   nParameters = parameterData.parameters.length;
-
-   // Add parameters from the parsed data
-   parameterData.parameters.forEach(parameter => {
-      // Create an instance of Parameter class
-      const param = new Parameter(parameter.parameterName);
-      homeScreen.addParameter(param);
-   });
-
-}
-
-
-//
-//   processParameterDataMessage
-//
-
-var parameterDataMessageCount = 0;
-
-var parameterSetIndex = 0;
-
-function processParameterDataMessage(newParameterDataMessage) {
-
-   parameterDataMessageCount++
-   LOGEVENT(" ");
-   LOGEVENTYELLOW('in processParameterDataMessage, count = ', parameterDataMessageCount);
-
-   // Parse the JSON string into JavaScript object
-   const parameterData = JSON.parse(newParameterDataMessage);
-
-   // See if the parameter setup is changing
-   var somethingChanged = 0;
-   var nParametersparameterDataMessage = parameterData.parameters.length;
-   if (nParametersparameterDataMessage != nParameters) {
-      somethingChanged = 1;
-   }
-   else {
-      var p;
-      for (p = 0; p < parameterData.parameters.length; p++) {
-         //LOGEVENTYELLOW(p + " message = " + parameterData.parameters[p].parameterName + "homeScreen = " + homeScreen.parameters[p].parameterName) ;
-
-         if (parameterData.parameters[p].parameterName != homeScreen.parameters[p].parameterName) {
-            somethingChanged = 1;
-            break;
-         }
-      }
-   }
-
-   if (somethingChanged) {
-      setupParameters(newParameterDataMessage);
-   }
-   else {
-
-      // Update values from this message into home screen parameter objects
-      var p;
-      for (p = 0; p < parameterData.parameters.length; p++) {
-         var foundMatch = 0;
-         var cp;
-         for (cp = 0; cp < parameterData.parameters.length; cp++) {
-            if (parameterData.parameters[p].parameterName == homeScreen.parameters[cp].parameterName) {
-               foundMatch = 1;
-               break;
-            }
-         }
-         if (foundMatch) {
-
-            var param = homeScreen.parameters[cp];
- 
-            var value = parameterData.parameters[cp].parameterValue ;
-            var alarmStatus = parameterData.parameters[cp].parameterAlarmStatus ;
-
-            param.setValue(value);
-            param.setAlarmStatus(alarmStatus);
-            param.drawParameterArea();
-
-         }
-
-      }
-
-   }
-
-}
-
-
-//
-//   shiftParameters  
-//
-
-function shiftParameters() {
-
-   parameterSetIndex++;
-
-   if (parameterSetIndex >= currentParameters.length) {
-      parameterSetIndex = 0;
-   }
-
-}
-
-
-
-
-
-// //
-// //  drawParameterAreas
-// //
-
-// function drawParameterAreas() {
-
-//    drawHRParameterArea();
-//    drawETCO2ParameterArea();
-//    drawFICO2ParameterArea();
-//    drawSPO2ParameterArea();
-//    drawRRCParameterArea();
-//    drawTEMPParameterArea();
-//    drawNIBPParameterArea();
-
-// }
-
-// //
-// //  drawHRParameterArea
-// //
-
-// function drawHRParameterArea() {
-
-//    textForegroundColor = window.colors.HRColor ;
-//    textBackgroundColor = window.colors.ZBLACK;
-
-//    // var needToColor  = 1 ;
-//    // var alarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH ;
-//    var needToColor  = window.monitorNeedToColor ;
-//    var alarmStatus = window.monitorAlarmStatus ;
-
-//    //LOGEVENTYELLOW("In drawHRParameterArea, needToColor = ", needToColor, " alarmStatus = ", alarmStatus);
-//    //LOGEVENTYELLOW("In drawHRParameterArea") ;
-
-//    if (alarmStatus == window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW) {
-//       var q = 0;
-//    }
-
-//    if (needToColor) {
-//       textForegroundColor = getTextForegroundColorFromAlarmStatus(alarmStatus, window.blinkState) ;
-//       textBackgroundColor = getTextBackgroundColorFromAlarmStatus(alarmStatus, window.blinkState) ;
-//    }
-
-//    displayCtx.fillStyle = textBackgroundColor;
-//    displayCtx.clearRect(homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight);
-//    displayCtx.fillRect(homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight);
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "HR", "333", textForegroundColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "HR", "80", textForegroundColor, "Arial", HRpointSize, homeScreen.HRParamAreaLeft, homeScreen.HRParamAreaTop, homeScreen.HRParamAreaWidth, homeScreen.HRParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawETCO2ParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "ETCO2", "32.3", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "ETCO2", "32.2", window.colors.ETCO2Color, "Arial", ETCO2pointSize, homeScreen.ETCO2ParamAreaLeft, homeScreen.ETCO2ParamAreaTop, homeScreen.ETCO2ParamAreaWidth, homeScreen.ETCO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawFICO2ParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "FICO2", "13.3", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "FICO2", "1.5", window.colors.FICO2Color, "Arial", FICO2pointSize, homeScreen.FICO2ParamAreaLeft, homeScreen.FICO2ParamAreaTop, homeScreen.FICO2ParamAreaWidth, homeScreen.FICO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawSPO2ParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "SPO2", "100", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "SPO2", "98", window.colors.SPO2Color, "Arial", SPO2pointSize, homeScreen.SPO2ParamAreaLeft, homeScreen.SPO2ParamAreaTop, homeScreen.SPO2ParamAreaWidth, homeScreen.SPO2ParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawRRCParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "RRC", "133", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "RRC", "12", window.colors.RRCColor, "Arial", RRCpointSize, homeScreen.RRCParamAreaLeft, homeScreen.RRCParamAreaTop, homeScreen.RRCParamAreaWidth, homeScreen.RRCParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawTEMPParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "TEMP", "103.3", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "TEMP", "98.6", window.colors.TEMPColor, "Arial", TEMPpointSize, homeScreen.TEMPParamAreaLeft, homeScreen.TEMPParamAreaTop, homeScreen.TEMPParamAreaWidth, homeScreen.TEMPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
-
-// function drawNIBPParameterArea() {
-
-//    if (window.graphicsDebug) {
-//       drawParameterArea(displayCtx, "NIBP", "222 / 222 (222)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-//    else {
-//       drawParameterArea(displayCtx, "NIBP", "120 / 80 (102)", window.colors.NIBPColor, "Arial", NIBPpointSize, homeScreen.NIBPParamAreaLeft, homeScreen.NIBPParamAreaTop, homeScreen.NIBPParamAreaWidth, homeScreen.NIBPParamAreaHeight); // Draw the rectangle (x, y, width, height)
-//    }
-
-// }
 
 Parameter.prototype.getColorFromParameterName = function() {
 
@@ -297,6 +65,9 @@ Parameter.prototype.getColorFromParameterName = function() {
 
 }
 
+//
+//   getPointSizeFromParameterName  
+//
 
 var HRpointSize = 50;
 var ETCO2pointSize = 50;
@@ -336,6 +107,10 @@ Parameter.prototype.getPointSizeFromParameterName = function() {
 
 }
 
+//
+//   getGraphicsDebugValueFromParameterName  
+//
+
 Parameter.prototype.getGraphicsDebugValueFromParameterName = function() {
 
    var graphicsDebugValue = "???" ;
@@ -365,6 +140,10 @@ Parameter.prototype.getGraphicsDebugValueFromParameterName = function() {
    return (graphicsDebugValue);
 
 }
+
+//
+//   getLeftFromParameterName  
+//
 
 Parameter.prototype.getLeftFromParameterName = function() {
 
@@ -396,6 +175,10 @@ Parameter.prototype.getLeftFromParameterName = function() {
 
 }
 
+//
+//   getTopFromParameterName  
+//
+
 Parameter.prototype.getTopFromParameterName = function() {
 
    var top = 0 ;
@@ -426,6 +209,10 @@ Parameter.prototype.getTopFromParameterName = function() {
 
 }
 
+//
+//   getWidthFromParameterName  
+//
+
 Parameter.prototype.getWidthFromParameterName = function() {
 
    var width = 0 ;
@@ -455,6 +242,10 @@ Parameter.prototype.getWidthFromParameterName = function() {
    return (width);
 
 }
+
+//
+//   getHeightFromParameterName  
+//
 
 Parameter.prototype.getHeightFromParameterName = function() {
 
@@ -495,7 +286,7 @@ Parameter.prototype.drawParameterArea = function() {
    textForegroundColor = this.getColorFromParameterName(this.parameterName) ;
    textBackgroundColor = window.colors.ZBLACK;
 
-   var numericAlarmStatus = getNumericAlarmStatusFromParameterAlarmStatus(this.parameterAlarmStatus) ;
+   var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(this.parameterAlarmStatus) ;
 
    var needToColor  = getNeedToColorFromAlarmStatus(numericAlarmStatus) ;
 
@@ -517,7 +308,7 @@ Parameter.prototype.drawParameterArea = function() {
    var width = this.getWidthFromParameterName() ;
    var height = this.getHeightFromParameterName() ;
 
-   displayCtx.clearRect(left, top, width, height);
+   //displayCtx.clearRect(left, top, width, height);
    displayCtx.fillRect(left, top, width, height);
 
    var pointSize = this.getPointSizeFromParameterName(this.parameterName) ;
@@ -532,6 +323,9 @@ Parameter.prototype.drawParameterArea = function() {
 
 }
 
+//
+//  drawGenericParameterArea
+//
 
 function drawGenericParameterArea(displayCtx, label, value, labelColor, font, fontSize, x, y, width, height) {
 
@@ -587,3 +381,130 @@ function drawParameterAreas() {
 
    }
 }
+
+
+//
+//   setupParameters - call when a new parameterDataMessage is received from the REST API
+//
+
+var nParameters = 0 ;
+
+function setupParameters(setupParameterDataMessage) {
+
+   homeScreen.clearParameterList();
+
+   // Parse the JSON string into JavaScript object
+   const parameterData = JSON.parse(setupParameterDataMessage);
+
+   nParameters = parameterData.parameters.length;
+
+   // Add parameters from the parsed data
+   parameterData.parameters.forEach(parameter => {
+      // Create an instance of Parameter class
+      const param = new Parameter(parameter.parameterName);
+      homeScreen.addParameter(param);
+   });
+
+}
+
+//
+//   shiftParameters  
+//
+
+function shiftParameters() {
+
+   parameterSetIndex++;
+
+   if (parameterSetIndex >= currentParameters.length) {
+      parameterSetIndex = 0;
+   }
+
+}
+
+
+//
+//   processParameterDataMessage
+//
+
+var parameterDataMessageCount = 0;
+
+var parameterSetIndex = 0;
+
+var lastBottomLineMessage ;
+var lastbottomLineMessageAlarmStatus;
+
+window.bottomLineMessage = " " ;
+window.bottomLineMessageAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
+
+function processParameterDataMessage(newParameterDataMessage) {
+
+   parameterDataMessageCount++
+   LOGEVENT(" ");
+   LOGEVENTYELLOW('in processParameterDataMessage, count = ', parameterDataMessageCount);
+
+   // Parse the JSON string into JavaScript object
+   const parameterData = JSON.parse(newParameterDataMessage);
+
+   var bottomLineMessage = parameterData.bottomLineMessage ;
+   var bottomLineMessageAlarmStatus = parameterData.bottomLineMessageAlarmStatus ;
+   if ((bottomLineMessage != lastBottomLineMessage) || (bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
+      lastBottomLineMessage = bottomLineMessage ;
+      lastbottomLineMessageAlarmStatus = bottomLineMessageAlarmStatus ;
+      window.bottomLineMessage = bottomLineMessage ;
+      window.bottomLineMessageAlarmStatus = bottomLineMessageAlarmStatus ;
+      drawBottomLineMessageArea() ;
+   }
+
+   // See if the parameter setup is changing
+   var somethingChanged = 0;
+   var nParametersparameterDataMessage = parameterData.parameters.length;
+   if (nParametersparameterDataMessage != nParameters) {
+      somethingChanged = 1;
+   }
+   else {
+      var p;
+      for (p = 0; p < parameterData.parameters.length; p++) {
+         //LOGEVENTYELLOW(p + " message = " + parameterData.parameters[p].parameterName + "homeScreen = " + homeScreen.parameters[p].parameterName) ;
+
+         if (parameterData.parameters[p].parameterName != homeScreen.parameters[p].parameterName) {
+            somethingChanged = 1;
+            break;
+         }
+      }
+   }
+
+   if (somethingChanged) {
+      setupParameters(newParameterDataMessage);
+   }
+   else {
+
+      // Update values from this message into home screen parameter objects
+      var p;
+      for (p = 0; p < parameterData.parameters.length; p++) {
+         var foundMatch = 0;
+         var cp;
+         for (cp = 0; cp < parameterData.parameters.length; cp++) {
+            if (parameterData.parameters[p].parameterName == homeScreen.parameters[cp].parameterName) {
+               foundMatch = 1;
+               break;
+            }
+         }
+         if (foundMatch) {
+
+            var param = homeScreen.parameters[cp];
+ 
+            var value = parameterData.parameters[cp].parameterValue ;
+            var alarmStatus = parameterData.parameters[cp].parameterAlarmStatus ;
+
+            param.setValue(value);
+            param.setAlarmStatus(alarmStatus);
+            param.drawParameterArea();
+
+         }
+
+      }
+
+   }
+
+}
+

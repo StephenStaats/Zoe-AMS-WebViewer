@@ -70,10 +70,10 @@ function silenceAlarms() {
 
 
 //
-//  getNumericAlarmStatusFromParameterAlarmStatus
+//  getNumericAlarmStatusFromAlarmStatus
 //
 
-function getNumericAlarmStatusFromParameterAlarmStatus(alarmStatus) {
+function getNumericAlarmStatusFromAlarmStatus(alarmStatus) {
 
    var numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
 
@@ -185,7 +185,7 @@ function soundalarmTone() {
 
       var param = homeScreen.parameters[p];
 
-      var thisNumericAlarmStatus = getNumericAlarmStatusFromParameterAlarmStatus(param.parameterAlarmStatus) ;
+      var thisNumericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(param.parameterAlarmStatus) ;
 
       if (thisNumericAlarmStatus > highestAlarmStatus) {
 
