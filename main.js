@@ -121,6 +121,9 @@ resetWaveforms(0);
 simulateArrivalOfParameterDataMessage();
 simulateArrivalOfParameterDataMessage();
 
+simulateArrivalOfSettingDataMessage();
+simulateArrivalOfSettingDataMessage();
+
 // Disable the button
 document.getElementById("setAlarmStatusHIGHButton").disabled = true;
 document.getElementById("setAlarmStatusMEDIUMButton").disabled = true;
@@ -151,6 +154,17 @@ function simulateArrivalOfWaveformDataMessage() {
 function simulateArrivalOfParameterDataMessage() {
 
    processParameterDataMessage(currentParameters[parameterSetIndex]);
+
+}
+
+
+//
+//   simulateArrivalOfSettingDataMessage
+//
+
+function simulateArrivalOfSettingDataMessage() {
+
+   processSettingDataMessage(currentSettings[settingSetIndex]);
 
 }
 

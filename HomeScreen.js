@@ -54,6 +54,8 @@ function HomeScreen(width, height) {
 
    this.parameters = [];
 
+   this.settings = [];
+
 }
 
 HomeScreen.prototype.initializeAreas = function () {
@@ -186,6 +188,41 @@ HomeScreen.prototype.getNParameters = function () {
    return (this.parameters.length);
 };
 
+HomeScreen.prototype.clearSettingList = function () {
+   this.settings = [];
+};
+
+HomeScreen.prototype.addSetting = function (setting) {
+   this.settings.push(setting);
+};
+
+HomeScreen.prototype.getNSettings = function () {
+   return (this.settings.length);
+};
+
+
+// Method to get setting value by name
+HomeScreen.prototype.getSettingValue = function(settingName) {
+
+   var settingValue = "" ;
+
+   var s;
+   for (s = 0; s < homeScreen.settings.length; s++) {
+
+      setting = homeScreen.settings[s];
+
+      if (setting.settingName == settingName) {
+         settingValue = setting.settingValue;
+         break ;
+      }
+
+   }
+
+   return (settingValue);
+
+};
+
+
 
 //
 //   drawHomeScreenAreas
@@ -199,9 +236,9 @@ function drawHomeScreenAreas() {
    //displayCtx.clearRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
    displayCtx.fillRect(homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height);
 
-   displayCtx.fillStyle = window.colors.ZGRAY4;
-   //displayCtx.clearRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
-   displayCtx.fillRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
+   // displayCtx.fillStyle = window.colors.ZGRAY4;
+   // //displayCtx.clearRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
+   // displayCtx.fillRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
 
    // displayCtx.fillStyle = "#ff0000";
    // displayCtx.clearRect(homeScreen.rightParamAreaLeft, homeScreen.rightParamAreaTop, homeScreen.rightParamAreaWidth, homeScreen.rightParamAreaHeight);
@@ -214,6 +251,8 @@ function drawHomeScreenAreas() {
    // displayCtx.fillStyle = window.colors.ZGRAY5;
    // displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
    // displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
+
+   drawTopLine() ;
 
    drawParameterAreas();
 
@@ -270,6 +309,137 @@ function drawHomeScreen(timestamp) {
    //}
 
 }
+
+
+//
+//  fitText
+//
+
+// no / Roboto: Designed by Google, Roboto is a sans-serif typeface that is widely used for its versatility and readability.
+// Open Sans: Another Google font, Open Sans is a humanist sans-serif typeface known for its clean and modern appearance.
+// Lato: Lato is a sans-serif typeface designed by Łukasz Dziedzic. It's known for its versatility and readability, making it suitable for various types of projects.
+// no / Montserrat: Montserrat is a geometric sans-serif typeface inspired by the urban typography of Montserrat, a neighborhood in Buenos Aires. It's widely used for its modern and minimalist style.
+// Source Sans Pro: Developed by Adobe, Source Sans Pro is a sans-serif typeface designed for user interfaces. It's known for its clean and elegant appearance.
+// Nunito: Nunito is a rounded sans-serif typeface designed by Vernon Adams. It's characterized by its friendly and approachable look, making it suitable for various design purposes.
+// Helvetica Neue: While not freely available like Google Fonts, Helvetica Neue is a widely recognized and popular sans-serif typeface known for its clean and timeless design.
+// Georgia: Georgia is a serif typeface designed by Matthew Carter and is commonly used for its readability, particularly in body text on the web.
+// Times New Roman: Another classic serif typeface, Times New Roman, is widely available on most systems and is often used in print and digital media for its readability and formal appearance.
+// no / Verdana: Verdana is a sans-serif typeface designed by Matthew Carter for Microsoft. It's known for its clarity and readability, particularly at smaller sizes, making it popular for web content.
+
+
+function fitText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+
+   displayCtx.fillStyle = textColor;
+
+   let fontSizePt = textPointSize; // Initial font size in points
+   var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
+   displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+
+   // Adjust font size to fit text in rectangle
+   while (displayCtx.measureText(textToFit).width > textWidth || fontSizePx > textHeight) {
+      fontSizePx--;
+      displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+   }
+
+   displayCtx.textAlign = textAlign;
+   displayCtx.textBaseline = textBaseline;  
+
+   // Draw text
+   displayCtx.fillText(textToFit, textLeft, textTop);
+ 
+}
+
+
+//
+//  drawTopLine
+//
+
+function drawTopLine() {
+ 
+   var patientNameLabelLeftPercent  =   2 ;
+   var patientNameLabelRightPercent =  12 ;
+
+   var patientNameValueLeftPercent  =  13 ;
+   var patientNameValueRightPercent =  43 ;
+
+   var patientIDLabelLeftPercent    =  48 ;
+   var patientIDLabelRightPercent   =  53 ;
+
+   var patientIDValueLeftPercent    =  54 ;
+   var patientIDValueRightPercent   =  66 ;
+
+   var monitorIDLabelLeftPercent    =  71 ;
+   var monitorIDLabelRightPercent   =  83 ;
+
+   var monitorIDValueLeftPercent    =  84 ;
+   var monitorIDValueRightPercent   =  98 ;
+
+   var patientNameLabelLeft  = homeScreen.headerLeft + homeScreen.headerWidth * patientNameLabelLeftPercent / 100 ;
+   var patientNameLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * patientNameLabelRightPercent / 100 ;
+   var patientNameLabelTop = homeScreen.headerTop ;
+   var patientNameLabelHeight = homeScreen.headerHeight ; 
+   var patientNameLabelWidth = patientNameLabelRight - patientNameLabelLeft ; 
+
+   var patientNameValueLeft  = homeScreen.headerLeft + homeScreen.headerWidth * patientNameValueLeftPercent / 100 ;
+   var patientNameValueRight = homeScreen.headerLeft + homeScreen.headerWidth * patientNameValueRightPercent / 100 ;
+   var patientNameValueTop = homeScreen.headerTop ;
+   var patientNameValueHeight = homeScreen.headerHeight ; 
+   var patientNameValueWidth = patientNameValueRight - patientNameValueLeft ; 
+
+   var patientIDLabelLeft  = homeScreen.headerLeft + homeScreen.headerWidth * patientIDLabelLeftPercent / 100 ;
+   var patientIDLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * patientIDLabelRightPercent / 100 ;
+   var patientIDLabelTop = homeScreen.headerTop ;
+   var patientIDLabelHeight = homeScreen.headerHeight ; 
+   var patientIDLabelWidth = patientIDLabelRight - patientIDLabelLeft ; 
+
+   var patientIDValueLeft  = homeScreen.headerLeft + homeScreen.headerWidth * patientIDValueLeftPercent / 100 ;
+   var patientIDValueRight = homeScreen.headerLeft + homeScreen.headerWidth * patientIDValueRightPercent / 100 ;
+   var patientIDValueTop = homeScreen.headerTop ;
+   var patientIDValueHeight = homeScreen.headerHeight ; 
+   var patientIDValueWidth = patientIDValueRight - patientIDValueLeft ; 
+
+   var monitorIDLabelLeft  = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDLabelLeftPercent / 100 ;
+   var monitorIDLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDLabelRightPercent / 100 ;
+   var monitorIDLabelTop = homeScreen.headerTop ;
+   var monitorIDLabelHeight = homeScreen.headerHeight ; 
+   var monitorIDLabelWidth = monitorIDLabelRight - monitorIDLabelLeft ; 
+
+   var monitorIDValueLeft  = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDValueLeftPercent / 100 ;
+   var monitorIDValueRight = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDValueRightPercent / 100 ;
+   var monitorIDValueTop = homeScreen.headerTop ;
+   var monitorIDValueHeight = homeScreen.headerHeight ;
+   var monitorIDValueWidth = monitorIDValueRight - monitorIDValueLeft ; 
+
+   displayCtx.fillStyle = window.colors.ZGRAY4;
+   displayCtx.fillRect(homeScreen.headerLeft, homeScreen.headerTop, homeScreen.headerWidth, homeScreen.headerHeight);
+
+   displayCtx.fillStyle = window.colors.ZWHITE;
+   displayCtx.font = '20pt Arial';  
+   displayCtx.textAlign = 'left';
+   displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
+
+   var textTop ;
+
+   textTop = patientNameLabelTop + patientNameLabelHeight / 2 ;
+   fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Calibri', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
+
+   textTop = patientNameValueTop + patientNameValueHeight / 2 ;
+   fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Calibri', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
+
+   textTop = patientIDLabelTop + patientIDLabelHeight / 2 ;
+   fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Calibri', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   textTop = patientIDValueTop + patientIDValueHeight / 2 ;
+   fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Calibri', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   textTop = monitorIDLabelTop + monitorIDLabelHeight / 2 ;
+   fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Calibri', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   textTop = monitorIDValueTop + monitorIDValueHeight / 2 ;
+   fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Calibri', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+}
+
 
 //
 //   drawBottomLineMessageArea

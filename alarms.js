@@ -210,20 +210,20 @@ function soundalarmTone() {
       switch (monitorAlarmTone)  {
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
-            //LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
+            //LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
             window.alarmsSilenced = 0 ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_LOW)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_LOW)) ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_MEDIUM)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_MEDIUM)) ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_HIGH)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_HIGH)) ;
             break ;
 
       }
@@ -454,6 +454,7 @@ function updateBlinkState() {
       if ((blinkState % 4) == 1) {
          simulateArrivalOfWaveformDataMessage() ;
          simulateArrivalOfParameterDataMessage() ;
+         simulateArrivalOfSettingDataMessage() ;
       }
 
    }
