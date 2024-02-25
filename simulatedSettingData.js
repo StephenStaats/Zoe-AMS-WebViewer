@@ -11,6 +11,10 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
+        "settingName": "TEMP units",
+        "settingValue": "F"
+      },
+      {
         "settingName": "Monitor ID",
         "settingValue": "M12345"
       },
@@ -31,6 +35,10 @@ window.currentSettings = [
       {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"
+      },
+      {
+        "settingName": "TEMP units",
+        "settingValue": "C"
       },
       {
         "settingName": "Monitor ID",
@@ -55,6 +63,10 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
+        "settingName": "TEMP units",
+        "settingValue": "C"
+      },
+      {
         "settingName": "Monitor ID",
         "settingValue": "M12345"
       },
@@ -75,6 +87,10 @@ window.currentSettings = [
       {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"
+      },
+      {
+        "settingName": "TEMP units",
+        "settingValue": "C"
       },
       {
         "settingName": "Monitor ID",

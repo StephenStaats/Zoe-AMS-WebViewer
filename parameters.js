@@ -32,6 +32,46 @@ Parameter.prototype.getAlarmStatus = function() {
 };
 
 //
+//   getUnitsOfMeasureFromParameterName  
+//
+
+Parameter.prototype.getUnitsOfMeasureFromParameterName = function() {
+
+   var unitsOfMeasure = "";
+
+   if (this.parameterName == "HR") { 
+      unitsOfMeasure = "bpm"; 
+   }
+   else if (this.parameterName == "SPO2") { 
+      unitsOfMeasure = "%"; 
+   }
+   else if (this.parameterName == "ETCO2") { 
+      unitsOfMeasure = "mmHg"; 
+   }
+   else if (this.parameterName == "FICO2") { 
+      unitsOfMeasure = "mmHg"; 
+   }
+   else if (this.parameterName == "RRC") { 
+      unitsOfMeasure = "rpm";  
+   }
+   else if (this.parameterName == "TEMP") { 
+      if (homeScreen.getSettingValue("TEMP units") == "C") {
+         unitsOfMeasure = "\u00B0 C";
+      }
+      else {
+         unitsOfMeasure = "\u00B0 F";
+      }
+   }
+   else if (this.parameterName == "NIBP") { 
+      unitsOfMeasure = "mmHg"; 
+   }
+
+   return (unitsOfMeasure);
+
+}
+
+
+//
 //   getColorFromParameterName  
 //
 
@@ -64,6 +104,7 @@ Parameter.prototype.getColorFromParameterName = function() {
    return (color);
 
 }
+
 
 //
 //   getPointSizeFromParameterName  
@@ -313,12 +354,14 @@ Parameter.prototype.drawParameterArea = function() {
 
    var pointSize = this.getPointSizeFromParameterName(this.parameterName) ;
 
+   var units = this.getUnitsOfMeasureFromParameterName(this.parameterName) ;
+
    if (window.graphicsDebug) {
       var graphicsDebugValue = this.getGraphicsDebugValueFromParameterName(this.parameterName) ;
-      drawGenericParameterArea(displayCtx, this.parameterName, graphicsDebugValue, textForegroundColor, "Arial", pointSize, left, top, width, height); // Draw the rectangle (x, y, width, height)
+      drawGenericParameterArea(this.parameterName, units, graphicsDebugValue, textForegroundColor, "Arial", pointSize, left, top, width, height); // Draw the rectangle (x, y, width, height)
    }
    else {
-      drawGenericParameterArea(displayCtx, this.parameterName, this.parameterValue, textForegroundColor, "Arial", pointSize, left, top, width, height); // Draw the rectangle (x, y, width, height)
+      drawGenericParameterArea(this.parameterName, units, this.parameterValue, textForegroundColor, "Arial", pointSize, left, top, width, height); // Draw the rectangle (x, y, width, height)
    }
 
 }
@@ -327,7 +370,7 @@ Parameter.prototype.drawParameterArea = function() {
 //  drawGenericParameterArea
 //
 
-function drawGenericParameterArea(displayCtx, label, value, labelColor, font, fontSize, x, y, width, height) {
+function drawGenericParameterArea(label, units, value, labelColor, font, fontSize, x, y, width, height) {
 
    // // Set the outline color
    // displayCtx.strokeStyle = window.colors.AreaSeparatorColor;
@@ -344,6 +387,9 @@ function drawGenericParameterArea(displayCtx, label, value, labelColor, font, fo
    var labelX = x + 8;
    var labelY = y + 20;
 
+   var unitsX = x + 8;
+   var unitsY = y + 35;
+
    var valueX = x + width * 50 / 100;
    var valueY = y + height * 70 / 100;
 
@@ -352,6 +398,12 @@ function drawGenericParameterArea(displayCtx, label, value, labelColor, font, fo
    displayCtx.font = '11pt Arial'; // Reset to default font and size
    displayCtx.textAlign = 'left';
    displayCtx.fillText(label, labelX, labelY); // Adjust the positioning as needed
+
+   // Add units right below label in the upper left corner
+   // Set the font and font size
+   displayCtx.font = '9pt Arial'; // Reset to default font and size
+   displayCtx.textAlign = 'left';
+   displayCtx.fillText(units, unitsX, unitsY); // Adjust the positioning as needed
 
    // Add value in the center
    // Set the font and font size
