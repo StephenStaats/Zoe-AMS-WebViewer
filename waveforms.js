@@ -21,8 +21,8 @@ function Waveform(waveformName, order) {
    this.drawXTime = 0;
    this.eraseX = this.drawX + homeScreen.eraseBarWidth;
    this.drawY = 0;
-   this.drawXLast = 0;
-   this.drawYLast = 0;
+   this.drawXLast = Number.MIN_VALUE;
+   this.drawYLast = Number.MIN_VALUE;
    this.startY = Number.MIN_VALUE;
    this.headIndex = 0;
    this.tailIndex = 0;
@@ -417,11 +417,13 @@ function drawWaveform(w) {
          var q = 0 ;
       }
       else {
-         displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
-         displayCtx.lineTo(wvf.drawX, wvf.drawY);
-         if (wvf.fill) {
-            displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
-            //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+         if (wvf.drawXLast != Number.MIN_VALUE) {
+            displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
+            displayCtx.lineTo(wvf.drawX, wvf.drawY);
+            if (wvf.fill) {
+               displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
+               //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+            }
          }
          wvf.drawXLast = wvf.drawX;
          wvf.drawYLast = wvf.drawY;
