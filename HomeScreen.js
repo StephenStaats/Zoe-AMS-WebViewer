@@ -475,3 +475,37 @@ function drawBottomLineMessageArea() {
    displayCtx.fillText(window.bottomLineMessage, centerX, centerY); // Adjust the positioning as needed
 
 }
+
+
+
+ 
+
+// Add event listener for mouse click
+displayCanvas.addEventListener('click', handleClick);
+
+// Add event listener for touch events
+displayCanvas.addEventListener('touchstart', handleTouch);
+
+// Function to handle mouse click
+function handleClick(event) {
+    const rect = displayCanvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    LOGEVENTMAGENTA("Mouse click at (" + x + ", " + y + ")");
+    // Perform actions based on x, y position
+    // For example, draw something at the clicked position
+    //displayCtx.fillRect(x - 5, y - 5, 10, 10);
+}
+
+// Function to handle touch events
+function handleTouch(event) {
+    event.preventDefault();
+    const rect = displayCanvas.getBoundingClientRect();
+    const touch = event.touches[0];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    LOGEVENTMAGENTA("Touch at (" + x + ", " + y + ")");
+    // Perform actions based on x, y position
+    // For example, draw something at the touched position
+    //displayCtx.fillRect(x - 5, y - 5, 10, 10);
+}
