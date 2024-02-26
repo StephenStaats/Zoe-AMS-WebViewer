@@ -243,7 +243,7 @@ Parameter.prototype.getTopFromParameterName = function() {
       top = homeScreen.TEMPParamAreaTop; 
    }
    else if (this.parameterName == "NIBP") { 
-      top = homeScreen.NIBPParamAreaTop; 
+      top = homeScreen.NIBPParamAreaTop ; 
    }
 
    return (top);
@@ -342,6 +342,16 @@ Parameter.prototype.drawParameterArea = function() {
       textBackgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
    }
 
+   // if (this.parameterName == "FICO2") {
+   //    textBackgroundColor = window.colors.ZRED;
+   // }
+   // if (this.parameterName == "NIBP") {
+   //    textBackgroundColor = window.colors.ZGREEN;
+   // }
+   // if (this.parameterName == "TEMP") {
+   //    textBackgroundColor = window.colors.ZBLUE;
+   // }
+
    displayCtx.fillStyle = textBackgroundColor;
 
    var left = this.getLeftFromParameterName() ;
@@ -405,11 +415,49 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
    displayCtx.textAlign = 'left';
    displayCtx.fillText(units, unitsX, unitsY); // Adjust the positioning as needed
 
-   // Add value in the center
-   // Set the font and font size
-   displayCtx.font = `${fontSize}pt ${font}`;
-   displayCtx.textAlign = 'center';
-   displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed
+   if (label == "NIBP") {
+
+      //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
+
+      // Split the string by "/"
+      const parts = value.split(" / ");
+
+      // Extract systolic and diastolic values
+      const systolic = parts[0]; // "120"
+      const diastolicWithMean = parts[1]; // "80 (100)"
+
+      // Extract diastolic and mean values
+      const diastolic = diastolicWithMean.split(" ")[0]; // "80"
+      const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
+
+      // Form the desired strings
+      const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
+      const meanString = `(${mean})`; // "(100)"
+
+      displayCtx.font = `${fontSize}pt ${font}`;
+      displayCtx.textAlign = 'center';
+
+      valueX = x + width * 40 / 100;
+      valueY = y + height * 70 / 100;
+
+      displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
+
+
+      displayCtx.font = `${fontSize-15}pt ${font}`;
+      displayCtx.textAlign = 'left';
+
+      valueX = x + width * 70 / 100;
+      valueY = y + height * 70 / 100;
+
+      displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
+
+   }
+   else {
+      displayCtx.font = `${fontSize}pt ${font}`;
+      displayCtx.textAlign = 'center';
+      displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
+   }
+
 
    //     // Reset the styles to default values
    //     displayCtx.strokeStyle = '#000000'; // Reset to default black

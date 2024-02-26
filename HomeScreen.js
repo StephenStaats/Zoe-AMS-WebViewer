@@ -69,52 +69,54 @@ HomeScreen.prototype.initializeAreas = function () {
 
    this.waveformAreaWidth = Math.round(this.width * 60 / 100);
    this.waveformAreaHeight = Math.round(this.height * 60 / 100);
+   //this.waveformAreaHeight = Math.round(this.height * 64 / 100);
    this.waveformAreaLeft = 0;
    this.waveformAreaRight = this.waveformAreaLeft + this.waveformAreaWidth;
    this.waveformAreaTop = this.headerBottom;
    this.waveformAreaBottom = this.waveformAreaTop + this.waveformAreaHeight;
 
+   this.bottomParamAreaWidth = this.waveformAreaWidth;
+   this.bottomParamAreaHeight = Math.round(this.height * 17 / 100);
+   this.bottomParamAreaLeft = 0;
+   this.bottomParamAreaRight = this.bottomParamAreaLeft + this.bottomParamAreaWidth;
+   this.bottomParamAreaTop = this.waveformAreaBottom + 1;
+   this.bottomParamAreaBottom = this.bottomParamAreaTop + this.bottomParamAreaHeight;
+
+   this.messageAreaWidth = this.width;
+   this.messageAreaHeight = Math.round(this.height * 13 / 100);
+   this.messageAreaLeft = 0;
+   this.messageAreaRight = this.messageAreaLeft + this.messageAreaWidth;
+   this.messageAreaTop = this.bottomParamAreaBottom + 1;
+   this.messageAreaBottom = this.bottom;
+
    this.middleParamAreaWidth = Math.round(this.width * 20 / 100);
-   this.middleParamAreaHeight = this.waveformAreaHeight;
+   this.middleParamAreaHeight = Math.round(this.height * 70 / 100);
    this.middleParamAreaLeft = this.waveformAreaRight + 1;
    this.middleParamAreaRight = this.middleParamAreaLeft + this.middleParamAreaWidth;
    this.middleParamAreaTop = this.headerBottom;
    this.middleParamAreaBottom = this.middleParamAreaTop + this.middleParamAreaHeight;
 
    this.rightParamAreaWidth = this.width - this.waveformAreaWidth - this.middleParamAreaWidth - 4;
-   this.rightParamAreaHeight = Math.round(this.height * 75 / 100);
+   this.rightParamAreaHeight = Math.round(this.height * 77 / 100);
    this.rightParamAreaLeft = this.middleParamAreaRight + 1;
    this.rightParamAreaRight = this.rightParamAreaLeft + this.rightParamAreaWidth;
    this.rightParamAreaTop = this.headerBottom;
    this.rightParamAreaBottom = this.rightParamAreaTop + this.rightParamAreaHeight;
 
-   this.bottomParamAreaWidth = this.width - this.rightParamAreaWidth;
-   this.bottomParamAreaHeight = this.rightParamAreaHeight - this.waveformAreaHeight;
-   this.bottomParamAreaLeft = 0;
-   this.bottomParamAreaRight = this.bottomParamAreaLeft + this.bottomParamAreaWidth;
-   this.bottomParamAreaTop = this.waveformAreaBottom + 1;
-   this.bottomParamAreaBottom = this.rightParamAreaBottom;
-
-   this.messageAreaWidth = this.width;
-   this.messageAreaLeft = 0;
-   this.messageAreaRight = this.messageAreaLeft + this.messageAreaWidth;
-   this.messageAreaTop = this.bottomParamAreaBottom + 1;
-   this.messageAreaBottom = this.bottom;
-   this.messageAreaHeight = this.messageAreaBottom - this.messageAreaTop;
 
 
 
    ///////////////////////////////////////////////
 
    this.HRParamAreaWidth = this.middleParamAreaWidth;
-   this.HRParamAreaHeight = Math.round(this.middleParamAreaHeight * 45 / 100);
+   this.HRParamAreaHeight = Math.round(this.middleParamAreaHeight * 40 / 100);
    this.HRParamAreaLeft = this.middleParamAreaLeft;
    this.HRParamAreaRight = this.middleParamAreaRight;
    this.HRParamAreaTop = this.middleParamAreaTop;
    this.HRParamAreaBottom = this.HRParamAreaTop + this.HRParamAreaHeight;
 
    this.ETCO2ParamAreaWidth = this.middleParamAreaWidth;
-   this.ETCO2ParamAreaHeight = Math.round(this.middleParamAreaHeight * 40 / 100);
+   this.ETCO2ParamAreaHeight = Math.round(this.middleParamAreaHeight * 35 / 100);
    this.ETCO2ParamAreaLeft = this.middleParamAreaLeft;
    this.ETCO2ParamAreaRight = this.middleParamAreaRight;
    this.ETCO2ParamAreaTop = this.HRParamAreaBottom + 1;
@@ -124,7 +126,7 @@ HomeScreen.prototype.initializeAreas = function () {
    this.FICO2ParamAreaLeft = this.middleParamAreaLeft;
    this.FICO2ParamAreaRight = this.middleParamAreaRight;
    this.FICO2ParamAreaTop = this.ETCO2ParamAreaBottom + 1;
-   this.FICO2ParamAreaBottom = this.bottomParamAreaTop - 1;
+   this.FICO2ParamAreaBottom = this.middleParamAreaBottom;
    this.FICO2ParamAreaHeight = this.FICO2ParamAreaBottom - this.FICO2ParamAreaTop;
 
    this.SPO2ParamAreaWidth = this.rightParamAreaWidth;
@@ -152,14 +154,17 @@ HomeScreen.prototype.initializeAreas = function () {
    this.TEMPParamAreaLeft = this.rightParamAreaLeft;
    this.TEMPParamAreaRight = this.rightParamAreaRight;
    this.TEMPParamAreaTop = this.FICO2ParamAreaTop;
-   this.TEMPParamAreaBottom = this.rightParamAreaBottom;
+   //this.TEMPParamAreaBottom = this.rightParamAreaBottom;
+   this.TEMPParamAreaBottom = this.messageAreaTop - 1;
    this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
 
    this.NIBPParamAreaLeft = this.bottomParamAreaLeft;
-   this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
+   //this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
+   this.NIBPParamAreaRight = this.bottomParamAreaRight ;
    this.NIBPParamAreaWidth = this.NIBPParamAreaRight - this.NIBPParamAreaLeft;
    this.NIBPParamAreaTop = this.bottomParamAreaTop;
-   this.NIBPParamAreaBottom = this.bottomParamAreaBottom;
+   //this.NIBPParamAreaBottom = this.bottomParamAreaBottom;
+   this.NIBPParamAreaBottom = t= this.messageAreaTop - 1;
    this.NIBPParamAreaHeight = this.NIBPParamAreaBottom - this.NIBPParamAreaTop;
 
 };
@@ -456,7 +461,7 @@ function drawBottomLineMessageArea() {
    var messageY       = homeScreen.messageAreaTop ;
    var messageWidth   = homeScreen.messageAreaWidth ;
 
-   messageY  = messageY + homeScreen.messageAreaHeight * 20 / 100;  // adjust since values in NIBP font can go below the parameter area
+   //messageY  = messageY + homeScreen.messageAreaHeight * 20 / 100;  // adjust since values in NIBP font can go below the parameter area
 
    var messageHeight  = homeScreen.messageAreaBottom - messageY ;
 

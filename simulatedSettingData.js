@@ -3,6 +3,41 @@
 //
 
 window.currentSettings = [
+
+  `{
+"messageType": "settingData",
+"settings": [
+{
+"settingName": "Patient Name",
+"settingValue": ""
+},
+{
+"settingName": "Patient ID",
+"settingValue": ""
+},
+{
+"settingName": "TEMP units",
+"settingValue": "F"
+},
+{
+"settingName": "Monitor ID",
+"settingValue": "ASV5D1"
+},
+{
+"settingName": "Device ID",
+"settingValue": "8ccab431-d02e-4ea0-b71f-76a8332c700f"
+},
+{
+"settingName": "Device Name",
+"settingValue": "ASV5D1"
+},
+{
+"settingName": "Monitor Serial Number",
+"settingValue": "ASV5D1"
+}
+]
+  }`,
+
   `{
     "messageType": "settingData",
     "settings": [
