@@ -425,23 +425,44 @@ function drawTopLine() {
 
    var textTop ;
 
+   // textTop = patientNameLabelTop + patientNameLabelHeight / 2 ;
+   // fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Calibri', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
+
+   // textTop = patientNameValueTop + patientNameValueHeight / 2 ;
+   // fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Calibri', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
+
+   // textTop = patientIDLabelTop + patientIDLabelHeight / 2 ;
+   // fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Calibri', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   // textTop = patientIDValueTop + patientIDValueHeight / 2 ;
+   // fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Calibri', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   // textTop = monitorIDLabelTop + monitorIDLabelHeight / 2 ;
+   // fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Calibri', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+   // textTop = monitorIDValueTop + monitorIDValueHeight / 2 ;
+   // fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Calibri', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+
+
+
    textTop = patientNameLabelTop + patientNameLabelHeight / 2 ;
-   fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Calibri', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
+   fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Droid Sans', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
 
    textTop = patientNameValueTop + patientNameValueHeight / 2 ;
-   fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Calibri', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
+   fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Droid Sans', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
 
    textTop = patientIDLabelTop + patientIDLabelHeight / 2 ;
-   fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Calibri', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+   fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Droid Sans', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
 
    textTop = patientIDValueTop + patientIDValueHeight / 2 ;
-   fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Calibri', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+   fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Droid Sans', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
 
    textTop = monitorIDLabelTop + monitorIDLabelHeight / 2 ;
-   fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Calibri', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
+   fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Droid Sans', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
 
    textTop = monitorIDValueTop + monitorIDValueHeight / 2 ;
-   fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Calibri', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+   fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Droid Sans', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
+
 
 }
 
