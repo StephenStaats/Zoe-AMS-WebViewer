@@ -58,11 +58,16 @@ function processWaveformDataMessage(newWaveformDataMessage) {
             minY = Number.MAX_VALUE;
             maxY = Number.MIN_VALUE;
 
-            samplesIn = waveformData.waveforms[cw].waveformSamples;
+            //samplesIn = waveformData.waveforms[cw].waveformSamples;
+            samplesIn = waveformData.waveforms[cw].waveformSamples.split(',');
+
             var samplesWritten = 0;
             var s;
             for (s = 0; s < samplesIn.length; s++) {
-               var thisSample = samplesIn[s];
+               //var thisSample = samplesIn[s];
+
+               var thisSample = parseFloat(samplesIn[s]);
+
                wvf.writeSample(thisSample);
                samplesWritten++;
                if (thisSample < minY) {

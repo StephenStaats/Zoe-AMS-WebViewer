@@ -2,8 +2,8 @@
 //   Alarm logic
 //
 
-window.monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
-window.lastMonitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
+window.monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
+window.lastMonitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
 
 window.monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
 window.lastMonitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
@@ -20,7 +20,7 @@ window.blinkState = 0 ;
 
 function setAlarmStatusHIGH() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH ;
+   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH ;
 
 }
 
@@ -30,7 +30,7 @@ function setAlarmStatusHIGH() {
 
 function setAlarmStatusMEDIUM() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM ;
+   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM ;
 
 }
 
@@ -40,7 +40,7 @@ function setAlarmStatusMEDIUM() {
 
 function setAlarmStatusLOW() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW ;
+   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW ;
 
 }
 
@@ -50,7 +50,7 @@ function setAlarmStatusLOW() {
 
 function setAlarmStatusNONE() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
+   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
 
 }
 
@@ -60,33 +60,37 @@ function setAlarmStatusNONE() {
 
 function silenceAlarms() {
 
-   monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE ;
+   //monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
+   if (window.monitorAlarmTone != window.Z_ALARM_TONE.Z_ALARM_TONE_NONE) {
+      window.alarmsSilenced = 1 ;
+      window.audio.pause();
+   }
 
 }
 
 
 //
-//  getNumericAlarmStatusFromParameterAlarmStatus
+//  getNumericAlarmStatusFromAlarmStatus
 //
 
-function getNumericAlarmStatusFromParameterAlarmStatus(alarmStatus) {
+function getNumericAlarmStatusFromAlarmStatus(alarmStatus) {
 
-   var numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
+   var numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.NORMAL_NONE ;
 
    switch (alarmStatus) {
-      case "Z_PARAM_ALARM_STATUS_NORMAL_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE; break ;
-      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE; break ;
-      case "Z_PARAM_ALARM_STATUS_LATCHED_NONE" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE; break ;
-      case "Z_PARAM_ALARM_STATUS_ACTIVE_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE; break ;
-      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW; break ;
-      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM; break ;
-      case "Z_PARAM_ALARM_STATUS_LATCHED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_LOW; break ;
-      case "Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM; break ;
-      case "Z_PARAM_ALARM_STATUS_ACTIVE_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW; break ;
-      case "Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM; break ;
-      case "Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH; break ;
-      case "Z_PARAM_ALARM_STATUS_LATCHED_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH; break ;
-      case "Z_PARAM_ALARM_STATUS_ACTIVE_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH; break ;
+      case "NORMAL_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.NORMAL_NONE; break ;
+      case "ACKNOWLEDGED_NONE" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE; break ;
+      case "LATCHED_NONE" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_NONE; break ;
+      case "ACTIVE_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE; break ;
+      case "ACKNOWLEDGED_LOW" :    numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW; break ;
+      case "ACKNOWLEDGED_MEDIUM" : numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM; break ;
+      case "LATCHED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_LOW; break ;
+      case "LATCHED_MEDIUM" :      numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM; break ;
+      case "ACTIVE_LOW" :          numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW; break ;
+      case "ACTIVE_MEDIUM" :       numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM; break ;
+      case "ACKNOWLEDGED_HIGH" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH; break ;
+      case "LATCHED_HIGH" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH; break ;
+      case "ACTIVE_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH; break ;
    }
 
    return(numericAlarmStatus) ;
@@ -103,22 +107,22 @@ function getNeedToColorFromAlarmStatus(alarmStatus) {
    var needToColor = 0;
 
    switch (alarmStatus) {
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE:
+      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
          needToColor = 0;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
          needToColor = 1;
          break;
 
@@ -142,15 +146,15 @@ function getAlarmToneFromAlarmStatus(alarmStatus) {
 
    switch (alarmStatus) {
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH :
          alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH ;
          break ;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM :
          alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM ;
          break ;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW :
          alarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_LOW ;
          break ;
 
@@ -175,13 +179,13 @@ function soundalarmTone() {
 
    //LOGALARMEVENT("In SoundalarmTone") ;
  
-   var highestAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
+   var highestAlarmStatus = window.Z_PARAM_ALARM_STATUS.NORMAL_NONE ;
 
    for (p = 0; p < homeScreen.parameters.length; p++) {
 
       var param = homeScreen.parameters[p];
 
-      var thisNumericAlarmStatus = getNumericAlarmStatusFromParameterAlarmStatus(param.parameterAlarmStatus) ;
+      var thisNumericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(param.parameterAlarmStatus) ;
 
       if (thisNumericAlarmStatus > highestAlarmStatus) {
 
@@ -206,19 +210,20 @@ function soundalarmTone() {
       switch (monitorAlarmTone)  {
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
-            //LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
+            //LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
+            window.alarmsSilenced = 0 ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_LOW)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_LOW)) ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_MEDIUM :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_MEDIUM)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_MEDIUM)) ;
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_HIGH :
-            LOGALARMEVENT(TranslateNumber(window.StringNumbers.SN_New_alarm_tone_HIGH)) ;
+            LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_HIGH)) ;
             break ;
 
       }
@@ -233,9 +238,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneHIGH() ;
-               LOGEVENT("playAlarmToneHIGH") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneHIGH() ;
+                  LOGEVENT("playAlarmToneHIGH") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 16 :
                monitorAlarmToneInProgress = 0 ;   // high alarm tone .wav file is 4 seconds long
@@ -252,9 +259,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneMEDIUM() ;
-               LOGEVENT("playAlarmToneMEDIUM") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneMEDIUM() ;
+                  LOGEVENT("playAlarmToneMEDIUM") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 8 :
                monitorAlarmToneInProgress = 0 ;   // medium alarm tone .wav file is 2 seconds long 
@@ -271,9 +280,11 @@ function soundalarmTone() {
          //
          switch (toneToggleState) {
             case 0 :
-               playAlarmToneLOW() ;
-               LOGEVENT("playAlarmToneLOW") ;
-               monitorAlarmToneInProgress = 1 ;
+               if (window.alarmsSilenced == 0) {
+                  playAlarmToneLOW() ;
+                  LOGEVENT("playAlarmToneLOW") ;
+                  monitorAlarmToneInProgress = 1 ;
+               }
                break ;
             case 8 :
                monitorAlarmToneInProgress = 0 ;   // low alarm tone .wav file is 2 seconds long 
@@ -310,35 +321,35 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
    let returnColor;
 
    switch (alarmStatus) {
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE:
+      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
          returnColor = window.colors.ZBLACK;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
          returnColor = window.colors.ZCYAN;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
          returnColor = window.colors.ZYELLOW;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
          returnColor = window.colors.ZRED;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
          returnColor = window.colors.ZCYAN;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
          returnColor = (blinkState < 4) ? window.colors.ZBLINK_YELLOW_ON : window.colors.ZBLINK_YELLOW_OFF;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
-         returnColor = (blinkState < 2) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
+         returnColor = (blinkState < 4) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
          break;
 
       default:
@@ -355,25 +366,25 @@ function getTextForegroundColorFromAlarmStatus(alarmStatus, blinkState) {
    let returnColor;
 
    switch (alarmStatus) {
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE:
+      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
          returnColor = window.colors.ZWHITE;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
          returnColor = window.colors.ZBLACK;
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
          returnColor = window.colors.ZWHITE;
          break;
 
@@ -390,31 +401,31 @@ function updateAlarmTones() {
 
    switch (monitorAlarmStatus) {
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_NONE:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
          // silence 
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
          playAlarmToneLOW();
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
          playAlarmToneMEDIUM();
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_LATCHED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
          // silence 
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH:
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
          playAlarmToneHIGH();
          break;
 
@@ -443,6 +454,7 @@ function updateBlinkState() {
       if ((blinkState % 4) == 1) {
          simulateArrivalOfWaveformDataMessage() ;
          simulateArrivalOfParameterDataMessage() ;
+         simulateArrivalOfSettingDataMessage() ;
       }
 
    }
@@ -474,13 +486,13 @@ function updateBlinkState() {
 
    switch (monitorAlarmStatus) {
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_HIGH :
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_MEDIUM :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM :
          needToBlinkMessage        = 1 ;
          needToBlinkParameterBoxes = 1 ;
          break ;
 
-      case window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_ACTIVE_LOW :
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW :
          needToBlinkMessage        = 0 ;
          needToBlinkParameterBoxes = 0 ;
          break ;

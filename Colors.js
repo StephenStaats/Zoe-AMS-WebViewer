@@ -4,6 +4,8 @@ window.colors = {
    ZGRAY5: "#555555",
    ZWHITE: "#FFFFFF",
    ZRED: "#FF0000",
+   ZGREEN: "#00FF00",
+   ZBLUE: "#0000FF",
    ZYELLOW: "#FFFF00",
    ZCYAN: "#00FFFF",
    ZBLINK_RED_ON: "#FF0032",
