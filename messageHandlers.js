@@ -5,6 +5,9 @@
 var waveformDataMessageCount = 0;
 
 function processWaveformDataMessage(newWaveformDataMessage) {
+//function processWaveformDataMessage(waveformData) {
+
+   LOGEVENTGREEN("In processWaveformDataMessage") ;
 
    if (pauseWaveformDrawing == 1) return;
 
@@ -52,12 +55,6 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
             var wvf = homeScreen.waveforms[cw];
 
-            var minY;
-            var maxY;
-
-            minY = Number.MAX_VALUE;
-            maxY = Number.MIN_VALUE;
-
             //samplesIn = waveformData.waveforms[cw].waveformSamples;
             samplesIn = waveformData.waveforms[cw].waveformSamples.split(',');
 
@@ -70,21 +67,27 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                wvf.writeSample(thisSample);
                samplesWritten++;
-               if (thisSample < minY) {
-                  minY = thisSample;
+
+               if (wvf.autoScale) {
+
+                  if (wvf.waveformName == "RESP_AUTO") {
+                     var q = 0;
+                  }
+
+                  if (thisSample <  wvf.yMin) {
+                      wvf.yMin = thisSample;
+                     var amplitude = maxY - minY;
+                     wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
+                     wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
+                  }
+                  else if (thisSample > wvf.yMax) {
+                     wvf.yMax = thisSample;
+                     var amplitude = maxY - minY;
+                     wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
+                     wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
+                  }
+
                }
-               else if (thisSample > maxY) {
-                  maxY = thisSample;
-               }
-            }
-
-            if (wvf.autoScale) {
-
-               var amplitude = maxY - minY;
-
-               wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
-               wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
-
             }
 
             LOGEVENTGREEN("Read ", homeScreen.waveforms[cw].bufferReadCount, " samples from ", homeScreen.waveforms[cw].waveformName);
@@ -101,6 +104,19 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
       LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
 
+   }
+
+   if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
+      currentMSPerSample = currentMSPerSampleHigh ;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
+   }
+   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMin) {
+      currentMSPerSample = currentMSPerSampleLow ;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
+   }
+   else {
+      currentMSPerSample = currentMSPerSampleNormal ;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
    }
 
 }

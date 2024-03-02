@@ -30,7 +30,7 @@ RingBuffer.prototype.dequeue = function() {
       // Check if the buffer is empty
       if (this.size === 0) {
          //throw new Error(this.name + " Buffer is empty");
-         LOGEVENTRED(this.name + " Buffer is empty (dequeue)");
+         //LOGEVENTRED(this.name + " Buffer is empty (dequeue)");
          return (window.LEAD_OFF_OR_UNPLUGGED);
       }
       const sample = this.buffer[this.tail];

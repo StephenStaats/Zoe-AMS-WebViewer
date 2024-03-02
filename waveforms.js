@@ -41,7 +41,9 @@ function Waveform(waveformName, order) {
 
    switch (this.waveformName) {
 
+      case 'ECGI':
       case 'ECGII':
+      case 'ECGIII':
          this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
          this.color = window.colors.ECGColor;
          this.fill = false;
@@ -68,8 +70,10 @@ function Waveform(waveformName, order) {
             this.yMax = 4500; 
          }
          else {
-            this.yMin = -500;
-            this.yMax = 500;
+            // this.yMin = -500;
+            // this.yMax = 500;
+            this.yMin = -100;
+            this.yMax = 4500; 
          }
          this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
          this.simulatedSamples = window.simulatedWaveformCO2;
@@ -90,15 +94,18 @@ function Waveform(waveformName, order) {
          break;
 
       case 'RESP':
-         this.waveformId = window.Z_WAVEFORM_ID.Z_WAVEFORM_RESP;
+      case 'RESP_AUTO':
+         this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
          this.color = window.colors.RESPColor;
          this.fill = false;
          this.sampleRateIn = 250;
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
          this.autoScale = true;
-         this.yMin = 0;
-         this.yMax = 0;
+         // this.yMin = Number.MAX_VALUE;
+         // this.yMax = Number.MIN_VALUE;
+         this.yMin = 100000000;
+         this.yMax = -100000000;
          this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
          this.simulatedSamples = window.simulatedWaveformRESP;
          break;
@@ -204,8 +211,6 @@ var waveformHeight;
 
 function setupWaveforms(setupWaveformDataMessage) {
 
-   //homeScreen.setupWaveforms(setupWaveformDataMessage);
-
    homeScreen.clearWaveformList();
 
    // Parse the JSON string into JavaScript object
@@ -216,12 +221,10 @@ function setupWaveforms(setupWaveformDataMessage) {
 
    // Add waveforms from the parsed data
    var order = 0;
-   waveformData.waveforms.forEach(waveform => {
-      // Create an instance of Waveform class
-      const wvf = new Waveform(waveform.waveformName, order);
+   for (order = 0; order < nWaveforms; order++) {
+      const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
       homeScreen.addWaveform(wvf);
-      order++;
-   });
+   }
 
 }
 
@@ -245,7 +248,7 @@ function resetWaveforms(shiftWaveforms) {
 
    pauseWaveformDrawing = 1;
 
-   setupWaveforms(currentWaveforms[waveformSetIndex]);
+   //setupWaveforms(currentWaveforms[waveformSetIndex]);
 
    pauseWaveformDrawing = 0;
 
@@ -308,6 +311,12 @@ const pixelsPerMM = screenWidthPixels / screenWidthMM;
 
 var enteredMSPerPixel = 1 / (25 * pixelsPerMM / 1000) ;
 var enteredMSPerSample = 4.0 ;
+var currentMSPerSample = 4.0 ;
+var currentMSPerSampleHigh= 4.1 ;
+var currentMSPerSampleNormal = 4.0 ;
+var currentMSPerSampleLow = 3.9 ;
+var waveformSampleBufferCountMin = 300 ;
+var waveformSampleBufferCountMax = 400 ;
 
 //
 //   drawWaveform
@@ -324,14 +333,19 @@ function drawWaveform(w) {
    var MSPerSample = 0;
    if (window.simulatedDataMode) {
       //MSPerPixel = 1 / pixelsPerMS;
-      MSPerSample = 1000 / wvf.sampleRateIn;
+      //MSPerSample = 1000 / wvf.sampleRateIn;
    }
    else {   
       //MSPerPixel = enteredMSPerPixel;
-      MSPerSample = enteredMSPerSample;
+      //MSPerSample = enteredMSPerSample;
+      MSPerSample = currentMSPerSample;
    }
 
    const normalizeWaveform = (value) => {
+
+               if (wvf.waveformName == "RESP_AUTO") {
+                  var q = 0;
+               }
 
       normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
 
