@@ -10,11 +10,80 @@ function Waveform(waveformName, order) {
    this.buffer = new RingBuffer(this.waveformName, this.capacity);
    this.bufferReadCount = 0;
 
+
    this.left = homeScreen.waveformAreaLeft;
-   this.top = homeScreen.waveformAreaTop + order * waveformHeight;
+   this.order = order;
+
+   switch (this.order) {
+
+      case 0:
+         this.top = homeScreen.waveformAreaTop ;
+         this.height = topWaveformHeight ;
+         break ;
+
+      case 1:
+         this.top = homeScreen.waveformAreaTop + topWaveformHeight;
+         this.height = waveformHeight ;
+         break ;
+
+      case 2:
+         this.top = homeScreen.waveformAreaTop + topWaveformHeight + waveformHeight ;
+         this.height = waveformHeight ;
+         break ;
+
+   }
+
+   // Create a new ImageData object for a 1-pixel-wide column
+   const columnWidth = 1;
+   this.eraseTopWaveformImageData = displayCtx.createImageData(columnWidth, topWaveformHeight);
+   this.eraseWaveformImageData = displayCtx.createImageData(columnWidth, waveformHeight);
+   this.eraseWithDotsWaveformImageData = displayCtx.createImageData(columnWidth, waveformHeight);
+
+   // Set color values for each pixel in the column
+   const colorYellow = [255, 255, 0, 255]; // RGBA values for yellow color
+   const colorBlack  = [  0,   0, 0, 255]; // RGBA values for black color
+
+   for (let y = 0; y < topWaveformHeight; y++) {
+
+      const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+      this.eraseTopWaveformImageData.data[pixelIndex] = colorBlack[0]; // Red
+      this.eraseTopWaveformImageData.data[pixelIndex + 1] = colorBlack[1]; // Green
+      this.eraseTopWaveformImageData.data[pixelIndex + 2] = colorBlack[2]; // Blue
+      this.eraseTopWaveformImageData.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+
+   }
+
+   for (let y = 0; y < waveformHeight; y++) {
+
+      const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+      this.eraseWaveformImageData.data[pixelIndex] = colorBlack[0]; // Red
+      this.eraseWaveformImageData.data[pixelIndex + 1] = colorBlack[1]; // Green
+      this.eraseWaveformImageData.data[pixelIndex + 2] = colorBlack[2]; // Blue
+      this.eraseWaveformImageData.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+
+   }
+
+   for (let y = 0; y < waveformHeight; y++) {
+
+      if ((y == 0) || (y == Math.floor(waveformHeight / 2)) || (y == waveformHeight - 1)) {
+         const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+         this.eraseWithDotsWaveformImageData.data[pixelIndex] = colorYellow[0]; // Red
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 1] = colorYellow[1]; // Green
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 2] = colorYellow[2]; // Blue
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 3] = colorYellow[3]; // Alpha (opacity)
+      }
+      else {
+         const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+         this.eraseWithDotsWaveformImageData.data[pixelIndex] = colorBlack[0]; // Red
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 1] = colorBlack[1]; // Green
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 2] = colorBlack[2]; // Blue
+         this.eraseWithDotsWaveformImageData.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+      }
+
+   }
+
    this.right = homeScreen.waveformAreaLeft + homeScreen.waveformAreaWidth;
    this.width = homeScreen.waveformAreaWidth;
-   this.height = waveformHeight - 1;
    this.bottom = this.top + this.height;
 
    this.drawX = this.left;
@@ -75,6 +144,7 @@ function Waveform(waveformName, order) {
             // this.yMax = 500;
             this.yMin = -100;
             this.yMax = 4500;
+            //this.yMax = 1500;
          }
          this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
          this.simulatedSamples = window.simulatedWaveformCO2;
@@ -278,6 +348,7 @@ Waveform.prototype.getCapacity = function () {
 //
 
 var nWaveforms;
+var topWaveformHeight;
 var waveformHeight;
 
 function setupWaveforms(setupWaveformDataMessage) {
@@ -288,7 +359,31 @@ function setupWaveforms(setupWaveformDataMessage) {
    const waveformData = JSON.parse(setupWaveformDataMessage);
 
    nWaveforms = waveformData.waveforms.length;
-   waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
+
+   //waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
+
+   switch (nWaveforms) {
+
+      case 3 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
+         break ;
+
+      case 2 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
+         break ;
+
+      case 1 :
+      default :
+
+         topWaveformHeight = homeScreen.waveformAreaHeight ;
+         waveformHeight    = topWaveformHeight ;
+         break ;
+
+   }
 
    // Add waveforms from the parsed data
    var order = 0;
@@ -386,6 +481,8 @@ var currentMSPerSample = 4.0;
 var currentMSPerSampleHigh = 4.1;
 var currentMSPerSampleNormal = 4.0;
 var currentMSPerSampleLow = 3.9;
+// var waveformSampleBufferCountMin = 300;
+// var waveformSampleBufferCountMax = 400;
 var waveformSampleBufferCountMin = 300;
 var waveformSampleBufferCountMax = 400;
 
@@ -402,34 +499,15 @@ function drawWaveform(w) {
       if (wvf.initializing) {
 
          wvf.initializing = false ;
-
-         // const imageData = new ImageData(1, 1);
-
-         // // Extract RGB values from the color string
-         // const hexColor = wvf.color.substring(1); // Remove '#' from the color string
-         // const red = parseInt(hexColor.substring(0, 2), 16); // Parse the red component
-         // const green = parseInt(hexColor.substring(2, 4), 16); // Parse the green component
-         // const blue = parseInt(hexColor.substring(4, 6), 16); // Parse the blue component
-
-         // // Construct the Uint8ClampedArray representing RGBA values
-         // const rgbaValues = new Uint8ClampedArray([red, green, blue, 255]); // Alpha value set to 255 (fully opaque)
-
-         // imageData.data.set(rgbaValues); // Set color values
          
          var x ;
          for (x = wvf.left; x < wvf.right; x++) {
 
             if (((x - wvf.left) % 16) == 0) {
-
-               // displayCtx.fillStyle = wvf.color;
-               // displayCtx.fillRect(x, wvf.top + 2, 2, 1);
-               // displayCtx.fillRect(x, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2), 1, 1);
-               // displayCtx.fillRect(x, wvf.bottom - 2, 2, 1);
-
-               displayCtx.putImageData(wvf.imageData, x, wvf.top + 2);  
-               displayCtx.putImageData(wvf.imageData, x, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2));  
-               displayCtx.putImageData(wvf.imageData, x, wvf.bottom - 2);  
-
+               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, x, wvf.top);
+            }
+            else {
+               displayCtx.putImageData(wvf.eraseWaveformImageData, x, wvf.top);
             }
 
          }
@@ -603,81 +681,167 @@ function drawWaveform(w) {
    //
    //   Draw erase bar
    //
-
-   displayCtx.beginPath();
-
-   displayCtx.strokeStyle = window.colors.ZBLACK;
-   displayCtx.lineWidth = 2;
-   displayCtx.lineJoin = 'round';
-   displayCtx.lineCap = 'round';
-
-   //displayCtx.moveTo(wvf.eraseX, wvf.top);
-
+ 
    var eraseBarPixelsDrawn = 0;
    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
 
-      // if (wvf.waveformName == "CO2") {
-      //    displayCtx.moveTo(wvf.eraseX, wvf.top + 2);
-      // }
-      // else {
-         displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
-      //}
-      displayCtx.lineTo(wvf.eraseX, wvf.bottom - 1);
+      if (wvf.order == 0) {
+         displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX, wvf.top);
+      }
+      else if (wvf.waveformName == "CO2") {
+         if ((wvf.eraseX % 16) == 0) {
+            displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX, wvf.top);
+         }
+         else {
+            displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+         }
+      }
+      else {
+         displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+      }
 
       wvf.eraseX++;
       if (wvf.eraseX >= wvf.right) {
+
          wvf.eraseX = wvf.left;
+
+         // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
+         if (wvf.order == 0) {
+            displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top + 2);
+         }
+         else {
+            displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top + 2);
+         }
+
       }
 
       eraseBarPixelsDrawn++;
 
    }
 
-   displayCtx.stroke();
+}
 
 
-   if (wvf.waveformName == "CO2") {
+//
+//   drawWaveformScaleArea
+//
 
-      if ((((wvf.eraseX-2) - wvf.left) % 16) == 0) {
+function drawWaveformScaleArea(elapsed) {
 
-   //       // displayCtx.fillStyle = wvf.color;
-   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.top + 2, 2, 1);
-   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2), 2, 1);
-   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.bottom - 2, 2, 1);
+   displayCtx.fillStyle = window.colors.ZBLACK;
+   displayCtx.clearRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
+   displayCtx.fillRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
 
-         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.top + 2);  
-         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2));  
-         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.bottom - 2); 
+   var w;
+   for (w = 0; w < homeScreen.waveforms.length; w++) {
+
+      wvf = homeScreen.waveforms[w];
+
+      if (wvf.waveformName.indexOf("ECG") !== -1) {  
+   
+         let labelRect, gainRect, bracketRect;
+         let gainTextDisplayed = 0;
+
+         let labelRectTop = wvf.top ;
+         let labelRectBottom = wvf.bottom ;
+         var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 30 / 100 ;
+         var labelRectRight = homeScreen.waveformScaleAreaRight ;
+
+         labelRect = new CRect(labelRectLeft, labelRectTop, labelRectRight, labelRectBottom);
+
+         let gainRectTop = wvf.top ;
+         let gainRectBottom = wvf.bottom ;
+         var gainRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100 ;
+         var gainRectRight = homeScreen.waveformScaleAreaRight ;
+
+         gainRect =  new CRect(gainRectLeft, gainRectTop, gainRectRight, gainRectBottom);
+ 
+         bracketRect = new CRect(homeScreen.waveformScaleAreaLeft, wvf.top, homeScreen.waveformScaleAreaRight, wvf.bottom);
+
+         let waveGain = homeScreen.getSettingValue("ECGGain")
+
+         let bracketHeightInMM;
+         let bracketHeightInPixels;
+         let gainText ;
+
+         switch (waveGain) {
+            case "2.5 mm/mV":
+               bracketHeightInMM = 2.5;
+               gainText = "1 mV";
+               break;
+            case "5 mm/mV":
+               bracketHeightInMM = 5.0;
+               gainText = "1 mV";
+               break;
+            case "10 mm/mV":
+               bracketHeightInMM = 10.0;
+               gainText = "1 mV";
+               break;
+            case "15 mm/mV":
+               bracketHeightInMM = 7.5;
+               gainText = "0.5 mV";
+               break;
+            case "20 mm/mV":
+               bracketHeightInMM = 10.0;
+               gainText = "0.5 mV";
+               break;
+         }
+
+         bracketHeightInPixels = Math.round(bracketHeightInMM * pixelsPerMM);
+
+         bracketRect.top = wvf.top + wvf.height * 40 / 100 - bracketHeightInPixels / 2;
+
+         bracketRect.bottom = bracketRect.top + bracketHeightInPixels;
+
+         let leadText = homeScreen.getSettingValue("ECGLead")
+
+         let leadHeight = wvf.height / 5;
+         let gainHeight = wvf.height / 5;
+
+         labelRect.top = bracketRect.top - leadHeight * 75 / 100 ;
+
+         gainRect.top = bracketRect.bottom + gainHeight * 25 / 100 ;
+
+         fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width()-1, labelRect.height(), 'left', 'top') ;
+         fitText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width()-1, gainRect.height(), 'left', 'top') ;
+
+         let bracketXOffset = 5;
+         let bracketLegWidth = 10;
+         let bracketCenterWidth = 10;
+
+         let bracketLeft = bracketRect.left + bracketXOffset;
+         let bracketCenterLeft = bracketLeft + bracketLegWidth;
+         let bracketCenterRight = bracketCenterLeft + bracketCenterWidth;
+         let bracketRight = bracketCenterRight + bracketLegWidth;
+
+         let bracketTop = bracketRect.top;
+         let bracketBottom = bracketRect.bottom;
+
+         drawLine(displayCtx, bracketLeft, bracketBottom, bracketCenterLeft, bracketBottom, window.colors.ZWHITE);
+         drawLine(displayCtx, bracketCenterLeft, bracketBottom, bracketCenterLeft, bracketTop, window.colors.ZWHITE);
+         drawLine(displayCtx, bracketCenterLeft, bracketTop, bracketCenterRight, bracketTop, window.colors.ZWHITE);
+         drawLine(displayCtx, bracketCenterRight, bracketTop, bracketCenterRight, bracketBottom, window.colors.ZWHITE);
+         drawLine(displayCtx, bracketCenterRight, bracketBottom, bracketRight, bracketBottom, window.colors.ZWHITE);
+
+      }
+      else if (wvf.waveformName == "CO2") {
+
+         var scaleHiLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100 ;
+         var scaleHiTop = wvf.top + wvf.height * 5 / 100 ;
+         var scaleHiWidth = homeScreen.waveformScaleAreaWidth ;
+         var scaleHiHeight = wvf.height * 25 / 100 ;
+
+         var scaleLoLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100 ;
+         var scaleLoTop = wvf.bottom - wvf.height * 0 / 100 ;
+         var scaleLoWidth = homeScreen.waveformScaleAreaWidth ;
+         var scaleLoHeight = wvf.height * 20 / 100 ;
+
+         fitText(homeScreen.getSettingValue("CO2 scale hi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top') ;
+         fitText(homeScreen.getSettingValue("CO2 scale lo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom') ;
 
       }
 
    }
-
-
-// const canvas = document.getElementById('canvas');
-// const ctx = canvas.getContext('2d');
-// const canvasWidth = canvas.width;
-// const canvasHeight = canvas.height;
-
-// // Create a new ImageData object for a 1-pixel-wide column
-// const columnWidth = 1;
-// const columnHeight = canvasHeight;
-// const columnImageData = ctx.createImageData(columnWidth, columnHeight);
-
-// // Set color values for each pixel in the column
-// const color = [255, 0, 0, 255]; // RGBA values for red color
-// for (let y = 0; y < columnHeight; y++) {
-//     const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
-//     columnImageData.data[pixelIndex] = color[0]; // Red
-//     columnImageData.data[pixelIndex + 1] = color[1]; // Green
-//     columnImageData.data[pixelIndex + 2] = color[2]; // Blue
-//     columnImageData.data[pixelIndex + 3] = color[3]; // Alpha (opacity)
-// }
-
-// // Draw the column on the canvas
-// ctx.putImageData(columnImageData, 0, 0);
-
-
 
 }
 

@@ -223,6 +223,47 @@ function getWaveformIdFromWaveformName(waveformName) {
 
 }
 
+
+//
+//   CRect (useful for porting C++ code)
+//
+
+class CRect {
+
+  constructor(left, top, right, bottom) {
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+  }
+
+  width() {
+    return this.right - this.left;
+  }
+
+  height() {
+    return this.bottom - this.top;
+  }
+
+}
+
+
+function fillRect(ctx, rect, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(rect.left, rect.top, rect.width(), rect.height());
+}
+
+function drawLine(ctx, startX, startY, endX, endY, color) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(endX, endY);
+  ctx.stroke();
+}
+
+
+
 //
 //   Event logging
 //

@@ -37,6 +37,8 @@ function shiftSettings() {
 
    drawTopLine() ;
 
+   drawWaveformScaleArea() ;
+
 }
 
 

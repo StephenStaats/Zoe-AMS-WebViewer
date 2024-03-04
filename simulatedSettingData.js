@@ -8,6 +8,22 @@ window.currentSettings = [
 "messageType": "settingData",
 "settings": [
 {
+"settingName": "ECGLead",
+"settingValue": "II"
+},
+{
+"settingName": "ECGGain",
+"settingValue": "10 mm/mV"
+},
+{
+"settingName": "CO2 scale hi",
+"settingValue": "40"
+},
+{
+"settingName": "CO2 scale lo",
+"settingValue": "0"
+},
+{
 "settingName": "Patient Name",
 "settingValue": ""
 },
@@ -42,6 +58,22 @@ window.currentSettings = [
     "messageType": "settingData",
     "settings": [
       {
+      "settingName": "ECGLead",
+      "settingValue": "II"
+      },
+      {
+      "settingName": "ECGGain",
+      "settingValue": "5 mm/mV"
+      },
+      {
+      "settingName": "CO2 scale hi",
+      "settingValue": "40"
+      },
+      {
+      "settingName": "CO2 scale lo",
+      "settingValue": "0"
+      },
+      {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"
       },
@@ -67,6 +99,22 @@ window.currentSettings = [
   `{
     "messageType": "settingData",
     "settings": [
+      {
+      "settingName": "ECGLead",
+      "settingValue": "III"
+      },
+      {
+      "settingName": "ECGGain",
+      "settingValue": "10 mm/mV"
+      },
+      {
+      "settingName": "CO2 scale hi",
+      "settingValue": "40"
+      },
+      {
+      "settingName": "CO2 scale lo",
+      "settingValue": "0"
+      },
       {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"
@@ -94,6 +142,22 @@ window.currentSettings = [
     "messageType": "settingData",
     "settings": [
       {
+      "settingName": "ECGLead",
+      "settingValue": "II"
+      },
+      {
+      "settingName": "ECGGain",
+      "settingValue": "15 mm/mV"
+      },
+      {
+      "settingName": "CO2 scale hi",
+      "settingValue": "40"
+      },
+      {
+      "settingName": "CO2 scale lo",
+      "settingValue": "0"
+      },
+      {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"
       },
@@ -119,6 +183,22 @@ window.currentSettings = [
   `{
     "messageType": "settingData",
     "settings": [
+      {
+      "settingName": "ECGLead",
+      "settingValue": "II"
+      },
+      {
+      "settingName": "ECGGain",
+      "settingValue": "20 mm/mV"
+      },
+      {
+      "settingName": "CO2 scale hi",
+      "settingValue": "40"
+      },
+      {
+      "settingName": "CO2 scale lo",
+      "settingValue": "0"
+      },
       {
         "settingName": "Monitor Serial Number",
         "settingValue": "SN12345"

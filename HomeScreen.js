@@ -74,14 +74,14 @@ HomeScreen.prototype.initializeAreas = function () {
    this.headerTop = 0;
    this.headerBottom = this.headerTop + this.headerHeight;
 
-   this.waveformScaleAreaWidth = Math.round(this.width * 5 / 100);
+   this.waveformScaleAreaWidth = Math.round(this.width * 6 / 100);
    this.waveformScaleAreaHeight = Math.round(this.height * 60 / 100);
    this.waveformScaleAreaLeft = 0;
    this.waveformScaleAreaRight = this.waveformScaleAreaLeft + this.waveformScaleAreaWidth;
    this.waveformScaleAreaTop = this.headerBottom;
    this.waveformScaleAreaBottom = this.waveformAreaTop + this.waveformAreaHeight;
 
-   this.waveformAreaWidth = Math.round(this.width * 55 / 100);
+   this.waveformAreaWidth = Math.round(this.width * 54 / 100);
    this.waveformAreaHeight = Math.round(this.height * 60 / 100);
    //this.waveformAreaHeight = Math.round(this.height * 64 / 100);
    this.waveformAreaLeft = this.waveformScaleAreaRight;
@@ -271,13 +271,15 @@ function drawHomeScreenAreas() {
    // displayCtx.clearRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
    // displayCtx.fillRect(homeScreen.messageAreaLeft, homeScreen.messageAreaTop, homeScreen.messageAreaWidth, homeScreen.messageAreaHeight);
 
-   displayCtx.fillStyle = window.colors.ZRED;
-   displayCtx.clearRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
-   displayCtx.fillRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
+   // displayCtx.fillStyle = window.colors.ZRED;
+   // displayCtx.clearRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
+   // displayCtx.fillRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
 
    drawTopLine() ;
 
    drawParameterAreas();
+
+   drawWaveformScaleArea();
 
    drawBottomLineMessageArea() ;
 

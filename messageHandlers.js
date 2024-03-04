@@ -5,15 +5,17 @@
 var waveformDataMessageCount = 0;
 
 function processWaveformDataMessage(newWaveformDataMessage) {
-//function processWaveformDataMessage(waveformData) {
+   //function processWaveformDataMessage(waveformData) {
 
-   LOGEVENTGREEN("In processWaveformDataMessage") ;
+   //LOGEVENTGREEN("In processWaveformDataMessage");
 
    if (pauseWaveformDrawing == 1) return;
 
    waveformDataMessageCount++
    LOGEVENT(" ");
-   LOGEVENTGREEN('in processWaveformDataMessage, count = ', waveformDataMessageCount);
+   LOGEVENTGREEN('In processWaveformDataMessage, count = ', waveformDataMessageCount);
+   LOGEVENTMAGENTA("topWaveformHeight = ", topWaveformHeight) ;
+   LOGEVENTMAGENTA("   waveformHeight = ", waveformHeight) ;
 
    // Parse the JSON string into JavaScript object
    const waveformData = JSON.parse(newWaveformDataMessage);
@@ -45,7 +47,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
       for (w = 0; w < waveformData.waveforms.length; w++) {
 
          if (waveformData.waveforms[w].waveformName == "RRA") {
-            var q = 0 ;
+            var q = 0;
          }
 
          var foundMatch = 0;
@@ -75,10 +77,10 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                if (wvf.autoScale) {
 
-                  if (thisSample <  wvf.runningMinSample) {
+                  if (thisSample < wvf.runningMinSample) {
                      wvf.runningMinSample = thisSample;
                   }
-                  else if (thisSample > wvf.runningMaxSample ) {
+                  else if (thisSample > wvf.runningMaxSample) {
                      wvf.runningMaxSample = thisSample;
                   }
 
@@ -89,10 +91,10 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                // wvf.yMaxSum += maxY ;
                // wvf.yMinSum += minY ;
-               wvf.autoScaleCount += 1 ;
+               wvf.autoScaleCount += 1;
 
-               LOGEVENTYELLOW(wvf.waveformName, " runningMaxSample = = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
-               LOGEVENTYELLOW("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+               LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
+               LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
 
                //if ((wvf.autoScaleCountStartup) || (wvf.autoScaleCount >= 5)) {
                //if (wvf.autoScaleCount >= 0) {
@@ -109,10 +111,10 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                   // wvf.yMax = averageYMax + amplitude * wvf.autoscaleOffsetPercentage / 100;
                   // LOGEVENTRED("averageYMax = ", averageYMax, " averageYMin = ", averageYMin, " amplitude = ", amplitude);
 
-                  var amplitude = wvf.runningMaxSample - wvf.runningMinSample ;
+                  var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
                   wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
                   wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
-                  LOGEVENTYELLOW(wvf.waveformName, " New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+                  LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
 
                   wvf.runningMinSample = Number.MAX_VALUE;
                   wvf.runningMaxSample = Number.MIN_VALUE;
@@ -143,16 +145,77 @@ function processWaveformDataMessage(newWaveformDataMessage) {
    }
 
    if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
-      currentMSPerSample = currentMSPerSampleHigh ;
+      currentMSPerSample = currentMSPerSampleHigh;
       LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
    }
    else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
-      currentMSPerSample = currentMSPerSampleLow ;
+      currentMSPerSample = currentMSPerSampleLow;
       LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
    }
    else {
-      currentMSPerSample = currentMSPerSampleNormal ;
+      currentMSPerSample = currentMSPerSampleNormal;
       LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
    }
 
 }
+
+
+// {
+//    "waveforms": [
+//       {
+//          "waveformName": "ECGII",
+//          "waveformSamples": "1,2,3,4,5"
+//       },
+//       {
+//          "waveformName": "SPO2",
+//          "waveformSamples": "21,22,15,4,22"
+//       }
+//    ],
+//    "parameters": [
+//       {
+//          "parameterName": "HR",
+//          "parameterValue": "ASY",
+//          "parameterAlarmStatus": "ACTIVE_HIGH"
+//       },
+//       {
+//          "parameterName": "SPO2",
+//          "parameterValue": "100",
+//          "parameterAlarmStatus": "NORMAL_NONE"
+//       }
+//    ],
+//    "settings": [
+//       {
+//          "settingName": "monitorSerialNumber",
+//          "settingValue": "SN12345"
+//       },
+//       {
+//          "settingName": "deviceName",
+//          "settingValue": "<User friendly name from portal>"
+//       },
+//       {
+//          "settingName": "deviceId",
+//          "settingValue": "<GUID from portal>"
+//       },
+//       {
+//          "settingName": "patientId",
+//          "settingValue": "P12345"
+//       },
+//       {
+//          "settingName": "patientFirstName",
+//          "settingValue": "Diana"
+//       },
+//       {
+//          "settingName": "patientLastName",
+//          "settingValue": "Villiers"
+//       },
+//       {
+//          "settingName": "bottomLineMessage",
+//          "settingValue": "HR Asystole"
+//       },
+//       {
+//          "settingName": "bottomLineMessageAlarmStatus",
+//          "settingValue": "ACTIVE_HIGH"
+//       }
+//    ]
+// }
+
