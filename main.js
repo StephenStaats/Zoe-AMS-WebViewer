@@ -227,7 +227,7 @@ async function getWaveformDataMessages() {
 
    try {
 
-      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/a/fromStreamingDevice/JSON/ASDR3', {
+      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {
          method: 'GET',
          headers: {
                'Accept': 'application/json',

@@ -55,6 +55,7 @@ function Waveform(waveformName, order) {
          this.yMax = 500;
          this.maxSimulatedSampleIndex = window.simulatedWaveformECGII.length;
          this.simulatedSamples = window.simulatedWaveformECGII;
+         this.autoscaleOffsetPercentage = 0;
          break;
 
       case 'CO2':
@@ -67,16 +68,17 @@ function Waveform(waveformName, order) {
          this.autoScale = false;
          if (window.simulatedDataMode) {
             this.yMin = -100;
-            this.yMax = 4500; 
+            this.yMax =  4500;
          }
          else {
             // this.yMin = -500;
             // this.yMax = 500;
             this.yMin = -100;
-            this.yMax = 4500; 
+            this.yMax = 4500;
          }
          this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
          this.simulatedSamples = window.simulatedWaveformCO2;
+         this.autoscaleOffsetPercentage = 0;
          break;
 
       case 'SPO2':
@@ -87,13 +89,17 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 25.0;
          this.autoScale = true;
-         this.yMin = 0;
-         this.yMax = 0;
+         // this.yMin = Number.MAX_VALUE;
+         // this.yMax = Number.MIN_VALUE;
+         // this.yMin = 100000000;
+         // this.yMax = -100000000;
+         this.yMin = -5000;
+         this.yMax = 5000;
          this.maxSimulatedSampleIndex = window.simulatedWaveformSpO2At250Hz.length;
          this.simulatedSamples = window.simulatedWaveformSpO2At250Hz;
+         this.autoscaleOffsetPercentage = 5;
          break;
 
-      case 'RESP':
       case 'RESP_AUTO':
          this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
          this.color = window.colors.RESPColor;
@@ -104,41 +110,106 @@ function Waveform(waveformName, order) {
          this.autoScale = true;
          // this.yMin = Number.MAX_VALUE;
          // this.yMax = Number.MIN_VALUE;
-         this.yMin = 100000000;
-         this.yMax = -100000000;
+         // this.yMin = 100000000;
+         // this.yMax = -100000000;
+         this.yMin = -60;
+         this.yMax =  60;
          this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
          this.simulatedSamples = window.simulatedWaveformRESP;
+         this.autoscaleOffsetPercentage = 10;
          break;
+
+      case 'RRA':
+         this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
+         this.color = window.colors.RESPColor;
+         this.fill = false;
+         this.sampleRateIn = 250;
+         this.sampleRate = 250;
+         this.sweepSpeed = 6.25;
+         this.autoScale = true;
+         // this.yMin = Number.MAX_VALUE;
+         // this.yMax = Number.MIN_VALUE;
+         // this.yMin = 100000000;
+         // this.yMax = -100000000;
+         this.yMin = -50000;
+         this.yMax =  50000;
+         this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
+         this.simulatedSamples = window.simulatedWaveformRESP;
+         this.autoscaleOffsetPercentage = 1;
+         break;
+
 
    }
 
+
+   this.imageData = new ImageData(1, 1);  // for drawing dots in scales
+
+   // Extract RGB values from the color string
+   const hexColor = this.color.substring(1); // Remove '#' from the color string
+   const red = parseInt(hexColor.substring(0, 2), 16); // Parse the red component
+   const green = parseInt(hexColor.substring(2, 4), 16); // Parse the green component
+   const blue = parseInt(hexColor.substring(4, 6), 16); // Parse the blue component
+
+   // Construct the Uint8ClampedArray representing RGBA values
+   const rgbaValues = new Uint8ClampedArray([red, green, blue, 255]); // Alpha value set to 255 (fully opaque)
+
+   this.imageData.data.set(rgbaValues); // Set color values
+
+   // this.runningMinSample =  10000000;
+   // this.runningMaxSample = -10000000;
+
+   // this.runningMinY =  10000000;
+   // this.runningMaxY = -10000000;
+
+   this.initializing = true ;
+
+   this.runningMinSample = Number.MAX_VALUE;
+   this.runningMaxSample = Number.MIN_VALUE;
+
+   this.runningMinY = Number.MAX_VALUE;
+   this.runningMaxY = Number.MIN_VALUE;
+
+   // this.yMaxSum = 0 ;
+   // this.yMinSum = 0 ;
+   this.autoScaleCount = 0;
+   //this.autoScaleCountStartup = false ;
+   this.autoScaleDone = false;
+
    if (this.autoScale) {
 
-      var minY;
-      var maxY;
+      //this.autoScaleCountStartup = true ;
 
-      minY = Number.MAX_VALUE;
-      maxY = Number.MIN_VALUE;
-      var s;
-      for (s = 0; s < this.maxSimulatedSampleIndex; s++) {
-         if (this.simulatedSamples[s] < minY) {
-            minY = this.simulatedSamples[s];
+      if (window.simulatedDataMode) {
+
+         var minY;
+         var maxY;
+
+         minY = Number.MAX_VALUE;
+         maxY = Number.MIN_VALUE;
+         var s;
+         for (s = 0; s < this.maxSimulatedSampleIndex; s++) {
+            if (this.simulatedSamples[s] < minY) {
+               minY = this.simulatedSamples[s];
+            }
+            if (this.simulatedSamples[s] > maxY) {
+               maxY = this.simulatedSamples[s];
+            }
          }
-         if (this.simulatedSamples[s] > maxY) {
-            maxY = this.simulatedSamples[s];
-         }
+         var amplitude = maxY - minY;
+
+         this.yMin = minY - amplitude * this.autoscaleOffsetPercentage / 100;
+         this.yMax = maxY + amplitude * this.autoscaleOffsetPercentage / 100;
+
+         this.autoScaleDone = true;
+
       }
-      var amplitude = maxY - minY;
-
-      this.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
-      this.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
 
    }
 
 }
 
 // Method to write a sample to the waveform ring buffer
-Waveform.prototype.writeSample = function(sample) {
+Waveform.prototype.writeSample = function (sample) {
    this.buffer.enqueue(sample);
    if (this.buffer.getSize() > this.capacity) {
       this.buffer.dequeue(); // Remove oldest sample if buffer exceeds capacity
@@ -146,58 +217,58 @@ Waveform.prototype.writeSample = function(sample) {
 };
 
 // Method to read a sample from the waveform ring buffer
-Waveform.prototype.readSample = function() {
+Waveform.prototype.readSample = function () {
    this.bufferReadCount++;
    const sample = this.buffer.dequeue();
    return sample;
 };
 
 // Method to peek at current sample from the waveform ring buffer without dequeuing it
-Waveform.prototype.peekThisSample = function() {
+Waveform.prototype.peekThisSample = function () {
    const sample = this.buffer.peek();
    return sample;
 };
 
 // Method to peek at sample beyond current sample from the waveform ring buffer without dequeuing it
-Waveform.prototype.peekNextSample = function() {
+Waveform.prototype.peekNextSample = function () {
    const sample = this.buffer.peekNext();
    return sample;
 };
 
 // Method to clear the waveform data
-Waveform.prototype.clearSamples = function() {
+Waveform.prototype.clearSamples = function () {
    while (!this.buffer.isEmpty()) {
       this.buffer.dequeue();
    }
 };
 
 // Method to get number of samples
-Waveform.prototype.getNSamples = function() {
+Waveform.prototype.getNSamples = function () {
    return this.buffer.getSize();
 };
 
 // Method to get the waveform name
-Waveform.prototype.getWaveformName = function() {
+Waveform.prototype.getWaveformName = function () {
    return this.waveformName;
 };
 
 // Method to get the waveform ID
-Waveform.prototype.getWaveformId = function() {
+Waveform.prototype.getWaveformId = function () {
    return this.waveformId;
 };
 
 // Method to get the samples as an array
-Waveform.prototype.getSamples = function() {
+Waveform.prototype.getSamples = function () {
    return this.buffer.toArray();
 };
 
 // Method to get the number of samples in the waveform
-Waveform.prototype.getNumSamples = function() {
+Waveform.prototype.getNumSamples = function () {
    return this.buffer.getSize();
 };
 
 // Method to get the capacity of the waveform
-Waveform.prototype.getCapacity = function() {
+Waveform.prototype.getCapacity = function () {
    return this.capacity;
 };
 
@@ -309,14 +380,14 @@ const screenWidthMM = 500;
 const screenWidthPixels = 1920;
 const pixelsPerMM = screenWidthPixels / screenWidthMM;
 
-var enteredMSPerPixel = 1 / (25 * pixelsPerMM / 1000) ;
-var enteredMSPerSample = 4.0 ;
-var currentMSPerSample = 4.0 ;
-var currentMSPerSampleHigh= 4.1 ;
-var currentMSPerSampleNormal = 4.0 ;
-var currentMSPerSampleLow = 3.9 ;
-var waveformSampleBufferCountMin = 300 ;
-var waveformSampleBufferCountMax = 400 ;
+var enteredMSPerPixel = 1 / (25 * pixelsPerMM / 1000);
+var enteredMSPerSample = 4.0;
+var currentMSPerSample = 4.0;
+var currentMSPerSampleHigh = 4.1;
+var currentMSPerSampleNormal = 4.0;
+var currentMSPerSampleLow = 3.9;
+var waveformSampleBufferCountMin = 300;
+var waveformSampleBufferCountMax = 400;
 
 //
 //   drawWaveform
@@ -325,6 +396,47 @@ var waveformSampleBufferCountMax = 400 ;
 function drawWaveform(w) {
 
    wvf = homeScreen.waveforms[w];
+
+   if (wvf.waveformName == "CO2") {
+
+      if (wvf.initializing) {
+
+         wvf.initializing = false ;
+
+         // const imageData = new ImageData(1, 1);
+
+         // // Extract RGB values from the color string
+         // const hexColor = wvf.color.substring(1); // Remove '#' from the color string
+         // const red = parseInt(hexColor.substring(0, 2), 16); // Parse the red component
+         // const green = parseInt(hexColor.substring(2, 4), 16); // Parse the green component
+         // const blue = parseInt(hexColor.substring(4, 6), 16); // Parse the blue component
+
+         // // Construct the Uint8ClampedArray representing RGBA values
+         // const rgbaValues = new Uint8ClampedArray([red, green, blue, 255]); // Alpha value set to 255 (fully opaque)
+
+         // imageData.data.set(rgbaValues); // Set color values
+         
+         var x ;
+         for (x = wvf.left; x < wvf.right; x++) {
+
+            if (((x - wvf.left) % 16) == 0) {
+
+               // displayCtx.fillStyle = wvf.color;
+               // displayCtx.fillRect(x, wvf.top + 2, 2, 1);
+               // displayCtx.fillRect(x, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2), 1, 1);
+               // displayCtx.fillRect(x, wvf.bottom - 2, 2, 1);
+
+               displayCtx.putImageData(wvf.imageData, x, wvf.top + 2);  
+               displayCtx.putImageData(wvf.imageData, x, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2));  
+               displayCtx.putImageData(wvf.imageData, x, wvf.bottom - 2);  
+
+            }
+
+         }
+
+      }
+
+   }
 
    var sweepSpeedMMPerSecond = wvf.sweepSpeed;
    var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
@@ -335,7 +447,7 @@ function drawWaveform(w) {
       //MSPerPixel = 1 / pixelsPerMS;
       //MSPerSample = 1000 / wvf.sampleRateIn;
    }
-   else {   
+   else {
       //MSPerPixel = enteredMSPerPixel;
       //MSPerSample = enteredMSPerSample;
       MSPerSample = currentMSPerSample;
@@ -343,19 +455,15 @@ function drawWaveform(w) {
 
    const normalizeWaveform = (value) => {
 
-               if (wvf.waveformName == "RESP_AUTO") {
-                  var q = 0;
-               }
-
       normalizedValue = wvf.top + wvf.height - ((value - wvf.yMin) / (wvf.yMax - wvf.yMin) * wvf.height);
 
       if (normalizedValue < wvf.top + 1) {
-         //normalizedValue = wvf.top + 1;
-         normalizedValue = LEAD_OFF_OR_UNPLUGGED;
+         normalizedValue = wvf.top + 1;
+         //normalizedValue = LEAD_OFF_OR_UNPLUGGED;
       }
       else if (normalizedValue > wvf.bottom - 1) {
-         //normalizedValue = wvf.bottom - 1;
-         normalizedValue = LEAD_OFF_OR_UNPLUGGED;
+         normalizedValue = wvf.bottom - 1;
+         //normalizedValue = LEAD_OFF_OR_UNPLUGGED;
       }
       return normalizedValue;
    };
@@ -381,9 +489,12 @@ function drawWaveform(w) {
 
       var avgYSum = 0;
       var avgYCount = 0;
+      var highestY = Number.MIN_VALUE;
       var lowestY = Number.MAX_VALUE;
+      // var highestY = -10000000;
+      // var lowestY = 10000000;
 
-      var skipPixel = 0 ;
+      var skipPixel = 0;
       while (wvf.drawnPixelTime > wvf.readSampleTime) {
 
          if (window.simulatedDataMode) {
@@ -393,17 +504,18 @@ function drawWaveform(w) {
             wvf.readSampleTime += MSPerSample;
          }
          else {
-            var thisSample = wvf.readSample() ;
+            var thisSample = wvf.readSample();
             //LOGEVENTYELLOW("1 readSample from ", wvf.waveformName, " = ", thisY) ;
             wvf.samplesDrawn++;
             wvf.readSampleTime += MSPerSample;
+
             if (thisSample == LEAD_OFF_OR_UNPLUGGED) {
-               skipPixel = 1 ;
+               skipPixel = 1;
             }
             else {
                var thisY = normalizeWaveform(thisSample);
                if (thisY == LEAD_OFF_OR_UNPLUGGED) {
-                  skipPixel = 1 ;
+                  skipPixel = 1;
                }
             }
 
@@ -412,37 +524,66 @@ function drawWaveform(w) {
          avgYSum += thisY;
          avgYCount++;
 
+         if (thisY > highestY) {
+            highestY = thisY;
+         }
          if (thisY < lowestY) {
             lowestY = thisY;
          }
 
+         // if (thisY > wvf.runningMaxY) {
+         //    wvf.runningMinY = thisY;
+         // }
+         // else if (thisY < wvf.runningMinY) {
+         //    wvf.runningMinY = thisY;
+         // }
+
       }
 
-      //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
-      const index = wvf.waveformName.indexOf("ECG");
-      if (index !== -1) {
-         wvf.drawY = lowestY;
-      } else {
-         wvf.drawY = avgYSum / avgYCount;
-      }
+      if (skipPixel == 0) {
 
-      //if (wvf.drawX > wvf.drawXLast) {
-      if (skipPixel) {
-         var q = 0 ;
-      }
-      else {
+         if (wvf.waveformName.indexOf("ECG") !== -1) {  //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
+
+            //if ((lowestY != 10000000) && (highestY != -10000000)) {
+            wvf.drawY = lowestY;
+            //}
+
+         }
+         else if (wvf.waveformName.indexOf("RRA") !== -1) { //if RRA (to preserve amplitude) use most extreme point
+            var highDiff = Math.abs(highestY - wvf.drawY);
+            var lowDiff = Math.abs(lowestY - wvf.drawY);
+            if (highDiff > lowDiff) {
+               wvf.drawY = highestY;
+            }
+            else {
+               wvf.drawY = lowestY;
+            }
+            if (wvf.drawY < wvf.top) {
+               wvf.drawY = wvf.top;
+            }
+            else if (wvf.drawY > wvf.bottom) {
+               wvf.drawY = wvf.bottom;
+            }
+         }
+         else {
+            wvf.drawY = avgYSum / avgYCount;
+         }
+
          if (wvf.drawXLast != Number.MIN_VALUE) {
             displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
+            //if ((wvf.autoScale == false) || (wvf.autoScaleDone == true)) {
             displayCtx.lineTo(wvf.drawX, wvf.drawY);
+            //}  
             if (wvf.fill) {
+               //if ((wvf.autoScale == false) || (wvf.autoScaleDone == true)) {
                displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
-               //displayCtx.moveTo(wvf.drawX, wvf.drawY);
+               //}
             }
          }
          wvf.drawXLast = wvf.drawX;
          wvf.drawYLast = wvf.drawY;
+
       }
-      //}
 
       NewSamplePixelsDrawn++;
 
@@ -470,12 +611,17 @@ function drawWaveform(w) {
    displayCtx.lineJoin = 'round';
    displayCtx.lineCap = 'round';
 
-   displayCtx.moveTo(wvf.eraseX, wvf.top);
+   //displayCtx.moveTo(wvf.eraseX, wvf.top);
 
    var eraseBarPixelsDrawn = 0;
    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
 
-      displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+      // if (wvf.waveformName == "CO2") {
+      //    displayCtx.moveTo(wvf.eraseX, wvf.top + 2);
+      // }
+      // else {
+         displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+      //}
       displayCtx.lineTo(wvf.eraseX, wvf.bottom - 1);
 
       wvf.eraseX++;
@@ -488,6 +634,50 @@ function drawWaveform(w) {
    }
 
    displayCtx.stroke();
+
+
+   if (wvf.waveformName == "CO2") {
+
+      if ((((wvf.eraseX-2) - wvf.left) % 16) == 0) {
+
+   //       // displayCtx.fillStyle = wvf.color;
+   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.top + 2, 2, 1);
+   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2), 2, 1);
+   //       // displayCtx.fillRect(wvf.eraseX-2, wvf.bottom - 2, 2, 1);
+
+         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.top + 2);  
+         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.top + Math.floor((wvf.bottom - wvf.top) / 2));  
+         displayCtx.putImageData(wvf.imageData, wvf.eraseX-2, wvf.bottom - 2); 
+
+      }
+
+   }
+
+
+// const canvas = document.getElementById('canvas');
+// const ctx = canvas.getContext('2d');
+// const canvasWidth = canvas.width;
+// const canvasHeight = canvas.height;
+
+// // Create a new ImageData object for a 1-pixel-wide column
+// const columnWidth = 1;
+// const columnHeight = canvasHeight;
+// const columnImageData = ctx.createImageData(columnWidth, columnHeight);
+
+// // Set color values for each pixel in the column
+// const color = [255, 0, 0, 255]; // RGBA values for red color
+// for (let y = 0; y < columnHeight; y++) {
+//     const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+//     columnImageData.data[pixelIndex] = color[0]; // Red
+//     columnImageData.data[pixelIndex + 1] = color[1]; // Green
+//     columnImageData.data[pixelIndex + 2] = color[2]; // Blue
+//     columnImageData.data[pixelIndex + 3] = color[3]; // Alpha (opacity)
+// }
+
+// // Draw the column on the canvas
+// ctx.putImageData(columnImageData, 0, 0);
+
+
 
 }
 

@@ -43,6 +43,11 @@ function processWaveformDataMessage(newWaveformDataMessage) {
       // Write samples from this message into waveform ring buffers
       var w;
       for (w = 0; w < waveformData.waveforms.length; w++) {
+
+         if (waveformData.waveforms[w].waveformName == "RRA") {
+            var q = 0 ;
+         }
+
          var foundMatch = 0;
          var cw;
          for (cw = 0; cw < homeScreen.waveforms.length; cw++) {
@@ -70,24 +75,55 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                if (wvf.autoScale) {
 
-                  if (wvf.waveformName == "RESP_AUTO") {
-                     var q = 0;
+                  if (thisSample <  wvf.runningMinSample) {
+                     wvf.runningMinSample = thisSample;
                   }
-
-                  if (thisSample <  wvf.yMin) {
-                      wvf.yMin = thisSample;
-                     var amplitude = maxY - minY;
-                     wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
-                     wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
-                  }
-                  else if (thisSample > wvf.yMax) {
-                     wvf.yMax = thisSample;
-                     var amplitude = maxY - minY;
-                     wvf.yMin = minY - amplitude * window.autoscaleOffsetPercentage / 100;
-                     wvf.yMax = maxY + amplitude * window.autoscaleOffsetPercentage / 100;
+                  else if (thisSample > wvf.runningMaxSample ) {
+                     wvf.runningMaxSample = thisSample;
                   }
 
                }
+            }
+
+            if (wvf.autoScale) {
+
+               // wvf.yMaxSum += maxY ;
+               // wvf.yMinSum += minY ;
+               wvf.autoScaleCount += 1 ;
+
+               LOGEVENTYELLOW(wvf.waveformName, " runningMaxSample = = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
+               LOGEVENTYELLOW("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+
+               //if ((wvf.autoScaleCountStartup) || (wvf.autoScaleCount >= 5)) {
+               //if (wvf.autoScaleCount >= 0) {
+               if (wvf.autoScaleCount % 10 == 0) {
+
+                  //wvf.autoScaleCountStartup = false ;
+                  // var averageYMax = wvf.yMaxSum / wvf.autoScaleCount ;
+                  // var averageYMin = wvf.yMinSum / wvf.autoScaleCount ;
+                  // var amplitude = averageYMax - averageYMin ;
+                  // wvf.yMaxSum = 0 ;
+                  // wvf.yMinSum = 0 ;
+                  //wvf.autoScaleCount = 0 ;
+                  // wvf.yMin = averageYMin - amplitude * wvf.autoscaleOffsetPercentage / 100;
+                  // wvf.yMax = averageYMax + amplitude * wvf.autoscaleOffsetPercentage / 100;
+                  // LOGEVENTRED("averageYMax = ", averageYMax, " averageYMin = ", averageYMin, " amplitude = ", amplitude);
+
+                  var amplitude = wvf.runningMaxSample - wvf.runningMinSample ;
+                  wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
+                  wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
+                  LOGEVENTYELLOW(wvf.waveformName, " New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+
+                  wvf.runningMinSample = Number.MAX_VALUE;
+                  wvf.runningMaxSample = Number.MIN_VALUE;
+                  // wvf.autoScaleDone = true ;
+
+                  // if (wvf.waveformName == "RRA") {
+                  //    var q = 0 ;
+                  // }
+
+               }
+
             }
 
             LOGEVENTGREEN("Read ", homeScreen.waveforms[cw].bufferReadCount, " samples from ", homeScreen.waveforms[cw].waveformName);
@@ -110,7 +146,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
       currentMSPerSample = currentMSPerSampleHigh ;
       LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
    }
-   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMin) {
+   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
       currentMSPerSample = currentMSPerSampleLow ;
       LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
    }

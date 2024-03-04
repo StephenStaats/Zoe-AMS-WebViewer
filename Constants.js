@@ -8,7 +8,7 @@ window.developmentMode = 0;
 
 window.graphicsDebug = 0;
 
-window.autoscaleOffsetPercentage = 10;
+//window.autoscaleOffsetPercentage = 10;
 
 window.alarmsSilenced = 0 ;
 
@@ -52,7 +52,8 @@ const NZALARMTONES = Object.keys(Z_ALARM_TONE).length;
 window.Z_ALL_ALARMS_OFF_TRUE  = 0x1898 ;
 window.Z_ALL_ALARMS_OFF_FALSE = 0x1914 ;
 
-window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;
+//window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;
+window.LEAD_OFF_OR_UNPLUGGED = -32768 ;
 
 window.Z_WAVEFORM_ID = {
    Z_WAVEFORM_ECGI: 0,
