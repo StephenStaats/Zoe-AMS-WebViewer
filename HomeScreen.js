@@ -83,7 +83,6 @@ HomeScreen.prototype.initializeAreas = function () {
 
    this.waveformAreaWidth = Math.round(this.width * 54 / 100);
    this.waveformAreaHeight = Math.round(this.height * 60 / 100);
-   //this.waveformAreaHeight = Math.round(this.height * 64 / 100);
    this.waveformAreaLeft = this.waveformScaleAreaRight;
    this.waveformAreaRight = this.waveformAreaLeft + this.waveformAreaWidth;
    this.waveformAreaTop = this.headerBottom;
@@ -366,12 +365,19 @@ function fitText(textToFit, textColor, textFontTypeface, textPointSize, textLeft
       displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
    }
 
+   var saveTextAlign = displayCtx.textAlign ;
+   var saveTextBaseline = displayCtx.textBaseline ;
+
    displayCtx.textAlign = textAlign;
    displayCtx.textBaseline = textBaseline;  
 
    // Draw text
    displayCtx.fillText(textToFit, textLeft, textTop);
  
+   displayCtx.textAlign = saveTextAlign ;
+   displayCtx.textBaseline =  saveTextBaseline ;
+;
+
 }
 
 

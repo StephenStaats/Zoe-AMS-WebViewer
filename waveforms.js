@@ -559,8 +559,6 @@ function drawWaveform(w) {
    displayCtx.lineJoin = 'round';
    displayCtx.lineCap = 'round';
 
-   //displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
-
    while (wvf.drawXTime < wvf.elapsedTime) {
 
       //if (MSPerPixel > MSPerSample) {   we now upsample 50Hz waveform so that this is always true
@@ -569,8 +567,6 @@ function drawWaveform(w) {
       var avgYCount = 0;
       var highestY = Number.MIN_VALUE;
       var lowestY = Number.MAX_VALUE;
-      // var highestY = -10000000;
-      // var lowestY = 10000000;
 
       var skipPixel = 0;
       while (wvf.drawnPixelTime > wvf.readSampleTime) {
@@ -583,7 +579,6 @@ function drawWaveform(w) {
          }
          else {
             var thisSample = wvf.readSample();
-            //LOGEVENTYELLOW("1 readSample from ", wvf.waveformName, " = ", thisY) ;
             wvf.samplesDrawn++;
             wvf.readSampleTime += MSPerSample;
 
@@ -609,23 +604,12 @@ function drawWaveform(w) {
             lowestY = thisY;
          }
 
-         // if (thisY > wvf.runningMaxY) {
-         //    wvf.runningMinY = thisY;
-         // }
-         // else if (thisY < wvf.runningMinY) {
-         //    wvf.runningMinY = thisY;
-         // }
-
       }
 
       if (skipPixel == 0) {
 
          if (wvf.waveformName.indexOf("ECG") !== -1) {  //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
-
-            //if ((lowestY != 10000000) && (highestY != -10000000)) {
             wvf.drawY = lowestY;
-            //}
-
          }
          else if (wvf.waveformName.indexOf("RRA") !== -1) { //if RRA (to preserve amplitude) use most extreme point
             var highDiff = Math.abs(highestY - wvf.drawY);
@@ -740,7 +724,6 @@ function drawWaveformScaleArea(elapsed) {
       if (wvf.waveformName.indexOf("ECG") !== -1) {  
    
          let labelRect, gainRect, bracketRect;
-         let gainTextDisplayed = 0;
 
          let labelRectTop = wvf.top ;
          let labelRectBottom = wvf.bottom ;
@@ -764,24 +747,44 @@ function drawWaveformScaleArea(elapsed) {
          let bracketHeightInPixels;
          let gainText ;
 
+         let bandHeightInMM = Math.round(wvf.height / pixelsPerMM);
+
+         // WAVE_SIZE_SETTING ECGSettings[] = {
+         //    { SN_2_5_mm_mV ,  -(bandHeightInMM * LSBS_PER_MV) / (1 * 5)  , (bandHeightInMM * LSBS_PER_MV) / (1 * 5)  } ,
+         //    { SN_5_mm_mV   ,  -(bandHeightInMM * LSBS_PER_MV) / (2 * 5)  , (bandHeightInMM * LSBS_PER_MV) / (2 * 5)  } ,
+         //    { SN_10_mm_mV  ,  -(bandHeightInMM * LSBS_PER_MV) / (2 * 10) , (bandHeightInMM * LSBS_PER_MV) / (2 * 10) } ,
+         //    { SN_15_mm_mV  ,  -(bandHeightInMM * LSBS_PER_MV) / (2 * 15) , (bandHeightInMM * LSBS_PER_MV) / (2 * 15) } ,
+         //    { SN_20_mm_mV  ,  -(bandHeightInMM * LSBS_PER_MV) / (2 * 20) , (bandHeightInMM * LSBS_PER_MV) / (2 * 20) } ,
+         // } ;
+
          switch (waveGain) {
             case "2.5 mm/mV":
+               wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (1 * 5);
+               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (1 * 5);
                bracketHeightInMM = 2.5;
                gainText = "1 mV";
                break;
             case "5 mm/mV":
+               wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 5);
+               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 5);
                bracketHeightInMM = 5.0;
                gainText = "1 mV";
                break;
             case "10 mm/mV":
+               wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 10);
+               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 10);
                bracketHeightInMM = 10.0;
                gainText = "1 mV";
                break;
             case "15 mm/mV":
+               wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 15);
+               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 15);
                bracketHeightInMM = 7.5;
                gainText = "0.5 mV";
                break;
             case "20 mm/mV":
+               wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 20);
+               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 20);
                bracketHeightInMM = 10.0;
                gainText = "0.5 mV";
                break;
@@ -789,7 +792,7 @@ function drawWaveformScaleArea(elapsed) {
 
          bracketHeightInPixels = Math.round(bracketHeightInMM * pixelsPerMM);
 
-         bracketRect.top = wvf.top + wvf.height * 40 / 100 - bracketHeightInPixels / 2;
+         bracketRect.top = wvf.top + wvf.height * 50 / 100 - bracketHeightInPixels / 2;
 
          bracketRect.bottom = bracketRect.top + bracketHeightInPixels;
 

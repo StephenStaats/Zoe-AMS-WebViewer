@@ -442,7 +442,6 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
 
       displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
 
-
       displayCtx.font = `${fontSize-15}pt ${font}`;
       displayCtx.textAlign = 'left';
 
@@ -457,12 +456,6 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
       displayCtx.textAlign = 'center';
       displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
    }
-
-
-   //     // Reset the styles to default values
-   //     displayCtx.strokeStyle = '#000000'; // Reset to default black
-   //     displayCtx.fillStyle = '#000000'; // Reset to default black
-   //     displayCtx.font = '10px Arial'; // Reset to default font and size
 
 }
 

@@ -8,14 +8,14 @@ window.developmentMode = 0;
 
 window.graphicsDebug = 0;
 
-//window.autoscaleOffsetPercentage = 10;
-
 window.alarmsSilenced = 0 ;
 
 
 //
 //   Note:  The following enums and constants must be kept in sync with CVM10
 //
+
+window.LSBS_PER_MV = 400;   //  ECG signals are 2.5 uV/lsb
 
 window.Z_PARAM_ALARM_STATUS = {
    NORMAL_NONE: 0,
@@ -225,7 +225,7 @@ function getWaveformIdFromWaveformName(waveformName) {
 
 
 //
-//   CRect (useful for porting C++ code)
+//   C++ style drawing (useful for porting C++ code)
 //
 
 class CRect {
@@ -246,7 +246,6 @@ class CRect {
   }
 
 }
-
 
 function fillRect(ctx, rect, color) {
   ctx.fillStyle = color;

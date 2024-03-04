@@ -345,11 +345,22 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
          break;
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
-         returnColor = (blinkState < 4) ? window.colors.ZBLINK_YELLOW_ON : window.colors.ZBLINK_YELLOW_OFF;
+         // if (window.alarmsSilenced) {
+         //    returnColor = window.colors.ZBLINK_YELLOW_ON ;
+         // }
+         // else {
+            returnColor = (blinkState < 4) ? window.colors.ZBLINK_YELLOW_ON : window.colors.ZBLINK_YELLOW_OFF;
+         //}
          break;
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
-         returnColor = (blinkState < 4) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
+         // if (window.alarmsSilenced) {
+         //    returnColor = window.colors.ZBLINK_RED_ON ;
+
+         // }
+         // else {
+            returnColor = (blinkState < 4) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
+         //}
          break;
 
       default:
@@ -500,6 +511,11 @@ function updateBlinkState() {
    }
 
    if (suspendTimerRunning != window.Z_ALL_ALARMS_OFF_FALSE) needToBlinkMessage = 1 ;
+
+   // if (window.alarmsSilenced) {
+   //    needToBlinkMessage        = 0 ;
+   //    needToBlinkParameterBoxes = 0 ; 
+   // }
 
    if (needToBlinkMessage) {
 

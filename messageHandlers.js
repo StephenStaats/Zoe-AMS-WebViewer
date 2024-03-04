@@ -14,8 +14,8 @@ function processWaveformDataMessage(newWaveformDataMessage) {
    waveformDataMessageCount++
    LOGEVENT(" ");
    LOGEVENTGREEN('In processWaveformDataMessage, count = ', waveformDataMessageCount);
-   LOGEVENTMAGENTA("topWaveformHeight = ", topWaveformHeight) ;
-   LOGEVENTMAGENTA("   waveformHeight = ", waveformHeight) ;
+   // LOGEVENTMAGENTA("topWaveformHeight = ", topWaveformHeight) ;
+   // LOGEVENTMAGENTA("   waveformHeight = ", waveformHeight) ;
 
    // Parse the JSON string into JavaScript object
    const waveformData = JSON.parse(newWaveformDataMessage);
