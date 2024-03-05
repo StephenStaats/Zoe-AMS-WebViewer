@@ -68,8 +68,8 @@ function processWaveformDataMessage(newWaveformDataMessage) {
             var samplesWritten = 0;
             var s;
             for (s = 0; s < samplesIn.length; s++) {
-               //var thisSample = samplesIn[s];
 
+               //var thisSample = samplesIn[s];
                var thisSample = parseFloat(samplesIn[s]);
 
                wvf.writeSample(thisSample);
@@ -77,14 +77,17 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                if (wvf.autoScale) {
 
-                  if (thisSample < wvf.runningMinSample) {
-                     wvf.runningMinSample = thisSample;
-                  }
-                  else if (thisSample > wvf.runningMaxSample) {
-                     wvf.runningMaxSample = thisSample;
-                  }
+                  if (thisSample != LEAD_OFF_OR_UNPLUGGED) {
+                     if (thisSample < wvf.runningMinSample) {
+                        wvf.runningMinSample = thisSample;
+                     }
+                     else if (thisSample > wvf.runningMaxSample) {
+                        wvf.runningMaxSample = thisSample;
+                     }
+                 }
 
                }
+
             }
 
             if (wvf.autoScale) {
@@ -96,8 +99,6 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
                LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
 
-               //if ((wvf.autoScaleCountStartup) || (wvf.autoScaleCount >= 5)) {
-               //if (wvf.autoScaleCount >= 0) {
                if (wvf.autoScaleCount % 10 == 0) {
 
                   //wvf.autoScaleCountStartup = false ;
@@ -111,18 +112,17 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                   // wvf.yMax = averageYMax + amplitude * wvf.autoscaleOffsetPercentage / 100;
                   // LOGEVENTRED("averageYMax = ", averageYMax, " averageYMin = ", averageYMin, " amplitude = ", amplitude);
 
-                  var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
-                  wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
-                  wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
-                  LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+                  if ((wvf.runningMaxSample != Number.MIN_VALUE) && (vf.runningMinSample != Number.MAX_VALUE)) {
 
-                  wvf.runningMinSample = Number.MAX_VALUE;
-                  wvf.runningMaxSample = Number.MIN_VALUE;
-                  // wvf.autoScaleDone = true ;
+                     var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
+                     wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
+                     wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
+                     LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
 
-                  // if (wvf.waveformName == "RRA") {
-                  //    var q = 0 ;
-                  // }
+                     wvf.runningMinSample = Number.MAX_VALUE;
+                     wvf.runningMaxSample = Number.MIN_VALUE;
+
+                  }
 
                }
 

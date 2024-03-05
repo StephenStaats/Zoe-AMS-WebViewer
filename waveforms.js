@@ -2,14 +2,12 @@
 //   Waveform
 //   
 
-// Define the Waveform class globally
 function Waveform(waveformName, order) {
 
    this.waveformName = waveformName;
    this.capacity = 20000;
    this.buffer = new RingBuffer(this.waveformName, this.capacity);
    this.bufferReadCount = 0;
-
 
    this.left = homeScreen.waveformAreaLeft;
    this.order = order;
@@ -225,12 +223,6 @@ function Waveform(waveformName, order) {
 
    this.imageData.data.set(rgbaValues); // Set color values
 
-   // this.runningMinSample =  10000000;
-   // this.runningMaxSample = -10000000;
-
-   // this.runningMinY =  10000000;
-   // this.runningMaxY = -10000000;
-
    this.initializing = true ;
 
    this.runningMinSample = Number.MAX_VALUE;
@@ -239,15 +231,9 @@ function Waveform(waveformName, order) {
    this.runningMinY = Number.MAX_VALUE;
    this.runningMaxY = Number.MIN_VALUE;
 
-   // this.yMaxSum = 0 ;
-   // this.yMinSum = 0 ;
    this.autoScaleCount = 0;
-   //this.autoScaleCountStartup = false ;
-   this.autoScaleDone = false;
 
    if (this.autoScale) {
-
-      //this.autoScaleCountStartup = true ;
 
       if (window.simulatedDataMode) {
 
@@ -269,8 +255,6 @@ function Waveform(waveformName, order) {
 
          this.yMin = minY - amplitude * this.autoscaleOffsetPercentage / 100;
          this.yMax = maxY + amplitude * this.autoscaleOffsetPercentage / 100;
-
-         this.autoScaleDone = true;
 
       }
 
@@ -633,13 +617,9 @@ function drawWaveform(w) {
 
          if (wvf.drawXLast != Number.MIN_VALUE) {
             displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
-            //if ((wvf.autoScale == false) || (wvf.autoScaleDone == true)) {
             displayCtx.lineTo(wvf.drawX, wvf.drawY);
-            //}  
             if (wvf.fill) {
-               //if ((wvf.autoScale == false) || (wvf.autoScaleDone == true)) {
                displayCtx.lineTo(wvf.drawX, wvf.bottom - 1);
-               //}
             }
          }
          wvf.drawXLast = wvf.drawX;

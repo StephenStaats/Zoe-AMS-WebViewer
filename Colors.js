@@ -19,7 +19,7 @@ window.colors = {
    HRColor: "#00FF00",
    ETCO2Color: "#FFFF00",
    FICO2Color: "#FFFF00",
-   RRCColor: "#00ADFF",
+   RRCColor: "#FFFF00",
    TEMPColor: "#FFFFFF",
    NIBPColor: "#FF9900",
    AreaSeparatorColor: "#DDDDDD"
