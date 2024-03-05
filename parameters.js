@@ -111,7 +111,7 @@ Parameter.prototype.getColorFromParameterName = function() {
 //
 
 var HRpointSize = 50;
-var ETCO2pointSize = 50;
+var ETCO2pointSize = 45;
 var FICO2pointSize = 20;
 var SPO2pointSize = 50;
 var RRCpointSize = 50;
@@ -400,7 +400,7 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
    var unitsX = x + 8;
    var unitsY = y + 35;
 
-   var valueX = x + width * 50 / 100;
+   var valueX = x + width * 45 / 100;
    var valueY = y + height * 70 / 100;
 
    // Add label in the upper left corner

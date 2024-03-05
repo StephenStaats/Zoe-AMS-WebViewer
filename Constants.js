@@ -10,6 +10,7 @@ window.graphicsDebug = 0;
 
 window.alarmsSilenced = 0 ;
 
+window.selectedDeviceId = 0 ;
 
 //
 //   Note:  The following enums and constants must be kept in sync with CVM10
@@ -220,6 +221,56 @@ function getWaveformIdFromWaveformName(waveformName) {
 
    // If the input string doesn't match any enum key, return INVALID
    return Z_WAVEFORM_ID.Z_WAVE
+
+}
+
+
+//
+//   Drawing utilities
+//
+
+//
+//  fitText
+//
+
+// no / Roboto: Designed by Google, Roboto is a sans-serif typeface that is widely used for its versatility and readability.
+// Open Sans: Another Google font, Open Sans is a humanist sans-serif typeface known for its clean and modern appearance.
+// Lato: Lato is a sans-serif typeface designed by Łukasz Dziedzic. It's known for its versatility and readability, making it suitable for various types of projects.
+// no / Montserrat: Montserrat is a geometric sans-serif typeface inspired by the urban typography of Montserrat, a neighborhood in Buenos Aires. It's widely used for its modern and minimalist style.
+// Source Sans Pro: Developed by Adobe, Source Sans Pro is a sans-serif typeface designed for user interfaces. It's known for its clean and elegant appearance.
+// Nunito: Nunito is a rounded sans-serif typeface designed by Vernon Adams. It's characterized by its friendly and approachable look, making it suitable for various design purposes.
+// Helvetica Neue: While not freely available like Google Fonts, Helvetica Neue is a widely recognized and popular sans-serif typeface known for its clean and timeless design.
+// Georgia: Georgia is a serif typeface designed by Matthew Carter and is commonly used for its readability, particularly in body text on the web.
+// Times New Roman: Another classic serif typeface, Times New Roman, is widely available on most systems and is often used in print and digital media for its readability and formal appearance.
+// no / Verdana: Verdana is a sans-serif typeface designed by Matthew Carter for Microsoft. It's known for its clarity and readability, particularly at smaller sizes, making it popular for web content.
+
+
+function fitText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+
+   displayCtx.fillStyle = textColor;
+
+   let fontSizePt = textPointSize; // Initial font size in points
+   var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
+   displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+
+   // Adjust font size to fit text in rectangle
+   while (displayCtx.measureText(textToFit).width > textWidth || fontSizePx > textHeight) {
+      fontSizePx--;
+      displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+   }
+
+   var saveTextAlign = displayCtx.textAlign ;
+   var saveTextBaseline = displayCtx.textBaseline ;
+
+   displayCtx.textAlign = textAlign;
+   displayCtx.textBaseline = textBaseline;  
+
+   // Draw text
+   displayCtx.fillText(textToFit, textLeft, textTop);
+ 
+   displayCtx.textAlign = saveTextAlign ;
+   displayCtx.textBaseline =  saveTextBaseline ;
+;
 
 }
 

@@ -74,3 +74,43 @@ function processSettingDataMessage(setupSettingDataMessage) {
    });
 
 }
+
+
+//
+//   findSelectedPatient  
+//
+
+function findSelectedPatient(selectedDeviceId) {
+
+   var c = 0 ;
+   for (c = 0; c < currentSettings.length; c++) {
+
+      // Parse the JSON string into JavaScript object
+      const settingData = JSON.parse(currentSettings[c]);
+      
+      var s
+      for (s = 0; s < settingData.settings.length; s++) {
+
+         if (settingData.settings[s].settingName == "deviceId") {
+
+            if (settingData.settings[s].settingValue == selectedDeviceId) {
+
+               settingSetIndex = c ;
+
+               simulateArrivalOfSettingDataMessage() ;
+
+               drawTopLine() ;
+
+               drawWaveformScaleArea() ;
+
+               return ;
+
+            }
+
+         }
+
+      }
+
+   }
+
+}
