@@ -75,67 +75,60 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                wvf.writeSample(thisSample);
                samplesWritten++;
 
-               if (wvf.autoScale) {
+               // if (wvf.waveformName == "RESP_AUTO") {
+               //    LOGEVENTCYAN("   RA = ", thisSample)
+               // }
 
-                  if (wvf.waveformName == "RESP_AUTO") {
-                     if (thisSample < -200) {
-                        var q = 0 ;
-                     }
-                     if (thisSample > 200) {
-                        var q = 0 ;
-                     }
-                  }
+               // if (wvf.autoScale) {
 
-                  if (thisSample != LEAD_OFF_OR_UNPLUGGED) {
-                     if (thisSample < wvf.runningMinSample) {
-                        wvf.runningMinSample = thisSample;
-                     }
-                     else if (thisSample > wvf.runningMaxSample) {
-                        wvf.runningMaxSample = thisSample;
-                     }
-                 }
+               //    if (wvf.waveformName == "RESP_AUTO") {
+               //       if (thisSample < -200) {
+               //          var q = 0 ;
+               //       }
+               //       if (thisSample > 200) {
+               //          var q = 0 ;
+               //       }
+               //    }
 
-               }
+               //    if (thisSample != LEAD_OFF_OR_UNPLUGGED) {
+               //       if (thisSample < wvf.runningMinSample) {
+               //          wvf.runningMinSample = thisSample;
+               //       }
+               //       else if (thisSample > wvf.runningMaxSample) {
+               //          wvf.runningMaxSample = thisSample;
+               //       }
+               //   }
 
-            }
-
-            if (wvf.autoScale) {
-
-               // wvf.yMaxSum += maxY ;
-               // wvf.yMinSum += minY ;
-               wvf.autoScaleCount += 1;
-
-               LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
-               LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
-
-               if (wvf.autoScaleCount % 10 == 0) {
-
-                  //wvf.autoScaleCountStartup = false ;
-                  // var averageYMax = wvf.yMaxSum / wvf.autoScaleCount ;
-                  // var averageYMin = wvf.yMinSum / wvf.autoScaleCount ;
-                  // var amplitude = averageYMax - averageYMin ;
-                  // wvf.yMaxSum = 0 ;
-                  // wvf.yMinSum = 0 ;
-                  //wvf.autoScaleCount = 0 ;
-                  // wvf.yMin = averageYMin - amplitude * wvf.autoscaleOffsetPercentage / 100;
-                  // wvf.yMax = averageYMax + amplitude * wvf.autoscaleOffsetPercentage / 100;
-                  // LOGEVENTRED("averageYMax = ", averageYMax, " averageYMin = ", averageYMin, " amplitude = ", amplitude);
-
-                  if ((wvf.runningMaxSample != Number.MIN_VALUE) && (wvf.runningMinSample != Number.MAX_VALUE)) {
-
-                     var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
-                     wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
-                     wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
-                     LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
-
-                     wvf.runningMinSample = Number.MAX_VALUE;
-                     wvf.runningMaxSample = Number.MIN_VALUE;
-
-                  }
-
-               }
+               // }
 
             }
+
+            // if (wvf.autoScale) {
+
+            //    // wvf.yMaxSum += maxY ;
+            //    // wvf.yMinSum += minY ;
+            //    wvf.autoScaleCount += 1;
+
+            //    LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
+            //    LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+
+            //    if (wvf.autoScaleCount % 10 == 0) {
+
+            //       if ((wvf.runningMaxSample != Number.MIN_VALUE) && (wvf.runningMinSample != Number.MAX_VALUE)) {
+
+            //          var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
+            //          wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
+            //          wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
+            //          LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
+
+            //          wvf.runningMinSample = Number.MAX_VALUE;
+            //          wvf.runningMaxSample = Number.MIN_VALUE;
+
+            //       }
+
+            //    }
+
+            // }
 
             LOGEVENTGREEN("Read ", homeScreen.waveforms[cw].bufferReadCount, " samples from ", homeScreen.waveforms[cw].waveformName);
             homeScreen.waveforms[cw].bufferReadCount = 0;

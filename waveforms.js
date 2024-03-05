@@ -155,13 +155,9 @@ function Waveform(waveformName, order) {
          this.sampleRateIn = 250;
          this.sampleRate = 250;
          this.sweepSpeed = 25.0;
-         this.autoScale = true;
-         // this.yMin = Number.MAX_VALUE;
-         // this.yMax = Number.MIN_VALUE;
-         // this.yMin = 100000000;
-         // this.yMax = -100000000;
-         this.yMin = -5000;
-         this.yMax = 5000;
+         this.autoScale = false;  // already auto-scaled by monitor
+         this.yMin = -16384;
+         this.yMax = 16384;
          this.maxSimulatedSampleIndex = window.simulatedWaveformSpO2At250Hz.length;
          this.simulatedSamples = window.simulatedWaveformSpO2At250Hz;
          this.autoscaleOffsetPercentage = 5;
@@ -174,13 +170,9 @@ function Waveform(waveformName, order) {
          this.sampleRateIn = 250;
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
-         this.autoScale = true;
-         // this.yMin = Number.MAX_VALUE;
-         // this.yMax = Number.MIN_VALUE;
-         // this.yMin = 100000000;
-         // this.yMax = -100000000;
-         this.yMin = -60;
-         this.yMax =  60;
+         this.autoScale = false;  // already auto-scaled by monitor
+         this.yMin = -100 ;
+         this.yMax =  100;
          this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
          this.simulatedSamples = window.simulatedWaveformRESP;
          this.autoscaleOffsetPercentage = 10;
@@ -193,13 +185,9 @@ function Waveform(waveformName, order) {
          this.sampleRateIn = 250;
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
-         this.autoScale = true;
-         // this.yMin = Number.MAX_VALUE;
-         // this.yMax = Number.MIN_VALUE;
-         // this.yMin = 100000000;
-         // this.yMax = -100000000;
-         this.yMin = -50000;
-         this.yMax =  50000;
+         this.autoScale = false;  // already auto-scaled by monitor
+         this.yMin = -16384;
+         this.yMax = 16384;
          this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
          this.simulatedSamples = window.simulatedWaveformRESP;
          this.autoscaleOffsetPercentage = 1;
@@ -539,7 +527,15 @@ function drawWaveform(w) {
    displayCtx.lineJoin = 'round';
    displayCtx.lineCap = 'round';
 
+   if (wvf.waveformName == "RESP_AUTO") {
+      var q = 0 ;
+   }
+
    while (wvf.drawXTime < wvf.elapsedTime) {
+
+      if (wvf.waveformName == "RESP_AUTO") {
+         var q = 0 ;
+      }
 
       //if (MSPerPixel > MSPerSample) {   we now upsample 50Hz waveform so that this is always true
 
@@ -591,22 +587,22 @@ function drawWaveform(w) {
          if (wvf.waveformName.indexOf("ECG") !== -1) {  //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
             wvf.drawY = lowestY;
          }
-         else if (wvf.waveformName.indexOf("RRA") !== -1) { //if RRA (to preserve amplitude) use most extreme point
-            var highDiff = Math.abs(highestY - wvf.drawY);
-            var lowDiff = Math.abs(lowestY - wvf.drawY);
-            if (highDiff > lowDiff) {
-               wvf.drawY = highestY;
-            }
-            else {
-               wvf.drawY = lowestY;
-            }
-            if (wvf.drawY < wvf.top) {
-               wvf.drawY = wvf.top;
-            }
-            else if (wvf.drawY > wvf.bottom) {
-               wvf.drawY = wvf.bottom;
-            }
-         }
+         // else if (wvf.waveformName.indexOf("RRA") !== -1) { //if RRA (to preserve amplitude) use most extreme point
+         //    var highDiff = Math.abs(highestY - wvf.drawY);
+         //    var lowDiff = Math.abs(lowestY - wvf.drawY);
+         //    if (highDiff > lowDiff) {
+         //       wvf.drawY = highestY;
+         //    }
+         //    else {
+         //       wvf.drawY = lowestY;
+         //    }
+         //    if (wvf.drawY < wvf.top) {
+         //       wvf.drawY = wvf.top;
+         //    }
+         //    else if (wvf.drawY > wvf.bottom) {
+         //       wvf.drawY = wvf.bottom;
+         //    }
+         // }
          else {
             wvf.drawY = avgYSum / avgYCount;
          }
