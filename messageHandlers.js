@@ -77,6 +77,15 @@ function processWaveformDataMessage(newWaveformDataMessage) {
 
                if (wvf.autoScale) {
 
+                  if (wvf.waveformName == "RESP_AUTO") {
+                     if (thisSample < -200) {
+                        var q = 0 ;
+                     }
+                     if (thisSample > 200) {
+                        var q = 0 ;
+                     }
+                  }
+
                   if (thisSample != LEAD_OFF_OR_UNPLUGGED) {
                      if (thisSample < wvf.runningMinSample) {
                         wvf.runningMinSample = thisSample;
@@ -96,7 +105,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                // wvf.yMinSum += minY ;
                wvf.autoScaleCount += 1;
 
-               LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
+               LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
                LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
 
                if (wvf.autoScaleCount % 10 == 0) {
@@ -112,7 +121,7 @@ function processWaveformDataMessage(newWaveformDataMessage) {
                   // wvf.yMax = averageYMax + amplitude * wvf.autoscaleOffsetPercentage / 100;
                   // LOGEVENTRED("averageYMax = ", averageYMax, " averageYMin = ", averageYMin, " amplitude = ", amplitude);
 
-                  if ((wvf.runningMaxSample != Number.MIN_VALUE) && (vf.runningMinSample != Number.MAX_VALUE)) {
+                  if ((wvf.runningMaxSample != Number.MIN_VALUE) && (wvf.runningMinSample != Number.MAX_VALUE)) {
 
                      var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
                      wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;

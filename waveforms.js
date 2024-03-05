@@ -90,7 +90,6 @@ function Waveform(waveformName, order) {
    this.drawY = 0;
    this.drawXLast = Number.MIN_VALUE;
    this.drawYLast = Number.MIN_VALUE;
-   this.startY = Number.MIN_VALUE;
    this.headIndex = 0;
    this.tailIndex = 0;
 
@@ -227,9 +226,6 @@ function Waveform(waveformName, order) {
 
    this.runningMinSample = Number.MAX_VALUE;
    this.runningMaxSample = Number.MIN_VALUE;
-
-   this.runningMinY = Number.MAX_VALUE;
-   this.runningMaxY = Number.MIN_VALUE;
 
    this.autoScaleCount = 0;
 
@@ -615,7 +611,7 @@ function drawWaveform(w) {
             wvf.drawY = avgYSum / avgYCount;
          }
 
-         if (wvf.drawXLast != Number.MIN_VALUE) {
+         if ((wvf.drawXLast != Number.MIN_VALUE) && (wvf.drawYLast != Number.MIN_VALUE)) {
             displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
             displayCtx.lineTo(wvf.drawX, wvf.drawY);
             if (wvf.fill) {
