@@ -114,9 +114,13 @@ var framesPerSecond = 60;
 
 homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
 homeScreen.initializeAreas();
+//fetchAndProcessData();
 //homeScreen.setupWaveforms(waveformDataMessage);
 
 resetWaveforms(0);
+
+fetchAndProcessData();
+
 
 simulateArrivalOfParameterDataMessage();
 simulateArrivalOfParameterDataMessage();
@@ -140,8 +144,10 @@ drawHomeScreen();
 //   simulateArrivalOfWaveformDataMessage
 //
 
+
 function simulateArrivalOfWaveformDataMessage() {
 
+   //fetchAndProcessWaveform[waveformSetIndex];
    processWaveformDataMessage(currentWaveforms[waveformSetIndex]);
 
 }

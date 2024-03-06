@@ -250,7 +250,8 @@ function resetWaveforms(shiftWaveforms) {
    pauseWaveformDrawing = 0;
 
    if (window.simulatedDataMode == 0) {
-      simulateArrivalOfWaveformDataMessage();
+      fetchAndProcessData();
+      //simulateArrivalOfWaveformDataMessage();
    }
 
    // Get the button element by its ID

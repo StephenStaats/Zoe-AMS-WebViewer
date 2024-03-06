@@ -1,11 +1,11 @@
-//
-// Fetch API 
-//
-// Function to fetch waveform data from Joe's REST API and reset waveforms accordingly
+
+//Fetch API 
+
+// //Function to fetch waveform data from Joe's REST API and reset waveforms accordingly
 // window.fetchAndResetWaveforms() = async function(){
 //     try {
 //        // Specify the URL of Joe's REST API
-//        const apiUrl = 'http://joe-api.example.com/waveforms'; // Replace with the actual API URL
+//        const apiUrl = 'https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/1234/fromStreamingDevice/JSON/ASDR5'; // Replace with the actual API URL
  
 //        // Make an asynchronous GET request to the API
 //        const response = await fetch(apiUrl);
@@ -32,9 +32,9 @@
 //  }
  
 
-//
+
 //   resetWaveforms
-//
+
 
 // // resetWaveforms function that accepts a JSON string with waveform names and sets up waveforms accordingly
 // window.resetWaveforms = function(jsonWaveformNames) {
@@ -64,3 +64,29 @@
 //         console.error('Error resetting waveforms with the provided names:', error);
 //     }
 // }
+
+// API.js
+
+// Function to fetch waveform data from an API and process it
+async function fetchAndProcessData() {
+    try {
+        const apiUrl = 'https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/1234/fromStreamingDevice/JSON/ASDR5'; 
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+        const dataArray = await response.json(); // The API response is an array
+
+        dataArray.forEach(data => { // Iterate over each item in the array
+            if (data.messageType === 'waveformData') {
+                processWaveformDataMessage(data[waveformSetIndex]); // Process each waveform data message
+            } else if (data.messageType === 'parameterData') {
+                processParameterDataMessage(data[parameterSetIndex]); // Process each parameter data message
+            } else if (data.messageType === 'settingData') {
+                processSettingDataMessage(data[settingSetIndex]); // Process each setting data message
+            }
+        });
+    } catch (error) {
+        console.error("Failed to fetch and process data:", error);
+    }
+}

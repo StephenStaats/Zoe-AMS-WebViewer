@@ -452,6 +452,7 @@ function updateBlinkState() {
    if (window.simulatedDataMode == 0) {
 
       if ((blinkState % 4) == 1) {
+         //fetchAndProcessData();
          simulateArrivalOfWaveformDataMessage() ;
          simulateArrivalOfParameterDataMessage() ;
          simulateArrivalOfSettingDataMessage() ;
