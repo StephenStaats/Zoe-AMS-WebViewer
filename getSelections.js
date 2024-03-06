@@ -7,33 +7,34 @@ const data = [
   { deviceId: "5", deviceName: "Device 5", patientFirstName: "Stephen", patientLastName: "Maturin" },
   { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
   { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID8", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID9", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
-  { deviceId: "ID1", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-  { deviceId: "ID2", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+   { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
 ];
  
 
@@ -42,17 +43,33 @@ const data = [
 //
 
 function populateList() {
-  const listBody = document.getElementById('listBody');
+  const listBody = document.getElementById('scrollableList');
 
   data.forEach(item => {
     const listItem = document.createElement('div');
     listItem.classList.add('list-item');
-    listItem.textContent = `${item.deviceName} - ${item.patientFirstName} ${item.patientLastName}`;
+
+    const deviceNameColumn = document.createElement('div');
+    deviceNameColumn.classList.add('column');
+    deviceNameColumn.textContent = item.deviceName;
+    listItem.appendChild(deviceNameColumn);
+
+    const firstNameColumn = document.createElement('div');
+    firstNameColumn.classList.add('column');
+    firstNameColumn.textContent = item.patientFirstName;
+    listItem.appendChild(firstNameColumn);
+
+    const lastNameColumn = document.createElement('div');
+    lastNameColumn.classList.add('column');
+    lastNameColumn.textContent = item.patientLastName;
+    listItem.appendChild(lastNameColumn);
+
     listItem.onclick = () => handleListItemClick(item); // Assign click event handler
     listItem.dataset.deviceId = item.deviceId; // Store deviceId as a data attribute
     listBody.appendChild(listItem);
   });
 }
+
 
 //
 //   handleListItemClick  
@@ -79,3 +96,6 @@ window.onload = populateList;
 function showLiveScreen() {
    window.location.href = 'index.html';
 }
+
+
+
