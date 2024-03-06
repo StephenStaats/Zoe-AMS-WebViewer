@@ -197,18 +197,18 @@ function Waveform(waveformName, order) {
    }
 
 
-   this.imageData = new ImageData(1, 1);  // for drawing dots in scales
+   //this.imageData = new ImageData(1, 1);  // for drawing dots in scales
 
-   // Extract RGB values from the color string
-   const hexColor = this.color.substring(1); // Remove '#' from the color string
-   const red = parseInt(hexColor.substring(0, 2), 16); // Parse the red component
-   const green = parseInt(hexColor.substring(2, 4), 16); // Parse the green component
-   const blue = parseInt(hexColor.substring(4, 6), 16); // Parse the blue component
+   // // Extract RGB values from the color string
+   // const hexColor = this.color.substring(1); // Remove '#' from the color string
+   // const red = parseInt(hexColor.substring(0, 2), 16); // Parse the red component
+   // const green = parseInt(hexColor.substring(2, 4), 16); // Parse the green component
+   // const blue = parseInt(hexColor.substring(4, 6), 16); // Parse the blue component
 
-   // Construct the Uint8ClampedArray representing RGBA values
-   const rgbaValues = new Uint8ClampedArray([red, green, blue, 255]); // Alpha value set to 255 (fully opaque)
+   // // Construct the Uint8ClampedArray representing RGBA values
+   // const rgbaValues = new Uint8ClampedArray([red, green, blue, 255]); // Alpha value set to 255 (fully opaque)
 
-   this.imageData.data.set(rgbaValues); // Set color values
+   // this.imageData.data.set(rgbaValues); // Set color values
 
    this.initializing = true ;
 
@@ -356,7 +356,10 @@ function setupWaveforms(setupWaveformDataMessage) {
    // Add waveforms from the parsed data
    var order = 0;
    for (order = 0; order < nWaveforms; order++) {
-      const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
+      //const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
+
+      var waveformName = waveformData.waveforms[order].waveformName ;
+      const wvf = new Waveform(waveformName, order);
       homeScreen.addWaveform(wvf);
    }
 
@@ -391,9 +394,9 @@ function resetWaveforms(shiftWaveforms) {
    }
 
    // Get the button element by its ID
-   var button = document.getElementById('startStopWaveformsButton');
+   // var button = document.getElementById('startStopWaveformsButton');
 
-   button.textContent = 'Pause Waveforms';
+   // button.textContent = 'Pause Waveforms';
 
    redrawHomeScreen = 1;
 
@@ -462,7 +465,7 @@ function drawWaveform(w) {
 
    wvf = homeScreen.waveforms[w];
 
-   if (wvf.waveformName == "CO2") {
+   if (wvf.waveformName == "CO23") {
 
       if (wvf.initializing) {
 
@@ -471,11 +474,18 @@ function drawWaveform(w) {
          var x ;
          for (x = wvf.left; x < wvf.right; x++) {
 
+            // if (((x - wvf.left) % 16) == 0) {
+            //    displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, x, wvf.top);
+            // }
+            // else {
+            //    displayCtx.putImageData(wvf.eraseWaveformImageData, x, wvf.top);
+            // }
+
             if (((x - wvf.left) % 16) == 0) {
-               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, x, wvf.top);
+               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.top, x);
             }
             else {
-               displayCtx.putImageData(wvf.eraseWaveformImageData, x, wvf.top);
+               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, x);
             }
 
          }
@@ -634,46 +644,122 @@ function drawWaveform(w) {
 
    displayCtx.stroke();
 
+//    //
+//    //   Draw erase bar
+//    //
+ 
+//    var eraseBarPixelsDrawn = 0;
+//    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
+
+//       if (wvf.order == 0) {
+//          displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX, wvf.top);
+//       }
+//       else if (wvf.waveformName == "CO2") {
+//          if ((wvf.eraseX % 16) == 0) {
+//             displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX, wvf.top);
+//          }
+//          else {
+//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+//          }
+//       }
+//       else {
+//          displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+//       }
+
+//       wvf.eraseX++;
+//       if (wvf.eraseX >= wvf.right) {
+
+//          wvf.eraseX = wvf.left;
+
+//          // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
+//          if (wvf.order == 0) {
+//             displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top);
+//          }
+//          else {
+//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
+//          }
+
+//       }
+
+//       eraseBarPixelsDrawn++;
+
+//    }
+
+// }
+
+
+//    //
+//    //   Draw rotated erase bar 1
+//    //
+ 
+//    var eraseBarPixelsDrawn = 0;
+//    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
+
+//       if (wvf.order == 0) {
+//          displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.top, wvf.eraseX);
+//       }
+//       else if (wvf.waveformName == "CO2") {
+//          if ((wvf.eraseX % 16) == 0) {
+//             displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.top, wvf.eraseX);
+//          }
+//          else {
+//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX);
+//          }
+//       }
+//       else {
+//          displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX);
+//       }
+
+//       wvf.eraseX++;
+//       if (wvf.eraseX >= wvf.right) {
+
+//          wvf.eraseX = wvf.left;
+
+//          // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
+//          if (wvf.order == 0) {
+//             displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.top, wvf.eraseX-1);
+//          }
+//          else {
+//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX-1);
+//          }
+
+//       }
+
+//       eraseBarPixelsDrawn++;
+
+//    }
+
+// }
+
+
    //
-   //   Draw erase bar
+   //   Draw rotated erase bar 2
    //
  
+   displayCtx.beginPath();
+
+   displayCtx.strokeStyle = window.colors.ZBLACK;
+   displayCtx.lineWidth = 2;
+   displayCtx.lineJoin = 'round';
+   displayCtx.lineCap = 'round';
+
    var eraseBarPixelsDrawn = 0;
    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
 
-      if (wvf.order == 0) {
-         displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX, wvf.top);
-      }
-      else if (wvf.waveformName == "CO2") {
-         if ((wvf.eraseX % 16) == 0) {
-            displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX, wvf.top);
-         }
-         else {
-            displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
-         }
-      }
-      else {
-         displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
-      }
-
+      displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+      displayCtx.lineTo(wvf.eraseX, wvf.bottom);
+ 
       wvf.eraseX++;
       if (wvf.eraseX >= wvf.right) {
-
          wvf.eraseX = wvf.left;
-
-         // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
-         if (wvf.order == 0) {
-            displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top + 2);
-         }
-         else {
-            displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top + 2);
-         }
-
       }
 
       eraseBarPixelsDrawn++;
 
    }
+
+   displayCtx.stroke();
+
 
 }
 

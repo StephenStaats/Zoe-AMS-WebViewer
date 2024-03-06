@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Live EKG Chart</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+   <!-- On-screen Canvas -->
+   <!-- <canvas id="displayCanvas" width="1366" height="768"></canvas> -->
+   <canvas id="displayCanvas" width="800" height="480"></canvas>
+   <script src="constants.js"></script>
+   <script src="colors.js"></script>
+   <script src="text.js"></script>
+   <script src="sounds.js"></script>
+   <script src="simulatedWaveformData.js"></script>
+   <script src="simulatedParameterData.js"></script>
+   <script src="simulatedSettingData.js"></script>
+   <script src="ringBuffer.js"></script>
+   <script src="waveforms.js"></script>
+   <script src="parameters.js"></script>
+   <script src="settings.js"></script>
+   <script src="api.js"></script>
+   <script src="alarms.js"></script>
+   <script src="homeScreen.js"></script>
+   <script src="messageHandlers.js"></script>
+   <script src="main.js"></script>
+
+<script>
+
+//
+//   Get the canvas and context
+//
+
+const displayCanvas = document.getElementById('displayCanvas');
+const displayCtx = displayCanvas.getContext('2d');
+
+// Set canvas dimensions to match rotated dimensions
+displayCanvas.width = 480;
+displayCanvas.height = 800;
+
+displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
+
+displayCtx.save();
+
+// Translate the origin to the lower left corner of the canvas
+displayCtx.translate(0, displayCanvas.height);
+
+// Rotate the canvas 90 degrees counterclockwise (to achieve portrait orientation)
+displayCtx.rotate(-Math.PI / 2);
+
+// // Restore the transformation matrix to its original state
+// ctx.restore();
+
+// Set the background of the canvas to black
+displayCtx.fillStyle = 'black';
+displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+
+//
+//   Create and initialize home screen
+//
+
+let pauseWaveformDrawing = 0;
+var framesPerSecond = 60;
+
+homeScreen = new HomeScreen(displayCanvas.height, displayCanvas.width);
+homeScreen.initializeAreas();
+
+resetWaveforms(0);
+
+simulateArrivalOfParameterDataMessage();
+simulateArrivalOfParameterDataMessage();
+
+simulateArrivalOfSettingDataMessage();
+simulateArrivalOfSettingDataMessage();
+
+findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
+
+drawHomeScreen();
+
+var intervalId = 0;
+
+if (window.simulatedDataMode == 0) {
+   intervalId = setInterval(periodicUpdate, 250);
+}
+
+
+//
+//   updateFramesPerSecond  
+//
+
+function updateFramesPerSecond(elapsedTime) {
+}
+
+// Function to respond to touch or mouse click events
+function respondToMouseClickOrTouchAt(x, y) {
+   if ((x <= backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
+      window.location.href = 'select.html';
+   }
+}
+
+</script>
+
+</body>
+
+</html>

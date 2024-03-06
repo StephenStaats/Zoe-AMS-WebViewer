@@ -1,148 +1,120 @@
-//
-//   Get the canvas and context
-//
+// const displayCanvas = document.getElementById('displayCanvas');
+// const displayCtx = displayCanvas.getContext('2d');
 
-const displayCanvas = document.getElementById('displayCanvas');
-const displayCtx = displayCanvas.getContext('2d');
+// // Set canvas dimensions to match rotated dimensions
+// displayCanvas.width = 480;
+// displayCanvas.height = 800;
 
-// Create an off-screen canvas for double buffering
-const bufferCanvas = document.createElement('canvas');
-const bufferCtx = bufferCanvas.getContext('2d');
+// // Clear the canvas
+// displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-// Set initial dimensions of the canvas
-function resizeCanvas() {
+// // Save the current transformation matrix
+// displayCtx.save();
 
-   // displayCanvas.width = window.innerWidth;
-   // displayCanvas.height = 200; // Fixed height
+// // Translate the origin to the center of the canvas
+// displayCtx.translate(displayCanvas.width / 2, displayCanvas.height / 2);
 
-   // You might need to adjust the drawing here if necessary
-   // For example, redraw the waveform or clear the canvas
-   displayCtx.fillStyle = 'black';
-   displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+// // Rotate the canvas 90 degrees counterclockwise
+// displayCtx.rotate(-Math.PI / 2);
 
-   bufferCanvas.width = displayCanvas.width;
-   bufferCanvas.height = displayCanvas.height;
+// // Set the background of the canvas to red
+// displayCtx.fillStyle = 'red';
+// displayCtx.fillRect(-displayCanvas.height / 2, -displayCanvas.width / 2, displayCanvas.height, displayCanvas.width);
 
-   // Initial clear for buffer canvas
-   bufferCtx.fillStyle = 'black';
-   bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+// // Restore the transformation matrix to its original state
+// //displayCtx.restore();
 
-   redrawHomeScreen = 1;
-
-}
-
-
-//
-//   Event listener for changing simulation type dropdown
-//
-
-var intervalId = 0;
-
-const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
-
-simulationTypeDropdown.addEventListener("change", function () {
-
-   const selectedValue = simulationTypeDropdown.value;
-
-   if (selectedValue == 'simulateWaveformData') {
-      window.simulatedDataMode = 1;
-      //clearInterval(intervalId); // This stops the interval
-   }
-   else {
-      window.simulatedDataMode = 0;
-      //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);   
-   }
-
-   resetWaveforms(0);
-
-});
-
-
-//  Increment / decrement MS per pixel 
-var dialMSPerPixel = document.getElementById('dialMSPerPixel');
-
-function incrementMSPerPixel() {
-   if (parseFloat(dialMSPerPixel.value) < parseFloat(dialMSPerPixel.max)) {
-      dialMSPerPixel.value = (parseFloat(dialMSPerPixel.value) + 0.1).toFixed(1); // Increase by 0.1 and round to 1 decimal place
-      enteredMSPerPixel = parseFloat(dialMSPerPixel.value);
-   }
-}
-
-function decrementMSPerPixel() {
-   if (parseFloat(dialMSPerPixel.value) > parseFloat(dialMSPerPixel.min)) {
-      dialMSPerPixel.value = (parseFloat(dialMSPerPixel.value) - 0.1).toFixed(1); // Decrease by 0.1 and round to 1 decimal place
-      enteredMSPerPixel = parseFloat(dialMSPerPixel.value);
-   }
-}
-
-
-
-//  Increment / decrement MS per sample 
-var dialMSPerSample = document.getElementById('dialMSPerSample');
-
-function incrementMSPerSample() {
-   if (parseFloat(dialMSPerSample.value) < parseFloat(dialMSPerSample.max)) {
-      dialMSPerSample.value = (parseFloat(dialMSPerSample.value) + 0.1).toFixed(1); // Increase by 0.1 and round to 1 decimal place
-      enteredMSPerSample = parseFloat(dialMSPerSample.value);
-   }
-}
-
-function decrementMSPerSample() {
-   if (parseFloat(dialMSPerSample.value) > parseFloat(dialMSPerSample.min)) {
-      dialMSPerSample.value = (parseFloat(dialMSPerSample.value) - 0.1).toFixed(1); // Decrease by 0.1 and round to 1 decimal place
-      enteredMSPerSample = parseFloat(dialMSPerSample.value);
-   }
-}
+// const displayCanvas = document.getElementById('displayCanvas');
+// const displayCtx = displayCanvas.getContext('2d');
  
+// // Clear the canvas
+// displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-// Call resizeCanvas initially and on window resize
+// // Save the current transformation matrix
+// displayCtx.save();
 
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+// // Translate the origin to the center of the canvas
+// //displayCtx.translate(displayCanvas.width / 2, displayCanvas.height * 3 / 4);
+// displayCtx.translate(0, displayCanvas.height);
 
-// Set the background of the canvas to black
-displayCtx.fillStyle = 'black';
-displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+// // Rotate the canvas 90 degrees counterclockwise (to achieve portrait orientation)
+// displayCtx.rotate(-Math.PI / 2);
 
+// // // Restore the transformation matrix to its original state
+// // ctx.restore();
 
-//
-//   Create and initialize home screen
-//
+// resizeCanvas();
 
-let pauseWaveformDrawing = 0;
-var framesPerSecond = 60;
+// // Set the background of the canvas to red
+// displayCtx.fillStyle = 'red';
+// displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
-homeScreen.initializeAreas();
-//homeScreen.setupWaveforms(waveformDataMessage);
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
-resetWaveforms(0);
+// moved to script section inside .html files:
 
-simulateArrivalOfParameterDataMessage();
-simulateArrivalOfParameterDataMessage();
+// //
+// //   Get the canvas and context
+// //
 
-simulateArrivalOfSettingDataMessage();
-simulateArrivalOfSettingDataMessage();
+// const displayCanvas = document.getElementById('displayCanvas');
+// const displayCtx = displayCanvas.getContext('2d');
 
-// Disable the button
-document.getElementById("setAlarmStatusHIGHButton").disabled = true;
-document.getElementById("setAlarmStatusMEDIUMButton").disabled = true;
-document.getElementById("setAlarmStatusLOWButton").disabled = true;
-document.getElementById("setAlarmStatusNONEButton").disabled = true;
-//document.getElementById("silenceAlarmsButton").disabled = true;
+// // Call resizeCanvas initially and on window resize
 
+// //resizeCanvas();
+// //window.addEventListener('resize', resizeCanvas);
 
-
-// Find selected patient
-// Target page
-//window.selectedDeviceId = sessionStorage.getItem("selectedDeviceId");
-findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
-
-// Start drawing
-drawHomeScreen();
+// // Set the background of the canvas to black
+// displayCtx.fillStyle = 'black';
+// displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+// //displayCtx.fillRect(0, 0, 200, 50);
+// //displayCtx.fillRect(0, 0, displayCanvas.height, displayCanvas.width);
 
 
-// Function to fetch EKG waveform data
+// //
+// //   Create and initialize home screen
+// //
+
+// let pauseWaveformDrawing = 0;
+// var framesPerSecond = 60;
+
+// homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
+// //homeScreen = new HomeScreen(displayCanvas.height, displayCanvas.width);
+// homeScreen.initializeAreas();
+// //homeScreen.setupWaveforms(waveformDataMessage);
+
+// resetWaveforms(0);
+
+// simulateArrivalOfParameterDataMessage();
+// simulateArrivalOfParameterDataMessage();
+
+// simulateArrivalOfSettingDataMessage();
+// simulateArrivalOfSettingDataMessage();
+
+// // Find selected patient
+// findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
+
+// // Start drawing
+// drawHomeScreen();
+
+// var intervalId = 0;
+// // Set the interval to execute the function every 250 milliseconds  
+// if (window.simulatedDataMode == 0) {
+//    //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);
+//    intervalId = setInterval(periodicUpdate, 250);
+// }
+
+// // To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
+// // setTimeout(() => {
+// //    clearInterval(intervalId); // This stops the interval
+// //    console.log('Interval stopped.');
+// // }, 10000);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Function to fetch waveform data
 async function getWaveformDataMessages() {
 
    LOGEVENTGREEN("In getWaveformDataMessages") ;
@@ -160,11 +132,19 @@ async function getWaveformDataMessages() {
       }
 
       var waveformDataMessages = await response.json();
-      // Loop through each string in the waveformDataMessages array
-      waveformDataMessages.forEach((waveformDataMessage, index) => {
+
+      // //Loop through each string in the waveformDataMessages array
+      // waveformDataMessages.forEach((waveformDataMessage, index) => {
+      //    const waveformDataMessageString = JSON.stringify(waveformDataMessage);
+      //    processWaveformDataMessage(waveformDataMessageString);
+      // });
+
+      var m = 0 ;
+      for (m = 0; m < waveformDataMessages.length; m++) {
+         waveformDataMessage = waveformDataMessages[m] ;
          const waveformDataMessageString = JSON.stringify(waveformDataMessage);
          processWaveformDataMessage(waveformDataMessageString);
-      });
+      }
 
    } catch (error) {
 
@@ -213,19 +193,6 @@ function periodicUpdate() {
 
 }
 
-// Set the interval to execute the function every 250 milliseconds  
-if (window.simulatedDataMode == 0) {
-   //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);
-   intervalId = setInterval(periodicUpdate, 250);
-}
-
-// To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
-// setTimeout(() => {
-//    clearInterval(intervalId); // This stops the interval
-//    console.log('Interval stopped.');
-// }, 10000);
-
-
 //
 //   showSelectScreen  
 //
@@ -238,3 +205,19 @@ function showSelectScreen() {
 
 
 
+
+// Save the current transformation matrix
+// displayCtx.save();
+
+// // Rotate the canvas 90 degrees counterclockwise (to achieve portrait orientation)
+// displayCtx.rotate(-Math.PI / 2);
+
+// // Now, draw your waveforms with the same x and y coordinates as in landscape orientation
+// // For example:
+// displayCtx.beginPath();
+// displayCtx.moveTo(50, 50);  // This would be equivalent to (50, 50) in landscape orientation
+// displayCtx.lineTo(100, 100); // This would be equivalent to (100, 100) in landscape orientation
+// Draw more waveforms as needed...
+
+// Restore the transformation matrix to its original state
+//ctx.restore();

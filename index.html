@@ -64,8 +64,7 @@
       </div>
       <div class="column">
          <p><button id="setAlarmStatusHIGHButton" onclick="setAlarmStatusHIGH()">Set alarm status HIGH</button></p>
-         <p><button id="setAlarmStatusMEDIUMButton" onclick="setAlarmStatusMEDIUM()">Set alarm status MEDIUM</button>
-         </p>
+         <p><button id="setAlarmStatusMEDIUMButton" onclick="setAlarmStatusMEDIUM()">Set alarm status MEDIUM</button></p>
          <p><button id="setAlarmStatusLOWButton" onclick="setAlarmStatusLOW()">Set alarm status LOW</button></p>
          <p><button id="setAlarmStatusNONEButton" onclick="setAlarmStatusNONE()">Set alarm status NONE</button></p>
          <p><button id="silenceAlarmsButton" onclick="silenceAlarms()">Silence alarms</button></p>
@@ -74,7 +73,7 @@
    <p></p>
 
 
-   <!-- On-screen Canvas -->
+   <!-- // On-screen Canvas -->
    <!-- <canvas id="displayCanvas" width="1366" height="768"></canvas> -->
    <canvas id="displayCanvas" width="800" height="480"></canvas>
    <script src="constants.js"></script>
@@ -92,7 +91,94 @@
    <script src="alarms.js"></script>
    <script src="homeScreen.js"></script>
    <script src="messageHandlers.js"></script>
+   <script src="eventHandlers.js"></script>
    <script src="main.js"></script>
+
+<script>
+
+document.getElementById("setAlarmStatusHIGHButton").disabled = true;
+document.getElementById("setAlarmStatusMEDIUMButton").disabled = true;
+document.getElementById("setAlarmStatusLOWButton").disabled = true;
+document.getElementById("setAlarmStatusNONEButton").disabled = true;
+
+
+
+
+//
+//   Get the canvas and context
+//
+
+const displayCanvas = document.getElementById('displayCanvas');
+const displayCtx = displayCanvas.getContext('2d');
+
+// Set the background of the canvas to black
+displayCtx.fillStyle = 'black';
+displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+
+//
+//   Create and initialize home screen
+//
+
+let pauseWaveformDrawing = 0;
+var framesPerSecond = 60;
+
+homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
+homeScreen.initializeAreas();
+
+resetWaveforms(0);
+
+simulateArrivalOfParameterDataMessage();
+simulateArrivalOfParameterDataMessage();
+
+simulateArrivalOfSettingDataMessage();
+simulateArrivalOfSettingDataMessage();
+
+findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
+
+drawHomeScreen();
+
+var intervalId = 0;
+
+if (window.simulatedDataMode == 0) {
+   intervalId = setInterval(periodicUpdate, 250);
+}
+
+// To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
+// setTimeout(() => {
+//    clearInterval(intervalId); // This stops the interval
+//    console.log('Interval stopped.');
+// }, 10000);
+
+//
+//   updateFramesPerSecond  
+//
+
+let fpsDisplay = document.getElementById('fps-display'); // Assuming you have an HTML element to display the frame rate
+
+function updateFramesPerSecond(elapsedTime) {
+   framesPerSecond = 1000 / elapsedTime; // Calculate frames per second
+   fpsDisplay.textContent = `Frame Rate: ${Math.round(framesPerSecond)} FPS`;
+}
+
+
+//
+//   showSelectScreen  
+//
+
+function showSelectScreen() {
+
+  window.location.href = 'select.html';
+
+}
+
+// Function to respond to touch or mouse click events
+function respondToMouseClickOrTouchAt(x, y) {
+   if ((x >= backArrowTouchAreaLeft) && (x <= backArrowTouchAreaLeft + backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
+      window.location.href = 'select.html';
+   }
+}
+
+</script>
 
 </body>
 

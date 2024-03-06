@@ -82,7 +82,7 @@ function handleListItemClick(item) {
    console.log("Associated deviceId:", deviceId);
    //window.selectedDeviceId = deviceId ;
    sessionStorage.setItem("selectedDeviceId", deviceId);
-   window.location.href = "index.html";
+   window.location.href = "live.html";
 }
 
 // Call the function to populate list when the page loads
@@ -94,8 +94,16 @@ window.onload = populateList;
 //
 
 function showLiveScreen() {
-   window.location.href = 'index.html';
+   window.location.href = 'live.html';
 }
 
+
+//
+//   showTestScreen  
+//
+
+function showTestScreen() {
+   window.location.href = 'index.html';
+}
 
 
