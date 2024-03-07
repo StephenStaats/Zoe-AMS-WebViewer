@@ -2,7 +2,7 @@
 //   Global constants
 //
 
-window.simulatedDataMode = 0;
+window.simulatedDataMode = 1;
 
 window.developmentMode = 0;
 

@@ -35,7 +35,7 @@ window.currentSettings = [
         "settingValue": ""
       },
       {
-        "settingName": "TEMP units",
+        "settingName": "TEMPunits",
         "settingValue": "F"
       },
       {
@@ -80,11 +80,11 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
-        "settingName": "TEMP units",
+        "settingName": "TEMPunits",
         "settingValue": "F"
       },
       {
-        "settingName": "Monitor ID",
+        "settingName": "monitorId",
         "settingValue": "M12345"
       },
       {
@@ -141,11 +141,11 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
-        "settingName": "TEMP units",
+        "settingName": "TEMPunits",
         "settingValue": "C"
       },
       {
-        "settingName": "Monitor ID",
+        "settingName": "monitorId",
         "settingValue": "M12345"
       },
       {
@@ -202,11 +202,11 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
-        "settingName": "TEMP units",
+        "settingName": "TEMPunits",
         "settingValue": "C"
       },
       {
-        "settingName": "Monitor ID",
+        "settingName": "monitorId",
         "settingValue": "M12345"
       },
       {
@@ -263,11 +263,11 @@ window.currentSettings = [
         "settingValue": "SN12345"
       },
       {
-        "settingName": "TEMP units",
+        "settingName": "TEMPunits",
         "settingValue": "C"
       },
       {
-        "settingName": "Monitor ID",
+        "settingName": "monitorId",
         "settingValue": "M12345"
       },
       {

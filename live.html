@@ -17,9 +17,7 @@
    <script src="colors.js"></script>
    <script src="text.js"></script>
    <script src="sounds.js"></script>
-   <script src="simulatedWaveformData.js"></script>
-   <script src="simulatedParameterData.js"></script>
-   <script src="simulatedSettingData.js"></script>
+   <script src="simulatedAMSMessages.js"></script>
    <script src="ringBuffer.js"></script>
    <script src="waveforms.js"></script>
    <script src="parameters.js"></script>
@@ -72,11 +70,10 @@ homeScreen.initializeAreas();
 
 resetWaveforms(0);
 
-simulateArrivalOfParameterDataMessage();
-simulateArrivalOfParameterDataMessage();
-
-simulateArrivalOfSettingDataMessage();
-simulateArrivalOfSettingDataMessage();
+if (window.simulatedDataMode) {
+   simulateArrivalOfAMSMessage();
+   simulateArrivalOfAMSMessage();
+}
 
 findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
 
@@ -84,9 +81,9 @@ drawHomeScreen();
 
 var intervalId = 0;
 
-if (window.simulatedDataMode == 0) {
-   intervalId = setInterval(periodicUpdate, 250);
-}
+//if (window.simulatedDataMode == 0) {
+// intervalId = setInterval(periodicUpdate, 250);
+//}
 
 
 //

@@ -460,12 +460,17 @@ function updateBlinkState() {
       blinkState = 0 ; 
    }
 
-   if (window.simulatedDataMode == 0) {
+   if ((blinkState % 4) == 1) {
 
-      if ((blinkState % 4) == 1) {
-         simulateArrivalOfWaveformDataMessage() ;
-         simulateArrivalOfParameterDataMessage() ;
-         simulateArrivalOfSettingDataMessage() ;
+      if (window.simulatedDataMode) {
+
+         simulateArrivalOfAMSMessage() ;
+
+      }
+      else {
+
+         getAMSMessages() ;
+
       }
 
    }

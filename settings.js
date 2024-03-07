@@ -11,67 +11,88 @@ function Setting(settingName, settingValue) {
 }
 
 // Method to set setting value
-Setting.prototype.setValue = function(value) {
+Setting.prototype.setValue = function (value) {
    this.settingValue = value;
 };
 
 // Method to get setting value
-Setting.prototype.getValue = function(value) {
-   return (this.settingValue) ;
+Setting.prototype.getValue = function (value) {
+   return (this.settingValue);
 };
 
 
+// //
+// //   shiftSettings  
+// //
+
+// function shiftSettings() {
+
+//    settingSetIndex++;
+
+//    if (settingSetIndex >= currentSettings.length) {
+//       settingSetIndex = 0;
+//    }
+
+//    simulateArrivalOfSettingDataMessage() ;
+
+//    drawTopLine() ;
+
+//    drawWaveformScaleArea() ;
+
+// }
+
+
 //
-//   shiftSettings  
+//   processSettingData  
 //
 
-function shiftSettings() {
+var lastBottomLineMessage;
+var lastbottomLineMessageAlarmStatus;
 
-   settingSetIndex++;
-
-   if (settingSetIndex >= currentSettings.length) {
-      settingSetIndex = 0;
-   }
-
-   simulateArrivalOfSettingDataMessage() ;
-
-   drawTopLine() ;
-
-   drawWaveformScaleArea() ;
-
-}
-
-
-//
-//   processSettingDataMessage - call when a new settingDataMessage is received from the REST API
-//
+window.bottomLineMessage = " ";
+window.bottomLineMessageAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE;
 
 var settingDataMessageCount = 0;
 
 var settingSetIndex = 0;
 
-var nSettings = 0 ;
+var nSettings = 0;
 
-function processSettingDataMessage(setupSettingDataMessage) {
+function processSettingData(AMSSettings) {
 
    settingDataMessageCount++;
 
    LOGEVENT(" ");
-   LOGEVENTCYAN('in processSettingDataMessage, count = ', settingDataMessageCount);
+   LOGEVENTCYAN('in processSettingData, count = ', settingDataMessageCount);
 
    homeScreen.clearSettingList();
 
    // Parse the JSON string into JavaScript object
-   const settingData = JSON.parse(setupSettingDataMessage);
+   //const settingData = JSON.parse(setupSettingDataMessage);
 
-   nSettings = settingData.settings.length;
+   nSettings = AMSSettings.length;
 
    // Add parameters from the parsed data
-   settingData.settings.forEach(setting => {
+   //settingData.settings.forEach(setting => {
+   var s = 0;
+   for (s = 0; s < nSettings; s++) {
       // Create an instance of Parameter class
-      var setting = new Setting(setting.settingName, setting.settingValue);
+      var setting = new Setting(AMSSettings[s].settingName, AMSSettings[s].settingValue);
       homeScreen.addSetting(setting);
-   });
+
+      if (setting.settingName == "bottomLineMessage") {
+         window.bottomLineMessage = setting.settingValue;
+      }
+      else if (setting.settingName == "bottomLineMessageAlarmStatus") {
+         window.bottomLineMessageAlarmStatus = setting.settingValue;
+      }
+      if ((window.bottomLineMessage != lastBottomLineMessage) || (window.bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
+         lastBottomLineMessage = window.bottomLineMessage;
+         lastbottomLineMessageAlarmStatus = window.bottomLineMessageAlarmStatus;
+         drawBottomLineMessageArea();
+      }
+
+   }
 
 }
 
@@ -82,28 +103,30 @@ function processSettingDataMessage(setupSettingDataMessage) {
 
 function findSelectedPatient(selectedDeviceId) {
 
-   var c = 0 ;
-   for (c = 0; c < currentSettings.length; c++) {
+   var m = 0;
+   for (m = 0; m < simulatedAMSMessages.length; m++) {
 
-      // Parse the JSON string into JavaScript object
-      const settingData = JSON.parse(currentSettings[c]);
-      
+      const AMSMessage = simulatedAMSMessages[m];
+
       var s
-      for (s = 0; s < settingData.settings.length; s++) {
+      for (s = 0; s < AMSMessage.settings.length; s++) {
 
-         if (settingData.settings[s].settingName == "deviceId") {
+         if (AMSMessage.settings[s].settingName == "deviceId") {
 
-            if (settingData.settings[s].settingValue == selectedDeviceId) {
+            //if (AMSMessage.settings[s].settingValue == selectedDeviceId) {
 
-               settingSetIndex = c ;
+            var deviceId = AMSMessage.settings[s].settingValue
+            if (deviceId == selectedDeviceId) {
 
-               simulateArrivalOfSettingDataMessage() ;
+               simulatedAMSMessageIndex = m;
 
-               drawTopLine() ;
+               simulateArrivalOfAMSMessage();
 
-               drawWaveformScaleArea() ;
+               drawTopLine();
 
-               return ;
+               drawWaveformScaleArea();
+
+               return;
 
             }
 

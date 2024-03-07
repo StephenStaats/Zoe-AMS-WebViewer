@@ -33,20 +33,43 @@ function resizeCanvas() {
 
 const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
 
+if (window.simulatedDataMode) {
+   simulationTypeDropdown.value = 'simulatedData';
+}
+else {
+   simulationTypeDropdown.value = 'liveData';
+}
+
+
+
 simulationTypeDropdown.addEventListener("change", function () {
 
    const selectedValue = simulationTypeDropdown.value;
 
-   if (selectedValue == 'simulateWaveformData') {
+   if (selectedValue == 'simulatedData') {
+
       window.simulatedDataMode = 1;
-      //clearInterval(intervalId); // This stops the interval
+
+      nWaveforms = 0 ;
+      nParameters = 0 ;
+      nSettings = 0 ;
+
+      simulateArrivalOfAMSMessage();
+      simulateArrivalOfAMSMessage();
+
    }
    else {
+
       window.simulatedDataMode = 0;
-      //intervalId = setInterval(simulateArrivalOfWaveformDataMessage, 1000);   
+
+      homeScreen.clearWaveformList() ;
+      homeScreen.clearParameterList() ;
+      homeScreen.clearSettingList() ;
+
    }
 
-   resetWaveforms(0);
+   //resetWaveforms(0);
+   redrawHomeScreen = 1 ;
 
 });
 

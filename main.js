@@ -26,7 +26,7 @@
 
 // const displayCanvas = document.getElementById('displayCanvas');
 // const displayCtx = displayCanvas.getContext('2d');
- 
+
 // // Clear the canvas
 // displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
 
@@ -114,82 +114,68 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// Function to fetch waveform data
-async function getWaveformDataMessages() {
 
-   LOGEVENTGREEN("In getWaveformDataMessages") ;
+// function simulateArrivalOfWaveformDataMessage() {
 
-   try {
+//    getWaveformDataMessages() ;
 
-      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {
-         method: 'GET',
-         headers: {
-               'Accept': 'application/json',
-         },
-      })
-      if (!response.ok) {
-         throw new Error('Failed to fetch data');
-      }
+// }
 
-      var waveformDataMessages = await response.json();
 
-      // //Loop through each string in the waveformDataMessages array
-      // waveformDataMessages.forEach((waveformDataMessage, index) => {
-      //    const waveformDataMessageString = JSON.stringify(waveformDataMessage);
-      //    processWaveformDataMessage(waveformDataMessageString);
-      // });
+// //
+// //   simulateArrivalOfParameterDataMessage
+// //
 
-      var m = 0 ;
-      for (m = 0; m < waveformDataMessages.length; m++) {
-         waveformDataMessage = waveformDataMessages[m] ;
-         const waveformDataMessageString = JSON.stringify(waveformDataMessage);
-         processWaveformDataMessage(waveformDataMessageString);
-      }
+// function simulateArrivalOfParameterDataMessage() {
 
-   } catch (error) {
+//    processParameterDataMessage(currentParameters[parameterSetIndex]);
 
-      LOGEVENTRED('Error:', error);
+// }
 
+
+// //
+// //   simulateArrivalOfSettingDataMessage
+// //
+
+// function simulateArrivalOfSettingDataMessage() {
+
+//    processSettingDataMessage(currentSettings[settingSetIndex]);
+
+// }
+
+intervalId = setInterval(periodicUpdate, 250);
+
+
+//   shiftToNextSimulatedAMSMessage  
+//
+
+var simulatedAMSMessageIndex = 0 ;
+
+function shiftToNextSimulatedAMSMessage() {
+
+   simulatedAMSMessageIndex++;
+
+   if (simulatedAMSMessageIndex >= simulatedAMSMessages.length) {
+      simulatedAMSMessageIndex = 0;
    }
 
 }
 
 
-function simulateArrivalOfWaveformDataMessage() {
+//
+//   simulateArrivalOfAMSMessage
+//
 
-   getWaveformDataMessages() ;
+function simulateArrivalOfAMSMessage() {
 
-   //processWaveformDataMessage(currentWaveforms[waveformSetIndex]);
+   processAMSMessage(simulatedAMSMessages[simulatedAMSMessageIndex]);
 
 }
-
-
-//
-//   simulateArrivalOfParameterDataMessage
-//
-
-function simulateArrivalOfParameterDataMessage() {
-
-   processParameterDataMessage(currentParameters[parameterSetIndex]);
-
-}
-
-
-//
-//   simulateArrivalOfSettingDataMessage
-//
-
-function simulateArrivalOfSettingDataMessage() {
-
-   processSettingDataMessage(currentSettings[settingSetIndex]);
-
-}
-
 
 // Define the function to be executed at each interval
 function periodicUpdate() {
 
-   updateBlinkState() ;
+   updateBlinkState();
 
 }
 
@@ -199,7 +185,7 @@ function periodicUpdate() {
 
 function showSelectScreen() {
 
-  window.location.href = 'select.html';
+   window.location.href = 'select.html';
 
 }
 

@@ -119,9 +119,6 @@ function Waveform(waveformName, order) {
          this.autoScale = false;
          this.yMin = -500;
          this.yMax = 500;
-         this.maxSimulatedSampleIndex = window.simulatedWaveformECGII.length;
-         this.simulatedSamples = window.simulatedWaveformECGII;
-         this.autoscaleOffsetPercentage = 0;
          break;
 
       case 'CO2':
@@ -133,19 +130,17 @@ function Waveform(waveformName, order) {
          this.sweepSpeed = 6.25;
          this.autoScale = false;
          if (window.simulatedDataMode) {
-            this.yMin = -100;
-            this.yMax =  4500;
+            this.yMin = -500;
+            this.yMax = 500;
          }
          else {
-            // this.yMin = -500;
-            // this.yMax = 500;
             this.yMin = -100;
             this.yMax = 4500;
             //this.yMax = 1500;
          }
-         this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
-         this.simulatedSamples = window.simulatedWaveformCO2;
-         this.autoscaleOffsetPercentage = 0;
+         // this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
+         // this.simulatedSamples = window.simulatedWaveformCO2;
+         // this.autoscaleOffsetPercentage = 0;
          break;
 
       case 'SPO2':
@@ -156,11 +151,17 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 25.0;
          this.autoScale = false;  // already auto-scaled by monitor
-         this.yMin = -16384;
-         this.yMax = 16384;
-         this.maxSimulatedSampleIndex = window.simulatedWaveformSpO2At250Hz.length;
-         this.simulatedSamples = window.simulatedWaveformSpO2At250Hz;
-         this.autoscaleOffsetPercentage = 5;
+         if (window.simulatedDataMode) {
+            this.yMin = -5000;
+            this.yMax = 5000;
+         }
+         else {
+            this.yMin = -16384;
+            this.yMax = 16384;
+         }
+         // this.maxSimulatedSampleIndex = window.simulatedWaveformSpO2At250Hz.length;
+         // this.simulatedSamples = window.simulatedWaveformSpO2At250Hz;
+         // this.autoscaleOffsetPercentage = 5;
          break;
 
       case 'RESP_AUTO':
@@ -171,11 +172,17 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
          this.autoScale = false;  // already auto-scaled by monitor
-         this.yMin = -100 ;
-         this.yMax =  100;
-         this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
-         this.simulatedSamples = window.simulatedWaveformRESP;
-         this.autoscaleOffsetPercentage = 10;
+         if (window.simulatedDataMode) {
+            this.yMin = -5000;
+            this.yMax = 5000;
+         }
+         else {
+            this.yMin = -100 ;
+            this.yMax =  100;
+         }
+         // this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
+         // this.simulatedSamples = window.simulatedWaveformRESP;
+         // this.autoscaleOffsetPercentage = 10;
          break;
 
       case 'RRA':
@@ -188,9 +195,9 @@ function Waveform(waveformName, order) {
          this.autoScale = false;  // already auto-scaled by monitor
          this.yMin = -16384;
          this.yMax = 16384;
-         this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
-         this.simulatedSamples = window.simulatedWaveformRESP;
-         this.autoscaleOffsetPercentage = 1;
+         // this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
+         // this.simulatedSamples = window.simulatedWaveformRESP;
+         // this.autoscaleOffsetPercentage = 1;
          break;
 
 
@@ -212,37 +219,37 @@ function Waveform(waveformName, order) {
 
    this.initializing = true ;
 
-   this.runningMinSample = Number.MAX_VALUE;
-   this.runningMaxSample = Number.MIN_VALUE;
+   // this.runningMinSample = Number.MAX_VALUE;
+   // this.runningMaxSample = Number.MIN_VALUE;
 
-   this.autoScaleCount = 0;
+   // this.autoScaleCount = 0;
 
-   if (this.autoScale) {
+   // if (this.autoScale) {
 
-      if (window.simulatedDataMode) {
+   //    if (window.simulatedDataMode) {
 
-         var minY;
-         var maxY;
+   //       var minY;
+   //       var maxY;
 
-         minY = Number.MAX_VALUE;
-         maxY = Number.MIN_VALUE;
-         var s;
-         for (s = 0; s < this.maxSimulatedSampleIndex; s++) {
-            if (this.simulatedSamples[s] < minY) {
-               minY = this.simulatedSamples[s];
-            }
-            if (this.simulatedSamples[s] > maxY) {
-               maxY = this.simulatedSamples[s];
-            }
-         }
-         var amplitude = maxY - minY;
+   //       minY = Number.MAX_VALUE;
+   //       maxY = Number.MIN_VALUE;
+   //       var s;
+   //       for (s = 0; s < this.maxSimulatedSampleIndex; s++) {
+   //          if (this.simulatedSamples[s] < minY) {
+   //             minY = this.simulatedSamples[s];
+   //          }
+   //          if (this.simulatedSamples[s] > maxY) {
+   //             maxY = this.simulatedSamples[s];
+   //          }
+   //       }
+   //       var amplitude = maxY - minY;
 
-         this.yMin = minY - amplitude * this.autoscaleOffsetPercentage / 100;
-         this.yMax = maxY + amplitude * this.autoscaleOffsetPercentage / 100;
+   //       this.yMin = minY - amplitude * this.autoscaleOffsetPercentage / 100;
+   //       this.yMax = maxY + amplitude * this.autoscaleOffsetPercentage / 100;
 
-      }
+   //    }
 
-   }
+   // }
 
 }
 
@@ -312,131 +319,6 @@ Waveform.prototype.getCapacity = function () {
 
 
 //
-//   setupWaveforms - call when a new waveformDataMessage is received from the REST API
-//
-
-var nWaveforms;
-var topWaveformHeight;
-var waveformHeight;
-
-function setupWaveforms(setupWaveformDataMessage) {
-
-   homeScreen.clearWaveformList();
-
-   // Parse the JSON string into JavaScript object
-   const waveformData = JSON.parse(setupWaveformDataMessage);
-
-   nWaveforms = waveformData.waveforms.length;
-
-   //waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
-
-   switch (nWaveforms) {
-
-      case 3 :
-
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
-         break ;
-
-      case 2 :
-
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
-         break ;
-
-      case 1 :
-      default :
-
-         topWaveformHeight = homeScreen.waveformAreaHeight ;
-         waveformHeight    = topWaveformHeight ;
-         break ;
-
-   }
-
-   // Add waveforms from the parsed data
-   var order = 0;
-   for (order = 0; order < nWaveforms; order++) {
-      //const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
-
-      var waveformName = waveformData.waveforms[order].waveformName ;
-      const wvf = new Waveform(waveformName, order);
-      homeScreen.addWaveform(wvf);
-   }
-
-}
-
-
-//
-//   resetWaveforms
-//
-
-var waveformSetIndex = 0;
-
-function resetWaveforms(shiftWaveforms) {
-
-   //const randomInteger = Math.floor(Math.random() * 2);
-
-   if (shiftWaveforms) {
-      waveformSetIndex++
-      if (waveformSetIndex >= currentWaveforms.length) {
-         waveformSetIndex = 0;
-      }
-   }
-
-   pauseWaveformDrawing = 1;
-
-   //setupWaveforms(currentWaveforms[waveformSetIndex]);
-
-   pauseWaveformDrawing = 0;
-
-   if (window.simulatedDataMode == 0) {
-      simulateArrivalOfWaveformDataMessage();
-   }
-
-   // Get the button element by its ID
-   // var button = document.getElementById('startStopWaveformsButton');
-
-   // button.textContent = 'Pause Waveforms';
-
-   redrawHomeScreen = 1;
-
-}
-
-
-//
-//   startStopWaveforms
-//
-
-function startStopWaveforms() {
-
-   // Get the button element by its ID
-   var button = document.getElementById('startStopWaveformsButton');
-
-   //Check the current label and update it
-   if (button.textContent === 'Pause Waveforms') {
-      button.textContent = 'Restart Waveforms';
-      pauseWaveformDrawing = 1;
-   } else {
-      button.textContent = 'Pause Waveforms';
-      redrawHomeScreen = 1;
-      //pauseWaveformDrawing = 0;
-      resetWaveforms(0);
-   }
-
-}
-
-
-//
-//   shiftWaveforms  
-//
-
-function shiftWaveforms() {
-
-   resetWaveforms(1);
-
-}
-
-
 //   Compute parameters used for waveform drawing
 //
 //   Adjust these values based on the display
@@ -500,8 +382,8 @@ function drawWaveform(w) {
    var MSPerPixel = 1 / pixelsPerMS;
    var MSPerSample = 0;
    if (window.simulatedDataMode) {
-      //MSPerPixel = 1 / pixelsPerMS;
-      //MSPerSample = 1000 / wvf.sampleRateIn;
+      MSPerPixel = 1 / pixelsPerMS;
+      MSPerSample = 1000 / wvf.sampleRateIn;
    }
    else {
       //MSPerPixel = enteredMSPerPixel;
@@ -557,13 +439,13 @@ function drawWaveform(w) {
       var skipPixel = 0;
       while (wvf.drawnPixelTime > wvf.readSampleTime) {
 
-         if (window.simulatedDataMode) {
-            var thisY = normalizeWaveform(wvf.simulatedSamples[wvf.tailIndex]);
-            wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSimulatedSampleIndex;
-            wvf.samplesDrawn++;
-            wvf.readSampleTime += MSPerSample;
-         }
-         else {
+         // if (window.simulatedDataMode) {
+         //    var thisY = normalizeWaveform(wvf.simulatedSamples[wvf.tailIndex]);
+         //    wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSimulatedSampleIndex;
+         //    wvf.samplesDrawn++;
+         //    wvf.readSampleTime += MSPerSample;
+         // }
+         // else {
             var thisSample = wvf.readSample();
             wvf.samplesDrawn++;
             wvf.readSampleTime += MSPerSample;
@@ -578,7 +460,7 @@ function drawWaveform(w) {
                }
             }
 
-         }
+         //}
 
          avgYSum += thisY;
          avgYCount++;
@@ -932,4 +814,238 @@ function drawWaveforms(elapsed) {
 
 }
 
+
+//
+//   setupWaveforms - call when a new waveformDataMessage is received from the REST API
+//
+
+var nWaveforms;
+var topWaveformHeight;
+var waveformHeight;
+
+function setupWaveforms(AMSWaveforms) {
+
+   homeScreen.clearWaveformList();
+
+   // Parse the JSON string into JavaScript object
+   //const waveformData = JSON.parse(setupWaveformDataMessage);
+
+   nWaveforms = AMSWaveforms.length;
+
+   //waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
+
+   switch (nWaveforms) {
+
+      case 3 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
+         break ;
+
+      case 2 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
+         break ;
+
+      case 1 :
+      default :
+
+         topWaveformHeight = homeScreen.waveformAreaHeight ;
+         waveformHeight    = topWaveformHeight ;
+         break ;
+
+   }
+
+   // Add waveforms from the parsed data
+   var order = 0;
+   for (order = 0; order < nWaveforms; order++) {
+      //const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
+
+      var waveformName = AMSWaveforms[order].waveformName ;
+      const wvf = new Waveform(waveformName, order);
+      homeScreen.addWaveform(wvf);
+   }
+
+}
+
+
+//
+//   resetWaveforms
+//
+
+//var waveformSetIndex = 0;
+
+//function resetWaveforms(shiftWaveforms) {
+function resetWaveforms() {
+
+   //const randomInteger = Math.floor(Math.random() * 2);
+
+   // if (shiftWaveforms) {
+   //    waveformSetIndex++
+   //    if (waveformSetIndex >= currentWaveforms.length) {
+   //       waveformSetIndex = 0;
+   //    }
+   // }
+
+   pauseWaveformDrawing = 1;
+
+   //setupWaveforms(currentWaveforms[waveformSetIndex]);
+
+   pauseWaveformDrawing = 0;
+
+   if (window.simulatedDataMode) {
+      simulateArrivalOfAMSMessage();
+   }
+
+   // Get the button element by its ID
+   // var button = document.getElementById('startStopWaveformsButton');
+
+   // button.textContent = 'Pause Waveforms';
+
+   redrawHomeScreen = 1;
+
+}
+
+
+//
+//   startStopWaveforms
+//
+
+function startStopWaveforms() {
+
+   // Get the button element by its ID
+   var button = document.getElementById('startStopWaveformsButton');
+
+   //Check the current label and update it
+   if (button.textContent === 'Pause Waveforms') {
+      button.textContent = 'Restart Waveforms';
+      pauseWaveformDrawing = 1;
+   } else {
+      button.textContent = 'Pause Waveforms';
+      redrawHomeScreen = 1;
+      //pauseWaveformDrawing = 0;
+      resetWaveforms(0);
+   }
+
+}
+
+
+// //
+// //   shiftWaveforms  
+// //
+
+// function shiftWaveforms() {
+
+//    resetWaveforms(1);
+
+// }
+
+
+//
+//   processWaveformData
+//
+
+var waveformDataMessageCount = 0;
+
+function processWaveformData(AMSWaveforms) {
+
+   if (pauseWaveformDrawing == 1) return;
+
+   waveformDataMessageCount++
+   LOGEVENT(" ");
+   LOGEVENTGREEN('In processWaveformData, count = ', waveformDataMessageCount);
+   // LOGEVENTMAGENTA("topWaveformHeight = ", topWaveformHeight) ;
+   // LOGEVENTMAGENTA("   waveformHeight = ", waveformHeight) ;
+
+   // Parse the JSON string into JavaScript object
+   //const waveformData = JSON.parse(newWaveformDataMessage);
+
+   // See if the waveform setup is changing
+   var somethingChanged = 0;
+   var nWaveformswaveformDataMessage = AMSWaveforms.length;
+   if (nWaveformswaveformDataMessage != nWaveforms) {
+      somethingChanged = 1;
+   }
+   else {
+      var w;
+      for (w = 0; w < AMSWaveforms.length; w++) {
+         if (AMSWaveforms[w].waveformName != homeScreen.waveforms[w].waveformName) {
+            somethingChanged = 1;
+            break;
+         }
+      }
+   }
+
+   if (somethingChanged) {
+      setupWaveforms(AMSWaveforms);
+      resetWaveforms(0);
+   }
+   else {
+
+      // Write samples from this message into waveform ring buffers
+      var w;
+      for (w = 0; w < AMSWaveforms.length; w++) {
+
+         var foundMatch = 0;
+         var hw;
+         for (hw = 0; hw < homeScreen.waveforms.length; hw++) {
+            if (AMSWaveforms[w].waveformName == homeScreen.waveforms[hw].waveformName) {
+               foundMatch = 1;
+               break;
+            }
+         }
+         if (foundMatch) {
+
+            var wvf = homeScreen.waveforms[hw];
+
+            //samplesIn = waveformData.waveforms[cw].waveformSamples;
+            samplesIn = AMSWaveforms[w].waveformSamples.split(',');
+
+            var samplesWritten = 0;
+            var s;
+            for (s = 0; s < samplesIn.length; s++) {
+
+               //var thisSample = samplesIn[s];
+               var thisSample = parseFloat(samplesIn[s]);
+
+               wvf.writeSample(thisSample);
+               samplesWritten++;
+
+            }
+
+            LOGEVENTGREEN("Read ", homeScreen.waveforms[hw].bufferReadCount, " samples from ", homeScreen.waveforms[hw].waveformName);
+            homeScreen.waveforms[hw].bufferReadCount = 0;
+
+            LOGEVENTGREEN("Wrote ", samplesWritten, " samples to ", homeScreen.waveforms[hw].waveformName);
+
+         }
+
+      }
+
+   }
+
+   var w;
+   for (w = 0; w < homeScreen.waveforms.length; w++) {
+
+      LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
+
+   }
+
+   if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
+      currentMSPerSample = currentMSPerSampleHigh;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
+   }
+   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
+      currentMSPerSample = currentMSPerSampleLow;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
+   }
+   else {
+      currentMSPerSample = currentMSPerSampleNormal;
+      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
+   }
+
+   var d = 0 ;
+
+}
 

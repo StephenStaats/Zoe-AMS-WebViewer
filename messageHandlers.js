@@ -1,166 +1,62 @@
 //
-//   processWaveformDataMessage
+//   getAMSMessages
 //
 
-var waveformDataMessageCount = 0;
+async function getAMSMessages() {
 
-function processWaveformDataMessage(newWaveformDataMessage) {
-   //function processWaveformDataMessage(waveformData) {
+   LOGEVENTGREEN("In getAMSMessages");
 
-   //LOGEVENTGREEN("In processWaveformDataMessage");
+   try {
 
-   if (pauseWaveformDrawing == 1) return;
-
-   waveformDataMessageCount++
-   LOGEVENT(" ");
-   LOGEVENTGREEN('In processWaveformDataMessage, count = ', waveformDataMessageCount);
-   // LOGEVENTMAGENTA("topWaveformHeight = ", topWaveformHeight) ;
-   // LOGEVENTMAGENTA("   waveformHeight = ", waveformHeight) ;
-
-   // Parse the JSON string into JavaScript object
-   const waveformData = JSON.parse(newWaveformDataMessage);
-
-   // See if the waveform setup is changing
-   var somethingChanged = 0;
-   var nWaveformswaveformDataMessage = waveformData.waveforms.length;
-   if (nWaveformswaveformDataMessage != nWaveforms) {
-      somethingChanged = 1;
-   }
-   else {
-      var w;
-      for (w = 0; w < waveformData.waveforms.length; w++) {
-         if (waveformData.waveforms[w].waveformName != homeScreen.waveforms[w].waveformName) {
-            somethingChanged = 1;
-            break;
-         }
+      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {
+         method: 'GET',
+         headers: {
+            'Accept': 'application/json',
+         },
+      })
+      if (!response.ok) {
+         throw new Error('Failed to fetch data');
       }
-   }
 
-   if (somethingChanged) {
-      setupWaveforms(newWaveformDataMessage);
-      resetWaveforms(0);
-   }
-   else {
+      var AMSMessages = await response.json();
 
-      // Write samples from this message into waveform ring buffers
-      var w;
-      for (w = 0; w < waveformData.waveforms.length; w++) {
-
-         if (waveformData.waveforms[w].waveformName == "RRA") {
-            var q = 0;
-         }
-
-         var foundMatch = 0;
-         var cw;
-         for (cw = 0; cw < homeScreen.waveforms.length; cw++) {
-            if (waveformData.waveforms[w].waveformName == homeScreen.waveforms[cw].waveformName) {
-               foundMatch = 1;
-               break;
-            }
-         }
-         if (foundMatch) {
-
-            var wvf = homeScreen.waveforms[cw];
-
-            //samplesIn = waveformData.waveforms[cw].waveformSamples;
-            samplesIn = waveformData.waveforms[cw].waveformSamples.split(',');
-
-            var samplesWritten = 0;
-            var s;
-            for (s = 0; s < samplesIn.length; s++) {
-
-               //var thisSample = samplesIn[s];
-               var thisSample = parseFloat(samplesIn[s]);
-
-               wvf.writeSample(thisSample);
-               samplesWritten++;
-
-               // if (wvf.waveformName == "RESP_AUTO") {
-               //    LOGEVENTCYAN("   RA = ", thisSample)
-               // }
-
-               // if (wvf.autoScale) {
-
-               //    if (wvf.waveformName == "RESP_AUTO") {
-               //       if (thisSample < -200) {
-               //          var q = 0 ;
-               //       }
-               //       if (thisSample > 200) {
-               //          var q = 0 ;
-               //       }
-               //    }
-
-               //    if (thisSample != LEAD_OFF_OR_UNPLUGGED) {
-               //       if (thisSample < wvf.runningMinSample) {
-               //          wvf.runningMinSample = thisSample;
-               //       }
-               //       else if (thisSample > wvf.runningMaxSample) {
-               //          wvf.runningMaxSample = thisSample;
-               //       }
-               //   }
-
-               // }
-
-            }
-
-            // if (wvf.autoScale) {
-
-            //    // wvf.yMaxSum += maxY ;
-            //    // wvf.yMinSum += minY ;
-            //    wvf.autoScaleCount += 1;
-
-            //    LOGEVENTGREEN(wvf.waveformName, " runningMaxSample = ", wvf.runningMaxSample, " runningMinSample = ", wvf.runningMinSample);
-            //    LOGEVENTGREEN("   yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
-
-            //    if (wvf.autoScaleCount % 10 == 0) {
-
-            //       if ((wvf.runningMaxSample != Number.MIN_VALUE) && (wvf.runningMinSample != Number.MAX_VALUE)) {
-
-            //          var amplitude = wvf.runningMaxSample - wvf.runningMinSample;
-            //          wvf.yMax = wvf.runningMaxSample + amplitude * wvf.autoscaleOffsetPercentage / 100;
-            //          wvf.yMin = wvf.runningMinSample - amplitude * wvf.autoscaleOffsetPercentage / 100;
-            //          LOGEVENTGREEN("      New yMax = ", wvf.yMax, " yMin = ", wvf.yMin);
-
-            //          wvf.runningMinSample = Number.MAX_VALUE;
-            //          wvf.runningMaxSample = Number.MIN_VALUE;
-
-            //       }
-
-            //    }
-
-            // }
-
-            LOGEVENTGREEN("Read ", homeScreen.waveforms[cw].bufferReadCount, " samples from ", homeScreen.waveforms[cw].waveformName);
-            homeScreen.waveforms[cw].bufferReadCount = 0;
-
-            LOGEVENTGREEN("Wrote ", samplesWritten, " samples to ", homeScreen.waveforms[cw].waveformName);
-
-         }
+      var m = 0;
+      for (m = 0; m < AMSMessages.length; m++) {
+         AMSMessage = AMSMessages[m];
+         processAMSMessage(AMSMessage);
       }
-   }
 
-   var w;
-   for (w = 0; w < homeScreen.waveforms.length; w++) {
+   } catch (error) {
 
-      LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
+      LOGEVENTRED('Error:', error);
 
-   }
-
-   if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
-      currentMSPerSample = currentMSPerSampleHigh;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
-   }
-   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
-      currentMSPerSample = currentMSPerSampleLow;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
-   }
-   else {
-      currentMSPerSample = currentMSPerSampleNormal;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
    }
 
 }
 
+
+//
+//   processAMSMessage
+//
+
+var AMSMessageCount = 0;
+
+function processAMSMessage(newAMSMessage) {
+
+   AMSMessageCount++
+   LOGEVENT(" ");
+   LOGEVENTGREEN('In processAMSMessage, count = ', AMSMessageCount);
+
+   const AMSWaveforms = newAMSMessage.waveforms ;
+   processWaveformData(AMSWaveforms) ;
+
+   const AMSParameters = newAMSMessage.parameters ;
+   processParameterData(AMSParameters) ;
+
+   const AMSSettings = newAMSMessage.settings ;
+   processSettingData(AMSSettings) ;
+
+}
 
 // {
 //    "waveforms": [

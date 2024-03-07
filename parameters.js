@@ -55,7 +55,7 @@ Parameter.prototype.getUnitsOfMeasureFromParameterName = function() {
       unitsOfMeasure = "rpm";  
    }
    else if (this.parameterName == "TEMP") { 
-      if (homeScreen.getSettingValue("TEMP units") == "C") {
+      if (homeScreen.getSettingValue("TEMPunits") == "C") {
          unitsOfMeasure = "\u00B0 C";
       }
       else {
@@ -331,8 +331,6 @@ Parameter.prototype.drawParameterArea = function() {
 
    var needToColor  = getNeedToColorFromAlarmStatus(numericAlarmStatus) ;
 
-   //LOGEVENTYELLOW("In drawParameterArea, needToColor = ", needToColor, " this.parameterAlarmStatus = ", this.parameterAlarmStatus);
-
    if (this.parameterName == "SPO2") {
       var p = 0;
    }
@@ -342,16 +340,6 @@ Parameter.prototype.drawParameterArea = function() {
       textBackgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
    }
 
-   // if (this.parameterName == "FICO2") {
-   //    textBackgroundColor = window.colors.ZRED;
-   // }
-   // if (this.parameterName == "NIBP") {
-   //    textBackgroundColor = window.colors.ZGREEN;
-   // }
-   // if (this.parameterName == "TEMP") {
-   //    textBackgroundColor = window.colors.ZBLUE;
-   // }
-
    displayCtx.fillStyle = textBackgroundColor;
 
    var left = this.getLeftFromParameterName() ;
@@ -359,7 +347,6 @@ Parameter.prototype.drawParameterArea = function() {
    var width = this.getWidthFromParameterName() ;
    var height = this.getHeightFromParameterName() ;
 
-   //displayCtx.clearRect(left, top, width, height);
    displayCtx.fillRect(left, top, width, height);
 
    var pointSize = this.getPointSizeFromParameterName(this.parameterName) ;
@@ -482,84 +469,70 @@ function drawParameterAreas() {
 
 var nParameters = 0 ;
 
-function setupParameters(setupParameterDataMessage) {
+function setupParameters(AMSParameters) {
 
    homeScreen.clearParameterList();
 
    // Parse the JSON string into JavaScript object
-   const parameterData = JSON.parse(setupParameterDataMessage);
+   //const parameterData = JSON.parse(setupParameterDataMessage);
 
-   nParameters = parameterData.parameters.length;
+   nParameters = AMSParameters.length;
 
    // Add parameters from the parsed data
-   parameterData.parameters.forEach(parameter => {
+   //AMSParameters.forEach(parameter => {
+   var p = 0 ;
+   for (p = 0; p < nParameters; p++) {
       // Create an instance of Parameter class
-      const param = new Parameter(parameter.parameterName);
+      const param = new Parameter(AMSParameters[p].parameterName);
       homeScreen.addParameter(param);
-   });
-
-}
-
-//
-//   shiftParameters  
-//
-
-function shiftParameters() {
-
-   parameterSetIndex++;
-
-   if (parameterSetIndex >= currentParameters.length) {
-      parameterSetIndex = 0;
    }
 
 }
 
+// //
+// //   shiftParameters  
+// //
+
+// function shiftParameters() {
+
+//    parameterSetIndex++;
+
+//    if (parameterSetIndex >= currentParameters.length) {
+//       parameterSetIndex = 0;
+//    }
+
+// }
+
 
 //
-//   processParameterDataMessage
+//   processParameterData
 //
 
 var parameterDataMessageCount = 0;
 
 var parameterSetIndex = 0;
 
-var lastBottomLineMessage ;
-var lastbottomLineMessageAlarmStatus;
-
-window.bottomLineMessage = " " ;
-window.bottomLineMessageAlarmStatus = window.Z_PARAM_ALARM_STATUS.Z_PARAM_ALARM_STATUS_NORMAL_NONE ;
-
-function processParameterDataMessage(newParameterDataMessage) {
+function processParameterData(AMSParameters) {
 
    parameterDataMessageCount++
    LOGEVENT(" ");
-   LOGEVENTYELLOW('in processParameterDataMessage, count = ', parameterDataMessageCount);
+   LOGEVENTYELLOW('in processParameterData, count = ', parameterDataMessageCount);
 
    // Parse the JSON string into JavaScript object
-   const parameterData = JSON.parse(newParameterDataMessage);
-
-   var bottomLineMessage = parameterData.bottomLineMessage ;
-   var bottomLineMessageAlarmStatus = parameterData.bottomLineMessageAlarmStatus ;
-   if ((bottomLineMessage != lastBottomLineMessage) || (bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
-      lastBottomLineMessage = bottomLineMessage ;
-      lastbottomLineMessageAlarmStatus = bottomLineMessageAlarmStatus ;
-      window.bottomLineMessage = bottomLineMessage ;
-      window.bottomLineMessageAlarmStatus = bottomLineMessageAlarmStatus ;
-      drawBottomLineMessageArea() ;
-   }
+   //const parameterData = JSON.parse(newParameterDataMessage);
 
    // See if the parameter setup is changing
    var somethingChanged = 0;
-   var nParametersparameterDataMessage = parameterData.parameters.length;
+   var nParametersparameterDataMessage = AMSParameters.length;
    if (nParametersparameterDataMessage != nParameters) {
       somethingChanged = 1;
    }
    else {
       var p;
-      for (p = 0; p < parameterData.parameters.length; p++) {
+      for (p = 0; p < AMSParameters.length; p++) {
          //LOGEVENTYELLOW(p + " message = " + parameterData.parameters[p].parameterName + "homeScreen = " + homeScreen.parameters[p].parameterName) ;
 
-         if (parameterData.parameters[p].parameterName != homeScreen.parameters[p].parameterName) {
+         if (AMSParameters[p].parameterName != homeScreen.parameters[p].parameterName) {
             somethingChanged = 1;
             break;
          }
@@ -567,31 +540,40 @@ function processParameterDataMessage(newParameterDataMessage) {
    }
 
    if (somethingChanged) {
-      setupParameters(newParameterDataMessage);
+      setupParameters(AMSParameters);
    }
    else {
 
       // Update values from this message into home screen parameter objects
       var p;
-      for (p = 0; p < parameterData.parameters.length; p++) {
+      for (p = 0; p < AMSParameters.length; p++) {
          var foundMatch = 0;
-         var cp;
-         for (cp = 0; cp < parameterData.parameters.length; cp++) {
-            if (parameterData.parameters[p].parameterName == homeScreen.parameters[cp].parameterName) {
+         var hp;
+         for (hp = 0; hp < homeScreen.parameters.length; hp++) {
+            if (AMSParameters[p].parameterName == homeScreen.parameters[hp].parameterName) {
                foundMatch = 1;
                break;
             }
          }
          if (foundMatch) {
 
-            var param = homeScreen.parameters[cp];
+            //var param = homeScreen.parameters[hp];
  
-            var value = parameterData.parameters[cp].parameterValue ;
-            var alarmStatus = parameterData.parameters[cp].parameterAlarmStatus ;
+            var value = AMSParameters[hp].parameterValue ;
+            var alarmStatus = AMSParameters[hp].parameterAlarmStatus ;
 
-            param.setValue(value);
-            param.setAlarmStatus(alarmStatus);
-            param.drawParameterArea();
+            // param.setValue(value);
+            // param.setAlarmStatus(alarmStatus);
+            // param.drawParameterArea();
+
+            // homeScreen.parameters[hp].setValue(value);
+            // homeScreen.parameters[hp].setAlarmStatus(alarmStatus);
+            // homeScreen.parameters[hp].drawParameterArea();
+
+            homeScreen.parameters[hp].parameterName = AMSParameters[p].parameterName ;
+            homeScreen.parameters[hp].parameterValue = AMSParameters[p].parameterValue ;
+            homeScreen.parameters[hp].parameterAlarmStatus = AMSParameters[p].parameterAlarmStatus ;
+            homeScreen.parameters[hp].drawParameterArea();
 
          }
 
