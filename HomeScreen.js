@@ -304,6 +304,7 @@ function drawHomeScreen(timestamp) {
    if (redrawHomeScreen == 1) {
       redrawHomeScreen = 0;
       drawHomeScreenAreas();
+      drawWaveformScaleArea() ;
    }
 
    if (!lastTime) {

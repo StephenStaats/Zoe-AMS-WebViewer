@@ -967,6 +967,9 @@ function processWaveformData(AMSWaveforms) {
    if (nWaveformswaveformDataMessage != nWaveforms) {
       somethingChanged = 1;
    }
+   else if (homeScreen.waveforms.length == 0) {
+      somethingChanged = 1;
+   }
    else {
       var w;
       for (w = 0; w < AMSWaveforms.length; w++) {

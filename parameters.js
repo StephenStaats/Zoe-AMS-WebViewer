@@ -527,6 +527,9 @@ function processParameterData(AMSParameters) {
    if (nParametersparameterDataMessage != nParameters) {
       somethingChanged = 1;
    }
+   else if (homeScreen.parameters.length == 0) {
+      somethingChanged = 1;
+   }
    else {
       var p;
       for (p = 0; p < AMSParameters.length; p++) {
