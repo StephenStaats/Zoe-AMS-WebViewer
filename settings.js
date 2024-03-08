@@ -21,25 +21,23 @@ Setting.prototype.getValue = function (value) {
 };
 
 
-// //
-// //   shiftSettings  
-// //
+//
+//   setupSettings 
+//
 
-// function shiftSettings() {
+function setupSettings(AMSSettings) {
 
-//    settingSetIndex++;
+   homeScreen.clearSettingList();
 
-//    if (settingSetIndex >= currentSettings.length) {
-//       settingSetIndex = 0;
-//    }
+   var s = 0 ;
+   for (s = 0; s < AMSSettings.length; s++) {
 
-//    simulateArrivalOfSettingDataMessage() ;
+      const setting = new Setting(AMSSettings[s].settingName, AMSSettings[s].settingValue);
+      homeScreen.addSetting(setting);
 
-//    drawTopLine() ;
+   }
 
-//    drawWaveformScaleArea() ;
-
-// }
+}
 
 
 //
@@ -56,7 +54,7 @@ var settingDataMessageCount = 0;
 
 var settingSetIndex = 0;
 
-var nSettings = 0;
+//var nSettings = 0;
 
 function processSettingData(AMSSettings) {
 
@@ -65,34 +63,125 @@ function processSettingData(AMSSettings) {
    LOGEVENT(" ");
    LOGEVENTCYAN('in processSettingData, count = ', settingDataMessageCount);
 
-   homeScreen.clearSettingList();
+   // homeScreen.clearSettingList();
 
-   // Parse the JSON string into JavaScript object
-   //const settingData = JSON.parse(setupSettingDataMessage);
+   // // Parse the JSON string into JavaScript object
+   // //const settingData = JSON.parse(setupSettingDataMessage);
 
-   nSettings = AMSSettings.length;
+   // nSettings = AMSSettings.length;
 
-   // Add parameters from the parsed data
-   //settingData.settings.forEach(setting => {
-   var s = 0;
-   for (s = 0; s < nSettings; s++) {
-      // Create an instance of Parameter class
-      var setting = new Setting(AMSSettings[s].settingName, AMSSettings[s].settingValue);
-      homeScreen.addSetting(setting);
+   // // Add parameters from the parsed data
+   // //settingData.settings.forEach(setting => {
+   // var s = 0;
+   // for (s = 0; s < nSettings; s++) {
+   //    // Create an instance of Parameter class
+   //    var setting = new Setting(AMSSettings[s].settingName, AMSSettings[s].settingValue);
+   //    homeScreen.addSetting(setting);
 
-      if (setting.settingName == "bottomLineMessage") {
-         window.bottomLineMessage = setting.settingValue;
+   //    if (setting.settingName == "bottomLineMessage") {
+   //       window.bottomLineMessage = setting.settingValue;
+   //    }
+   //    else if (setting.settingName == "bottomLineMessageAlarmStatus") {
+   //       window.bottomLineMessageAlarmStatus = setting.settingValue;
+   //    }
+   //    if ((window.bottomLineMessage != lastBottomLineMessage) || (window.bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
+   //       lastBottomLineMessage = window.bottomLineMessage;
+   //       lastbottomLineMessageAlarmStatus = window.bottomLineMessageAlarmStatus;
+   //       drawBottomLineMessageArea();
+   //    }
+
+   // }
+
+   var somethingChanged = 0 ;
+
+   // homeScreen.clearSettingList();
+
+   nSettingsInAMSMessage = AMSSettings.length;
+
+   var nSettingsInAMSMessage = AMSSettings.length;
+   if (nSettingsInAMSMessage != homeScreen.settings.length) {
+      somethingChanged = 1;
+   }
+   else if (homeScreen.settings.length == 0) {
+      somethingChanged = 1;
+   }
+   else {
+      var s;
+      for (s = 0; s < AMSSettings.length; s++) {
+         if (AMSSettings[s].settingName != homeScreen.settings[s].settingName) {
+            somethingChanged = 1;
+            break;
+         }
       }
-      else if (setting.settingName == "bottomLineMessageAlarmStatus") {
-         window.bottomLineMessageAlarmStatus = setting.settingValue;
-      }
-      if ((window.bottomLineMessage != lastBottomLineMessage) || (window.bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
-         lastBottomLineMessage = window.bottomLineMessage;
-         lastbottomLineMessageAlarmStatus = window.bottomLineMessageAlarmStatus;
-         drawBottomLineMessageArea();
+   }
+   if (somethingChanged) {
+      setupSettings(AMSSettings);
+   }
+   else {   
+
+
+      var s = 0;
+      for (s = 0; s < AMSSettings.length; s++) {
+
+         var setting = AMSSettings[s] ;
+
+         if (setting.settingName == "bottomLineMessage") {
+            window.bottomLineMessage = setting.settingValue;
+         }
+         else if (setting.settingName == "bottomLineMessageAlarmStatus") {
+            window.bottomLineMessageAlarmStatus = setting.settingValue;
+         }
+         if ((window.bottomLineMessage != lastBottomLineMessage) || (window.bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
+            lastBottomLineMessage = window.bottomLineMessage;
+            lastbottomLineMessageAlarmStatus = window.bottomLineMessageAlarmStatus;
+            drawBottomLineMessageArea();
+         }
+
+         var hs = 0 ;
+         for (hs = 0; s < homeScreen.settings.length; hs++) {
+
+            if (homeScreen.settings[hs].settingName == setting.settingName) {
+
+               if (homeScreen.settings[hs].settingValue != setting.settingValue) {
+
+                  homeScreen.settings[hs].settingValue = setting.settingValue ;
+
+                  if ((setting.settingName == "deviceName") || 
+                      (setting.settingName == "patientFirstName") || 
+                      (setting.settingName == "patientLastName") ||
+                      (setting.settingName == "patientId")) {
+
+                     drawTopLine() ;
+
+                  }
+                  else if ((setting.settingName == "ECGLead") || 
+                           (setting.settingName == "ECGGain") || 
+                           (setting.settingName == "CO2ScaleHi") ||
+                           (setting.settingName == "CO2ScaleLo")) {
+
+                     drawWaveformAreas() ;
+
+                  }
+                  else if (setting.settingName == "TEMPunits") {
+
+                     drawParamterAreas() ;
+
+                  }
+
+               }
+
+               break ;
+
+            }
+
+         }
+
+
       }
 
    }
+
+   return (somethingChanged) ;
 
 }
 
@@ -122,9 +211,8 @@ function findSelectedPatient(selectedDeviceId) {
 
                simulateArrivalOfAMSMessage();
 
-               drawTopLine();
-
-               drawWaveformScaleArea();
+               //drawTopLine();
+               redrawHomeScreen = 1 ;
 
                return;
 

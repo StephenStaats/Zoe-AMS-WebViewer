@@ -97,9 +97,6 @@ document.getElementById("setAlarmStatusMEDIUMButton").disabled = true;
 document.getElementById("setAlarmStatusLOWButton").disabled = true;
 document.getElementById("setAlarmStatusNONEButton").disabled = true;
 
-
-
-
 //
 //   Get the canvas and context
 //
@@ -121,8 +118,6 @@ var framesPerSecond = 60;
 homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
 homeScreen.initializeAreas();
 
-resetWaveforms(0);
-
 if (window.simulatedDataMode) {
    simulateArrivalOfAMSMessage();
    simulateArrivalOfAMSMessage();
@@ -133,16 +128,6 @@ findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
 drawHomeScreen();
 
 var intervalId = 0;
-
-//if (window.simulatedDataMode == 0) {
-//   intervalId = setInterval(periodicUpdate, 250);
-//}
-
-// To stop the interval after a certain amount of time (e.g., 5 seconds), you can use setTimeout
-// setTimeout(() => {
-//    clearInterval(intervalId); // This stops the interval
-//    console.log('Interval stopped.');
-// }, 10000);
 
 //
 //   updateFramesPerSecond  
@@ -156,7 +141,7 @@ function updateFramesPerSecond(elapsedTime) {
 }
 
 
-//g
+//
 //   showSelectScreen  
 //
 

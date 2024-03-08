@@ -41,9 +41,9 @@ const displayCtx = displayCanvas.getContext('2d');
 displayCanvas.width = 480;
 displayCanvas.height = 800;
 
-displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
+//displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
 
-displayCtx.save();
+//displayCtx.save();
 
 // Translate the origin to the lower left corner of the canvas
 displayCtx.translate(0, displayCanvas.height);
@@ -68,7 +68,7 @@ var framesPerSecond = 60;
 homeScreen = new HomeScreen(displayCanvas.height, displayCanvas.width);
 homeScreen.initializeAreas();
 
-resetWaveforms(0);
+//resetWaveforms(0);
 
 if (window.simulatedDataMode) {
    simulateArrivalOfAMSMessage();
@@ -80,11 +80,6 @@ findSelectedPatient(sessionStorage.getItem("selectedDeviceId")) ;
 drawHomeScreen();
 
 var intervalId = 0;
-
-//if (window.simulatedDataMode == 0) {
-// intervalId = setInterval(periodicUpdate, 250);
-//}
-
 
 //
 //   updateFramesPerSecond  

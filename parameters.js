@@ -6,7 +6,7 @@
 function Parameter(parameterName) {
 
    this.parameterName = parameterName;
-   this.parameterValue = "---";
+   this.parameterValue = "";
    this.parameterAlarmStatus = "Z_PARAM_ALARM_STATUS_NORMAL_NONE";
 
 }
@@ -54,6 +54,9 @@ Parameter.prototype.getUnitsOfMeasureFromParameterName = function() {
    else if (this.parameterName == "RRC") { 
       unitsOfMeasure = "rpm";  
    }
+   else if (this.parameterName == "RR") { 
+      unitsOfMeasure = "rpm";  
+   }
    else if (this.parameterName == "TEMP") { 
       if (homeScreen.getSettingValue("TEMPunits") == "C") {
          unitsOfMeasure = "\u00B0 C";
@@ -94,6 +97,9 @@ Parameter.prototype.getColorFromParameterName = function() {
    else if (this.parameterName == "RRC") { 
       color = window.colors.RRCColor; 
    }
+   else if (this.parameterName == "RR") { 
+      color = window.colors.RRColor; 
+   }
    else if (this.parameterName == "TEMP") { 
       color = window.colors.TEMPColor; 
    }
@@ -115,6 +121,7 @@ var ETCO2pointSize = 45;
 var FICO2pointSize = 20;
 var SPO2pointSize = 50;
 var RRCpointSize = 50;
+var RRpointSize = 50;
 var TEMPpointSize = 30;
 var NIBPpointSize = 45;
 
@@ -136,6 +143,9 @@ Parameter.prototype.getPointSizeFromParameterName = function() {
    }
    else if (this.parameterName == "RRC") { 
       pointSize = RRCpointSize; 
+   }
+   else if (this.parameterName == "RR") { 
+      pointSize = RRpointSize; 
    }
    else if (this.parameterName == "TEMP") { 
       pointSize = TEMPpointSize; 
@@ -169,6 +179,9 @@ Parameter.prototype.getGraphicsDebugValueFromParameterName = function() {
       graphicsDebugValue = "33.3" ;
    }
    else if (this.parameterName == "RRC") { 
+      graphicsDebugValue = "133" ; 
+   }
+   else if (this.parameterName == "RR") { 
       graphicsDebugValue = "133" ; 
    }
    else if (this.parameterName == "TEMP") { 
@@ -205,6 +218,9 @@ Parameter.prototype.getLeftFromParameterName = function() {
    else if (this.parameterName == "RRC") { 
       left = homeScreen.RRCParamAreaLeft; 
    }
+   else if (this.parameterName == "RR") { 
+      left = homeScreen.RRParamAreaLeft; 
+   }
    else if (this.parameterName == "TEMP") { 
       left = homeScreen.TEMPParamAreaLeft; 
    }
@@ -238,6 +254,9 @@ Parameter.prototype.getTopFromParameterName = function() {
    }
    else if (this.parameterName == "RRC") { 
       top = homeScreen.RRCParamAreaTop; 
+   }
+   else if (this.parameterName == "RR") { 
+      top = homeScreen.RRParamAreaTop; 
    }
    else if (this.parameterName == "TEMP") { 
       top = homeScreen.TEMPParamAreaTop; 
@@ -273,6 +292,9 @@ Parameter.prototype.getWidthFromParameterName = function() {
    else if (this.parameterName == "RRC") { 
       width = homeScreen.RRCParamAreaWidth; 
    }
+   else if (this.parameterName == "RR") { 
+      width = homeScreen.RRParamAreaWidth; 
+   }
    else if (this.parameterName == "TEMP") { 
       width = homeScreen.TEMPParamAreaWidth; 
    }
@@ -307,6 +329,9 @@ Parameter.prototype.getHeightFromParameterName = function() {
    else if (this.parameterName == "RRC") { 
       height = homeScreen.RRCParamAreaHeight; 
    }
+   else if (this.parameterName == "RR") { 
+      height = homeScreen.RRParamAreaHeight; 
+   }
    else if (this.parameterName == "TEMP") { 
       height = homeScreen.TEMPParamAreaHeight; 
    }
@@ -331,13 +356,18 @@ Parameter.prototype.drawParameterArea = function() {
 
    var needToColor  = getNeedToColorFromAlarmStatus(numericAlarmStatus) ;
 
-   if (this.parameterName == "SPO2") {
-      var p = 0;
-   }
-
    if (needToColor) {
       textForegroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
       textBackgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState) ;
+   }
+
+   if (this.parameterName == "SPO2") {
+      var q = 0 ;
+      //textBackgroundColor = window.colors.ZBLUE ;
+   }
+   if (this.parameterName == "NIBP") {
+      var q = 0 ;
+      //textBackgroundColor = window.colors.ZGREEN ;
    }
 
    displayCtx.fillStyle = textBackgroundColor;
@@ -362,6 +392,109 @@ Parameter.prototype.drawParameterArea = function() {
    }
 
 }
+
+
+//
+//  clearParameterArea
+//
+
+Parameter.prototype.clearParameterArea = function() {
+
+   displayCtx.fillStyle = window.colors.ZBLACK;
+
+   var left = this.getLeftFromParameterName() ;
+   var top = this.getTopFromParameterName() ;
+   var width = this.getWidthFromParameterName() ;
+   var height = this.getHeightFromParameterName() ;
+
+   displayCtx.fillRect(left, top, width, height);
+
+}
+
+
+//
+// //  drawGenericParameterArea
+// //
+
+// function drawGenericParameterArea(label, units, value, labelColor, font, fontSize, x, y, width, height) {
+
+//    // // Set the outline color
+//    // displayCtx.strokeStyle = window.colors.AreaSeparatorColor;
+//    // // Set the outline width
+//    // displayCtx.lineWidth = 1; 
+//    // // Draw the rectangle outline
+//    // displayCtx.strokeRect(x, y, width, height);
+
+//    // Set the text color
+//    displayCtx.fillStyle = labelColor;
+
+//    // var labelX = x + width * 10 / 100 ;
+//    // var labelY = y + height * 15 / 100 ;
+//    var labelX = x + 8;
+//    var labelY = y + 20;
+
+//    var unitsX = x + 8;
+//    var unitsY = y + 35;
+
+//    var valueX = x + width * 45 / 100;
+//    var valueY = y + height * 70 / 100;
+
+//    // Add label in the upper left corner
+//    // Set the font and font size
+//    displayCtx.font = '11pt Arial'; // Reset to default font and size
+//    displayCtx.textAlign = 'left';
+//    displayCtx.fillText(label, labelX, labelY); // Adjust the positioning as needed
+
+//    // Add units right below label in the upper left corner
+//    // Set the font and font size
+//    displayCtx.font = '9pt Arial'; // Reset to default font and size
+//    displayCtx.textAlign = 'left';
+//    displayCtx.fillText(units, unitsX, unitsY); // Adjust the positioning as needed
+
+//    if (label == "NIBP") {
+
+//       //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
+
+//       // Split the string by "/"
+//       const parts = value.split(" / ");
+
+//       // Extract systolic and diastolic values
+//       const systolic = parts[0]; // "120"
+//       const diastolicWithMean = parts[1]; // "80 (100)"
+
+//       // Extract diastolic and mean values
+//       const diastolic = diastolicWithMean.split(" ")[0]; // "80"
+//       const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
+
+//       // Form the desired strings
+//       const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
+//       const meanString = `(${mean})`; // "(100)"
+
+//       displayCtx.font = `${fontSize}pt ${font}`;
+//       displayCtx.textAlign = 'center';
+
+//       valueX = x + width * 40 / 100;
+//       valueY = y + height * 70 / 100;
+
+//       displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
+
+//       displayCtx.font = `${fontSize-15}pt ${font}`;
+//       displayCtx.textAlign = 'left';
+
+//       valueX = x + width * 70 / 100;
+//       valueY = y + height * 70 / 100;
+
+//       displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
+
+//    }
+//    else {
+//       displayCtx.font = `${fontSize}pt ${font}`;
+//       displayCtx.textAlign = 'center';
+//       displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
+//    }
+
+// }
+
 
 //
 //  drawGenericParameterArea
@@ -404,38 +537,52 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
 
    if (label == "NIBP") {
 
-      //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
-
-      // Split the string by "/"
-      const parts = value.split(" / ");
-
-      // Extract systolic and diastolic values
-      const systolic = parts[0]; // "120"
-      const diastolicWithMean = parts[1]; // "80 (100)"
-
-      // Extract diastolic and mean values
-      const diastolic = diastolicWithMean.split(" ")[0]; // "80"
-      const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
-
-      // Form the desired strings
-      const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
-      const meanString = `(${mean})`; // "(100)"
-
       displayCtx.font = `${fontSize}pt ${font}`;
       displayCtx.textAlign = 'center';
 
       valueX = x + width * 40 / 100;
       valueY = y + height * 70 / 100;
-
-      displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
-
-      displayCtx.font = `${fontSize-15}pt ${font}`;
-      displayCtx.textAlign = 'left';
-
-      valueX = x + width * 70 / 100;
+      valueX = x + width * 40 / 100;
       valueY = y + height * 70 / 100;
 
-      displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
+      if (value.indexOf(" / ") == -1) {
+
+         displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed
+
+      }
+      else {
+
+         //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
+
+         // Split the string by "/"
+         const parts = value.split(" / ");
+
+         // Extract systolic and diastolic values
+         const systolic = parts[0]; // "120"
+         const diastolicWithMean = parts[1]; // "80 (100)"
+
+         // Extract diastolic and mean values
+         const diastolic = diastolicWithMean.split(" ")[0]; // "80"
+         const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
+
+         // Form the desired strings
+         const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
+         const meanString = `(${mean})`; // "(100)"
+
+         displayCtx.font = `${fontSize}pt ${font}`;
+         displayCtx.textAlign = 'center';
+
+         displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
+
+         displayCtx.font = `${fontSize-15}pt ${font}`;
+         displayCtx.textAlign = 'left';
+
+         valueX = x + width * 70 / 100;
+         valueY = y + height * 70 / 100;
+
+         displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
+
+      }
 
    }
    else {
@@ -447,11 +594,14 @@ function drawGenericParameterArea(label, units, value, labelColor, font, fontSiz
 }
 
 
+
 //
 //  drawParameterAreas
 //
 
 function drawParameterAreas() {
+
+   var clearRESPParameterArea = 1 ;
 
    for (p = 0; p < homeScreen.parameters.length; p++) {
 
@@ -459,49 +609,37 @@ function drawParameterAreas() {
 
       param.drawParameterArea() ;
 
+      if ((param.parameterName == "RRC") || (param.parameterName == "RR")) {
+         clearRESPParameterArea = 0 ;
+      }
+
    }
+
+   if (clearRESPParameterArea == 0) {
+      param.clearParameterArea() ;
+      return ;
+   }
+
 }
 
 
 //
-//   setupParameters - call when a new parameterDataMessage is received from the REST API
+//   setupParameters  I
 //
-
-var nParameters = 0 ;
 
 function setupParameters(AMSParameters) {
 
    homeScreen.clearParameterList();
 
-   // Parse the JSON string into JavaScript object
-   //const parameterData = JSON.parse(setupParameterDataMessage);
-
-   nParameters = AMSParameters.length;
-
-   // Add parameters from the parsed data
-   //AMSParameters.forEach(parameter => {
    var p = 0 ;
-   for (p = 0; p < nParameters; p++) {
-      // Create an instance of Parameter class
+   for (p = 0; p < AMSParameters.length; p++) {
+
       const param = new Parameter(AMSParameters[p].parameterName);
       homeScreen.addParameter(param);
+
    }
 
 }
-
-// //
-// //   shiftParameters  
-// //
-
-// function shiftParameters() {
-
-//    parameterSetIndex++;
-
-//    if (parameterSetIndex >= currentParameters.length) {
-//       parameterSetIndex = 0;
-//    }
-
-// }
 
 
 //
@@ -523,8 +661,8 @@ function processParameterData(AMSParameters) {
 
    // See if the parameter setup is changing
    var somethingChanged = 0;
-   var nParametersparameterDataMessage = AMSParameters.length;
-   if (nParametersparameterDataMessage != nParameters) {
+   var nParametersInAMSMessage = AMSParameters.length;
+   if (nParametersInAMSMessage != homeScreen.parameters.length) {
       somethingChanged = 1;
    }
    else if (homeScreen.parameters.length == 0) {
@@ -533,8 +671,6 @@ function processParameterData(AMSParameters) {
    else {
       var p;
       for (p = 0; p < AMSParameters.length; p++) {
-         //LOGEVENTYELLOW(p + " message = " + parameterData.parameters[p].parameterName + "homeScreen = " + homeScreen.parameters[p].parameterName) ;
-
          if (AMSParameters[p].parameterName != homeScreen.parameters[p].parameterName) {
             somethingChanged = 1;
             break;
@@ -583,6 +719,8 @@ function processParameterData(AMSParameters) {
       }
 
    }
+
+   return(somethingChanged) ;
 
 }
 

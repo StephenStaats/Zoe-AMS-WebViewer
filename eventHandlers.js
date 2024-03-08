@@ -44,15 +44,15 @@ else {
 
 simulationTypeDropdown.addEventListener("change", function () {
 
+   homeScreen.clearWaveformList() ;
+   homeScreen.clearParameterList() ;
+   homeScreen.clearSettingList() ;
+
    const selectedValue = simulationTypeDropdown.value;
 
    if (selectedValue == 'simulatedData') {
 
       window.simulatedDataMode = 1;
-
-      nWaveforms = 0 ;
-      nParameters = 0 ;
-      nSettings = 0 ;
 
       simulateArrivalOfAMSMessage();
       simulateArrivalOfAMSMessage();
@@ -62,13 +62,8 @@ simulationTypeDropdown.addEventListener("change", function () {
 
       window.simulatedDataMode = 0;
 
-      homeScreen.clearWaveformList() ;
-      homeScreen.clearParameterList() ;
-      homeScreen.clearSettingList() ;
-
    }
 
-   //resetWaveforms(0);
    redrawHomeScreen = 1 ;
 
 });

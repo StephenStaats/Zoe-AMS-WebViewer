@@ -100,6 +100,14 @@ window.simulatedAMSMessages = [
         "settingValue": "0"
       },
       {
+        "settingName": "CO2Enabled",
+        "settingValue": "Yes"
+      },
+      {
+        "settingName": "RESPEnabled",
+        "settingValue": "No"
+      },
+      {
         "settingName": "TEMPunits",
         "settingValue": "F"
       },
@@ -212,6 +220,14 @@ window.simulatedAMSMessages = [
         "settingValue": "0"
       },
       {
+        "settingName": "CO2Enabled",
+        "settingValue": "Yes"
+      },
+      {
+        "settingName": "RESPEnabled",
+        "settingValue": "No"
+      },
+      {
         "settingName": "TEMPunits",
         "settingValue": "F"
       },
@@ -253,18 +269,8 @@ window.simulatedAMSMessages = [
         "parameterAlarmStatus": "ACTIVE_MEDIUM"
       },
       {
-        "parameterName": "ETCO2",
-        "parameterValue": "33.3",
-        "parameterAlarmStatus": "NORMAL_NONE"
-      },
-      {
-        "parameterName": "FICO2",
-        "parameterValue": "2.0",
-        "parameterAlarmStatus": "NORMAL_NONE"
-      },
-      {
-        "parameterName": "RRC",
-        "parameterValue": "12",
+        "parameterName": "RR",
+        "parameterValue": "15",
         "parameterAlarmStatus": "NORMAL_NONE"
       },
       {
@@ -305,7 +311,7 @@ window.simulatedAMSMessages = [
       },
       {
         "settingName": "patientId",
-        "settingValue": "12345672"
+        "settingValue": "12345670"
       },
       {
         "settingName": "ECGLead",
@@ -324,8 +330,16 @@ window.simulatedAMSMessages = [
         "settingValue": "0"
       },
       {
+        "settingName": "CO2Enabled",
+        "settingValue": "No"
+      },
+      {
+        "settingName": "RESPEnabled",
+        "settingValue": "Yes"
+      },
+      {
         "settingName": "TEMPunits",
-        "settingValue": "C"
+        "settingValue": "F"
       },
       {
         "settingName": "bottomLineMessage",
@@ -366,17 +380,7 @@ window.simulatedAMSMessages = [
         "parameterAlarmStatus": "NORMAL_NONE"
       },
       {
-        "parameterName": "ETCO2",
-        "parameterValue": "33.3",
-        "parameterAlarmStatus": "NORMAL_NONE"
-      },
-      {
-        "parameterName": "FICO2",
-        "parameterValue": "2.0",
-        "parameterAlarmStatus": "NORMAL_NONE"
-      },
-      {
-        "parameterName": "RRC",
+        "parameterName": "RR",
         "parameterValue": "---",
         "parameterAlarmStatus": "ACTIVE_LOW"
       },
@@ -418,7 +422,7 @@ window.simulatedAMSMessages = [
       },
       {
         "settingName": "patientId",
-        "settingValue": "12345674"
+        "settingValue": "12345670"
       },
       {
         "settingName": "ECGLead",
@@ -437,12 +441,20 @@ window.simulatedAMSMessages = [
         "settingValue": "0"
       },
       {
+        "settingName": "CO2Enabled",
+        "settingValue": "No"
+      },
+      {
+        "settingName": "RESPEnabled",
+        "settingValue": "Yes"
+      },
+      {
         "settingName": "TEMPunits",
-        "settingValue": "C"
+        "settingValue": "F"
       },
       {
         "settingName": "bottomLineMessage",
-        "settingValue": "RRC Artifact"
+        "settingValue": "RR Artifact"
       },
       {
         "settingName": "bottomLineMessageAlarmStatus",

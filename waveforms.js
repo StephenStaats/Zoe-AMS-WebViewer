@@ -347,35 +347,6 @@ function drawWaveform(w) {
 
    wvf = homeScreen.waveforms[w];
 
-   if (wvf.waveformName == "CO23") {
-
-      if (wvf.initializing) {
-
-         wvf.initializing = false ;
-         
-         var x ;
-         for (x = wvf.left; x < wvf.right; x++) {
-
-            // if (((x - wvf.left) % 16) == 0) {
-            //    displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, x, wvf.top);
-            // }
-            // else {
-            //    displayCtx.putImageData(wvf.eraseWaveformImageData, x, wvf.top);
-            // }
-
-            if (((x - wvf.left) % 16) == 0) {
-               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.top, x);
-            }
-            else {
-               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, x);
-            }
-
-         }
-
-      }
-
-   }
-
    var sweepSpeedMMPerSecond = wvf.sweepSpeed;
    var pixelsPerSecond = sweepSpeedMMPerSecond * pixelsPerMM;
    var pixelsPerMS = pixelsPerSecond / 1000;
@@ -650,7 +621,7 @@ function drawWaveform(w) {
 //   drawWaveformScaleArea
 //
 
-function drawWaveformScaleArea(elapsed) {
+function drawWaveformScaleArea() {
 
    displayCtx.fillStyle = window.colors.ZBLACK;
    displayCtx.clearRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
@@ -816,99 +787,6 @@ function drawWaveforms(elapsed) {
 
 
 //
-//   setupWaveforms - call when a new waveformDataMessage is received from the REST API
-//
-
-var nWaveforms;
-var topWaveformHeight;
-var waveformHeight;
-
-function setupWaveforms(AMSWaveforms) {
-
-   homeScreen.clearWaveformList();
-
-   // Parse the JSON string into JavaScript object
-   //const waveformData = JSON.parse(setupWaveformDataMessage);
-
-   nWaveforms = AMSWaveforms.length;
-
-   //waveformHeight = Math.round(homeScreen.waveformAreaHeight / nWaveforms);
-
-   switch (nWaveforms) {
-
-      case 3 :
-
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
-         break ;
-
-      case 2 :
-
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
-         break ;
-
-      case 1 :
-      default :
-
-         topWaveformHeight = homeScreen.waveformAreaHeight ;
-         waveformHeight    = topWaveformHeight ;
-         break ;
-
-   }
-
-   // Add waveforms from the parsed data
-   var order = 0;
-   for (order = 0; order < nWaveforms; order++) {
-      //const wvf = new Waveform(waveformData.waveforms[order].waveformName, order);
-
-      var waveformName = AMSWaveforms[order].waveformName ;
-      const wvf = new Waveform(waveformName, order);
-      homeScreen.addWaveform(wvf);
-   }
-
-}
-
-
-//
-//   resetWaveforms
-//
-
-//var waveformSetIndex = 0;
-
-//function resetWaveforms(shiftWaveforms) {
-function resetWaveforms() {
-
-   //const randomInteger = Math.floor(Math.random() * 2);
-
-   // if (shiftWaveforms) {
-   //    waveformSetIndex++
-   //    if (waveformSetIndex >= currentWaveforms.length) {
-   //       waveformSetIndex = 0;
-   //    }
-   // }
-
-   pauseWaveformDrawing = 1;
-
-   //setupWaveforms(currentWaveforms[waveformSetIndex]);
-
-   pauseWaveformDrawing = 0;
-
-   if (window.simulatedDataMode) {
-      simulateArrivalOfAMSMessage();
-   }
-
-   // Get the button element by its ID
-   // var button = document.getElementById('startStopWaveformsButton');
-
-   // button.textContent = 'Pause Waveforms';
-
-   redrawHomeScreen = 1;
-
-}
-
-
-//
 //   startStopWaveforms
 //
 
@@ -931,13 +809,102 @@ function startStopWaveforms() {
 }
 
 
-// //
-// //   shiftWaveforms  
-// //
+//
+//  drawWaveformAreas
+//
 
-// function shiftWaveforms() {
+function drawWaveformAreas() {
 
-//    resetWaveforms(1);
+   displayCtx.fillStyle = window.colors.ZBLACK;
+   displayCtx.fillRect(homeScreen.waveformAreaLeft, homeScreen.waveformAreaTop, homeScreen.waveformAreaWidth, homeScreen.waveformAreaHeight);
+
+   drawWaveformScaleArea() ;
+
+}
+
+
+//
+//   setupWaveforms 
+//
+
+var topWaveformHeight;
+var waveformHeight;
+
+function setupWaveforms(AMSWaveforms) {
+
+   homeScreen.clearWaveformList();
+
+   switch (AMSWaveforms.length) {
+
+      case 3 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
+         break ;
+
+      case 2 :
+
+         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
+         break ;
+
+      case 1 :
+      default :
+
+         topWaveformHeight = homeScreen.waveformAreaHeight ;
+         waveformHeight    = topWaveformHeight ;
+         break ;
+
+   }
+
+   var order = 0;
+   for (order = 0; order < AMSWaveforms.length; order++) {
+
+      var waveformName = AMSWaveforms[order].waveformName ;
+      const wvf = new Waveform(waveformName, order);
+      homeScreen.addWaveform(wvf);
+
+   }
+
+   drawWaveformAreas() ;
+
+}
+
+
+//
+//   resetWaveforms
+//
+
+//var waveformSetIndex = 0;
+
+//function resetWaveforms(shiftWaveforms) {
+// function resetWaveforms() {
+
+//    //const randomInteger = Math.floor(Math.random() * 2);
+
+//    // if (shiftWaveforms) {
+//    //    waveformSetIndex++
+//    //    if (waveformSetIndex >= currentWaveforms.length) {
+//    //       waveformSetIndex = 0;
+//    //    }
+//    // }
+
+//    pauseWaveformDrawing = 1;
+
+//    //setupWaveforms(currentWaveforms[waveformSetIndex]);
+
+//    pauseWaveformDrawing = 0;
+
+//    if (window.simulatedDataMode) {
+//       simulateArrivalOfAMSMessage();
+//    }
+
+//    // Get the button element by its ID
+//    // var button = document.getElementById('startStopWaveformsButton');
+
+//    // button.textContent = 'Pause Waveforms';
+
+//    redrawHomeScreen = 1;
 
 // }
 
@@ -950,7 +917,7 @@ var waveformDataMessageCount = 0;
 
 function processWaveformData(AMSWaveforms) {
 
-   if (pauseWaveformDrawing == 1) return;
+   if (pauseWaveformDrawing == 1) return(0);
 
    waveformDataMessageCount++
    LOGEVENT(" ");
@@ -963,8 +930,8 @@ function processWaveformData(AMSWaveforms) {
 
    // See if the waveform setup is changing
    var somethingChanged = 0;
-   var nWaveformswaveformDataMessage = AMSWaveforms.length;
-   if (nWaveformswaveformDataMessage != nWaveforms) {
+   var nWaveformsInAMSMessage = AMSWaveforms.length;
+   if (nWaveformsInAMSMessage != homeScreen.waveforms.length) {
       somethingChanged = 1;
    }
    else if (homeScreen.waveforms.length == 0) {
@@ -982,7 +949,6 @@ function processWaveformData(AMSWaveforms) {
 
    if (somethingChanged) {
       setupWaveforms(AMSWaveforms);
-      resetWaveforms(0);
    }
    else {
 
@@ -1026,29 +992,31 @@ function processWaveformData(AMSWaveforms) {
 
       }
 
+      var w;
+      for (w = 0; w < homeScreen.waveforms.length; w++) {
+
+         LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
+
+      }
+
+      if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
+         currentMSPerSample = currentMSPerSampleHigh;
+         LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
+      }
+      else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
+         currentMSPerSample = currentMSPerSampleLow;
+         LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
+      }
+      else {
+         currentMSPerSample = currentMSPerSampleNormal;
+         LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
+      }
+
+      var d = 0 ;
+
    }
 
-   var w;
-   for (w = 0; w < homeScreen.waveforms.length; w++) {
-
-      LOGEVENTGREEN("homeScreen waveform ", homeScreen.waveforms[w].waveformName, " buffer has ", homeScreen.waveforms[w].getNSamples(), "samples");
-
-   }
-
-   if (homeScreen.waveforms[0].getNSamples() < waveformSampleBufferCountMin) {
-      currentMSPerSample = currentMSPerSampleHigh;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleHigh");
-   }
-   else if (homeScreen.waveforms[0].getNSamples() > waveformSampleBufferCountMax) {
-      currentMSPerSample = currentMSPerSampleLow;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleLow");
-   }
-   else {
-      currentMSPerSample = currentMSPerSampleNormal;
-      LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
-   }
-
-   var d = 0 ;
+   return(somethingChanged) ;
 
 }
 

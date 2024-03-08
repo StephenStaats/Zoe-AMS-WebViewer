@@ -48,13 +48,17 @@ function processAMSMessage(newAMSMessage) {
    LOGEVENTGREEN('In processAMSMessage, count = ', AMSMessageCount);
 
    const AMSWaveforms = newAMSMessage.waveforms ;
-   processWaveformData(AMSWaveforms) ;
+   var waveformChange = processWaveformData(AMSWaveforms) ;
 
    const AMSParameters = newAMSMessage.parameters ;
-   processParameterData(AMSParameters) ;
+   var parameterChange = processParameterData(AMSParameters) ;
 
    const AMSSettings = newAMSMessage.settings ;
-   processSettingData(AMSSettings) ;
+   var settingChange = processSettingData(AMSSettings) ;
+
+   if (waveformChange || parameterChange || settingChange) {
+      redrawHomeScreen = 1 ;
+   }
 
 }
 

@@ -159,6 +159,13 @@ HomeScreen.prototype.initializeAreas = function () {
    this.RRCParamAreaTop = this.ETCO2ParamAreaTop;
    this.RRCParamAreaBottom = this.ETCO2ParamAreaBottom;
 
+   this.RRParamAreaWidth = this.rightParamAreaWidth;
+   this.RRParamAreaHeight = this.ETCO2ParamAreaHeight;
+   this.RRParamAreaLeft = this.rightParamAreaLeft;
+   this.RRParamAreaRight = this.rightParamAreaRight;
+   this.RRParamAreaTop = this.ETCO2ParamAreaTop;
+   this.RRParamAreaBottom = this.ETCO2ParamAreaBottom;
+
    // this.blankParamAreaWidth = this.rightParamAreaWidth;
    // this.blankParamAreaHeight = this.FICO2ParamAreaHeight;
    // this.blankParamAreaLeft = this.rightParamAreaLeft;
@@ -279,9 +286,9 @@ function drawHomeScreenAreas() {
 
    drawTopLine();
 
-   drawParameterAreas();
+   drawWaveformAreas() ;
 
-   drawWaveformScaleArea();
+   drawParameterAreas();
 
    drawBottomLineMessageArea();
 
@@ -304,7 +311,6 @@ function drawHomeScreen(timestamp) {
    if (redrawHomeScreen == 1) {
       redrawHomeScreen = 0;
       drawHomeScreenAreas();
-      drawWaveformScaleArea() ;
    }
 
    if (!lastTime) {
