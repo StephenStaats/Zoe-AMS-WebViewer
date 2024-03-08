@@ -454,13 +454,13 @@ function updateAlarmTones() {
 
 function updateBlinkState() {
 
-   blinkState++ ;
+   window.blinkState++ ;
 
-   if (blinkState > 7) {
-      blinkState = 0 ; 
+   if (window.blinkState > 7) {
+      window.blinkState = 0 ; 
    }
 
-   if ((blinkState % 4) == 1) {
+   if ((window.blinkState % 4) == 1) {
 
       if (window.simulatedDataMode) {
 
@@ -528,9 +528,9 @@ function updateBlinkState() {
 	   //   Do this to blink message
 	   //
 
-      if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
+      if ((window.blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
 
-         //displayGMessage(&mMessageRect) ; // in UpdateAlarms
+         drawBottomLineMessageArea();
 
       }
 
@@ -542,7 +542,7 @@ function updateBlinkState() {
 	   //   Do this to blink parameter boxes
 	   //
 
-      if ((blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
+      if ((window.blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
 
          drawParameterAreas();
 

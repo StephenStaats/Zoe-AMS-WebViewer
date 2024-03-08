@@ -199,32 +199,33 @@ Parameter.prototype.getGraphicsDebugValueFromParameterName = function() {
 //   getLeftFromParameterName  
 //
 
-Parameter.prototype.getLeftFromParameterName = function() {
+//Parameter.prototype.getLeftFromParameterName = function() {
+function getLeftFromParameterName(parameterName) {
 
    var left = 0 ;
 
-   if (this.parameterName == "HR") { 
+   if (parameterName == "HR") { 
       left = homeScreen.HRParamAreaLeft; 
    }
-   else if (this.parameterName == "SPO2") { 
+   else if (parameterName == "SPO2") { 
       left = homeScreen.SPO2ParamAreaLeft; 
    }
-   else if (this.parameterName == "ETCO2") { 
+   else if (parameterName == "ETCO2") { 
       left = homeScreen.ETCO2ParamAreaLeft; 
    }
-   else if (this.parameterName == "FICO2") { 
+   else if (parameterName == "FICO2") { 
       left = homeScreen.FICO2ParamAreaLeft; 
    }
-   else if (this.parameterName == "RRC") { 
+   else if (parameterName == "RRC") { 
       left = homeScreen.RRCParamAreaLeft; 
    }
-   else if (this.parameterName == "RR") { 
+   else if (parameterName == "RR") { 
       left = homeScreen.RRParamAreaLeft; 
    }
-   else if (this.parameterName == "TEMP") { 
+   else if (parameterName == "TEMP") { 
       left = homeScreen.TEMPParamAreaLeft; 
    }
-   else if (this.parameterName == "NIBP") { 
+   else if (parameterName == "NIBP") { 
       left = homeScreen.NIBPParamAreaLeft; 
    }
 
@@ -236,32 +237,33 @@ Parameter.prototype.getLeftFromParameterName = function() {
 //   getTopFromParameterName  
 //
 
-Parameter.prototype.getTopFromParameterName = function() {
+//Parameter.prototype.getTopFromParameterName = function() {
+function getTopFromParameterName(parameterName) {
 
    var top = 0 ;
 
-   if (this.parameterName == "HR") { 
+   if (parameterName == "HR") { 
       top = homeScreen.HRParamAreaTop; 
    }
-   else if (this.parameterName == "SPO2") { 
+   else if (parameterName == "SPO2") { 
       top = homeScreen.SPO2ParamAreaTop; 
    }
-   else if (this.parameterName == "ETCO2") { 
+   else if (parameterName == "ETCO2") { 
       top = homeScreen.ETCO2ParamAreaTop; 
    }
-   else if (this.parameterName == "FICO2") { 
+   else if (parameterName == "FICO2") { 
       top = homeScreen.FICO2ParamAreaTop; 
    }
-   else if (this.parameterName == "RRC") { 
+   else if (parameterName == "RRC") { 
       top = homeScreen.RRCParamAreaTop; 
    }
-   else if (this.parameterName == "RR") { 
+   else if (parameterName == "RR") { 
       top = homeScreen.RRParamAreaTop; 
    }
-   else if (this.parameterName == "TEMP") { 
+   else if (parameterName == "TEMP") { 
       top = homeScreen.TEMPParamAreaTop; 
    }
-   else if (this.parameterName == "NIBP") { 
+   else if (parameterName == "NIBP") { 
       top = homeScreen.NIBPParamAreaTop ; 
    }
 
@@ -273,32 +275,33 @@ Parameter.prototype.getTopFromParameterName = function() {
 //   getWidthFromParameterName  
 //
 
-Parameter.prototype.getWidthFromParameterName = function() {
+//Parameter.prototype.getWidthFromParameterName = function() {
+function getWidthFromParameterName(parameterName) {
 
    var width = 0 ;
 
-   if (this.parameterName == "HR") { 
+   if (parameterName == "HR") { 
       width = homeScreen.HRParamAreaWidth; 
    }
-   else if (this.parameterName == "SPO2") { 
+   else if (parameterName == "SPO2") { 
       width = homeScreen.SPO2ParamAreaWidth; 
    }
-   else if (this.parameterName == "ETCO2") { 
+   else if (parameterName == "ETCO2") { 
       width = homeScreen.ETCO2ParamAreaWidth; 
    }
-   else if (this.parameterName == "FICO2") { 
+   else if (parameterName == "FICO2") { 
       width = homeScreen.FICO2ParamAreaWidth; 
    }
-   else if (this.parameterName == "RRC") { 
+   else if (parameterName == "RRC") { 
       width = homeScreen.RRCParamAreaWidth; 
    }
-   else if (this.parameterName == "RR") { 
+   else if (parameterName == "RR") { 
       width = homeScreen.RRParamAreaWidth; 
    }
-   else if (this.parameterName == "TEMP") { 
+   else if (parameterName == "TEMP") { 
       width = homeScreen.TEMPParamAreaWidth; 
    }
-   else if (this.parameterName == "NIBP") { 
+   else if (parameterName == "NIBP") { 
       width = homeScreen.NIBPParamAreaWidth; 
    }
 
@@ -310,32 +313,33 @@ Parameter.prototype.getWidthFromParameterName = function() {
 //   getHeightFromParameterName  
 //
 
-Parameter.prototype.getHeightFromParameterName = function() {
+//Parameter.prototype.getHeightFromParameterName = function() {
+function getHeightFromParameterName(parameterName) {
 
    var height = 0 ;
 
-   if (this.parameterName == "HR") { 
+   if (parameterName == "HR") { 
       height = homeScreen.HRParamAreaHeight; 
    }
-   else if (this.parameterName == "SPO2") { 
+   else if (parameterName == "SPO2") { 
       height = homeScreen.SPO2ParamAreaHeight; 
    }
-   else if (this.parameterName == "ETCO2") { 
+   else if (parameterName == "ETCO2") { 
       height = homeScreen.ETCO2ParamAreaHeight; 
    }
-   else if (this.parameterName == "FICO2") { 
+   else if (parameterName == "FICO2") { 
       height = homeScreen.FICO2ParamAreaHeight; 
    }
-   else if (this.parameterName == "RRC") { 
+   else if (parameterName == "RRC") { 
       height = homeScreen.RRCParamAreaHeight; 
    }
-   else if (this.parameterName == "RR") { 
+   else if (parameterName == "RR") { 
       height = homeScreen.RRParamAreaHeight; 
    }
-   else if (this.parameterName == "TEMP") { 
+   else if (parameterName == "TEMP") { 
       height = homeScreen.TEMPParamAreaHeight; 
    }
-   else if (this.parameterName == "NIBP") { 
+   else if (parameterName == "NIBP") { 
       height = homeScreen.NIBPParamAreaHeight; 
    }
 
@@ -372,10 +376,10 @@ Parameter.prototype.drawParameterArea = function() {
 
    displayCtx.fillStyle = textBackgroundColor;
 
-   var left = this.getLeftFromParameterName() ;
-   var top = this.getTopFromParameterName() ;
-   var width = this.getWidthFromParameterName() ;
-   var height = this.getHeightFromParameterName() ;
+   var left = getLeftFromParameterName(this.parameterName) ;
+   var top = getTopFromParameterName(this.parameterName) ;
+   var width = getWidthFromParameterName(this.parameterName) ;
+   var height = getHeightFromParameterName(this.parameterName) ;
 
    displayCtx.fillRect(left, top, width, height);
 
@@ -398,103 +402,20 @@ Parameter.prototype.drawParameterArea = function() {
 //  clearParameterArea
 //
 
-Parameter.prototype.clearParameterArea = function() {
+//Parameter.prototype.clearParameterArea = function() {
+function clearParameterArea(parameterName) {
+
+   var left = getLeftFromParameterName(parameterName) ;
+   var top = getTopFromParameterName(parameterName) ;
+   var width = getWidthFromParameterName(parameterName) ;
+   var height = getHeightFromParameterName(parameterName) ;
 
    displayCtx.fillStyle = window.colors.ZBLACK;
-
-   var left = this.getLeftFromParameterName() ;
-   var top = this.getTopFromParameterName() ;
-   var width = this.getWidthFromParameterName() ;
-   var height = this.getHeightFromParameterName() ;
-
    displayCtx.fillRect(left, top, width, height);
 
 }
 
-
-//
-// //  drawGenericParameterArea
-// //
-
-// function drawGenericParameterArea(label, units, value, labelColor, font, fontSize, x, y, width, height) {
-
-//    // // Set the outline color
-//    // displayCtx.strokeStyle = window.colors.AreaSeparatorColor;
-//    // // Set the outline width
-//    // displayCtx.lineWidth = 1; 
-//    // // Draw the rectangle outline
-//    // displayCtx.strokeRect(x, y, width, height);
-
-//    // Set the text color
-//    displayCtx.fillStyle = labelColor;
-
-//    // var labelX = x + width * 10 / 100 ;
-//    // var labelY = y + height * 15 / 100 ;
-//    var labelX = x + 8;
-//    var labelY = y + 20;
-
-//    var unitsX = x + 8;
-//    var unitsY = y + 35;
-
-//    var valueX = x + width * 45 / 100;
-//    var valueY = y + height * 70 / 100;
-
-//    // Add label in the upper left corner
-//    // Set the font and font size
-//    displayCtx.font = '11pt Arial'; // Reset to default font and size
-//    displayCtx.textAlign = 'left';
-//    displayCtx.fillText(label, labelX, labelY); // Adjust the positioning as needed
-
-//    // Add units right below label in the upper left corner
-//    // Set the font and font size
-//    displayCtx.font = '9pt Arial'; // Reset to default font and size
-//    displayCtx.textAlign = 'left';
-//    displayCtx.fillText(units, unitsX, unitsY); // Adjust the positioning as needed
-
-//    if (label == "NIBP") {
-
-//       //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
-
-//       // Split the string by "/"
-//       const parts = value.split(" / ");
-
-//       // Extract systolic and diastolic values
-//       const systolic = parts[0]; // "120"
-//       const diastolicWithMean = parts[1]; // "80 (100)"
-
-//       // Extract diastolic and mean values
-//       const diastolic = diastolicWithMean.split(" ")[0]; // "80"
-//       const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
-
-//       // Form the desired strings
-//       const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
-//       const meanString = `(${mean})`; // "(100)"
-
-//       displayCtx.font = `${fontSize}pt ${font}`;
-//       displayCtx.textAlign = 'center';
-
-//       valueX = x + width * 40 / 100;
-//       valueY = y + height * 70 / 100;
-
-//       displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
-
-//       displayCtx.font = `${fontSize-15}pt ${font}`;
-//       displayCtx.textAlign = 'left';
-
-//       valueX = x + width * 70 / 100;
-//       valueY = y + height * 70 / 100;
-
-//       displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
-
-//    }
-//    else {
-//       displayCtx.font = `${fontSize}pt ${font}`;
-//       displayCtx.textAlign = 'center';
-//       displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
-//    }
-
-// }
-
+ 
 
 //
 //  drawGenericParameterArea
@@ -615,8 +536,8 @@ function drawParameterAreas() {
 
    }
 
-   if (clearRESPParameterArea == 0) {
-      param.clearParameterArea() ;
+   if (clearRESPParameterArea) {
+      clearParameterArea("RR") ;
       return ;
    }
 

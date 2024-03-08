@@ -527,8 +527,8 @@ function drawBottomLineMessageArea() {
 
    var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(window.bottomLineMessageAlarmStatus);
 
-   var foregroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus);
-   var backgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus);
+   var foregroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState);
+   var backgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState);
 
    var messageX = homeScreen.messageAreaLeft;
    var messageY = homeScreen.messageAreaTop;
