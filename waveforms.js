@@ -80,6 +80,51 @@ function Waveform(waveformName, order) {
 
    }
 
+   // Create a new ImageData object for a 1-pixel-high row
+   const rowHeight = 1;
+   this.eraseTopWaveformImageDataRow = displayCtx.createImageData(topWaveformHeight, rowHeight);
+   this.eraseWaveformImageDataRow = displayCtx.createImageData(waveformHeight, rowHeight);
+   this.eraseWithDotsWaveformImageDataRow = displayCtx.createImageData(waveformHeight, rowHeight);
+
+   for (let y = 0; y < topWaveformHeight; y++) {
+
+      const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+      this.eraseTopWaveformImageDataRow.data[pixelIndex] = colorBlack[0]; // Red
+      this.eraseTopWaveformImageDataRow.data[pixelIndex + 1] = colorBlack[1]; // Green
+      this.eraseTopWaveformImageDataRow.data[pixelIndex + 2] = colorBlack[2]; // Blue
+      this.eraseTopWaveformImageDataRow.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+
+   }
+
+   for (let y = 0; y < waveformHeight; y++) {
+
+      const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+      this.eraseWaveformImageDataRow.data[pixelIndex] = colorBlack[0]; // Red
+      this.eraseWaveformImageDataRow.data[pixelIndex + 1] = colorBlack[1]; // Green
+      this.eraseWaveformImageDataRow.data[pixelIndex + 2] = colorBlack[2]; // Blue
+      this.eraseWaveformImageDataRow.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+
+   }
+
+   for (let y = 0; y < waveformHeight; y++) {
+
+      if ((y == 0) || (y == Math.floor(waveformHeight / 2)) || (y == waveformHeight - 1)) {
+         const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex] = colorYellow[0]; // Red
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 1] = colorYellow[1]; // Green
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 2] = colorYellow[2]; // Blue
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 3] = colorYellow[3]; // Alpha (opacity)
+      }
+      else {
+         const pixelIndex = (y * columnWidth) * 4; // Each pixel occupies 4 positions (RGBA)
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex] = colorBlack[0]; // Red
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 1] = colorBlack[1]; // Green
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 2] = colorBlack[2]; // Blue
+         this.eraseWithDotsWaveformImageDataRow.data[pixelIndex + 3] = colorBlack[3]; // Alpha (opacity)
+      }
+
+   }
+
    this.right = homeScreen.waveformAreaLeft + homeScreen.waveformAreaWidth;
    this.width = homeScreen.waveformAreaWidth;
    this.bottom = this.top + this.height;
@@ -217,7 +262,7 @@ function Waveform(waveformName, order) {
 
    // this.imageData.data.set(rgbaValues); // Set color values
 
-   this.initializing = true ;
+   //this.initializing = true ;
 
    // this.runningMinSample = Number.MAX_VALUE;
    // this.runningMaxSample = Number.MIN_VALUE;
@@ -497,96 +542,9 @@ function drawWaveform(w) {
 
    displayCtx.stroke();
 
-//    //
-//    //   Draw erase bar
-//    //
- 
-//    var eraseBarPixelsDrawn = 0;
-//    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
-
-//       if (wvf.order == 0) {
-//          displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX, wvf.top);
-//       }
-//       else if (wvf.waveformName == "CO2") {
-//          if ((wvf.eraseX % 16) == 0) {
-//             displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX, wvf.top);
-//          }
-//          else {
-//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
-//          }
-//       }
-//       else {
-//          displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
-//       }
-
-//       wvf.eraseX++;
-//       if (wvf.eraseX >= wvf.right) {
-
-//          wvf.eraseX = wvf.left;
-
-//          // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
-//          if (wvf.order == 0) {
-//             displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top);
-//          }
-//          else {
-//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
-//          }
-
-//       }
-
-//       eraseBarPixelsDrawn++;
-
-//    }
-
-// }
-
-
-//    //
-//    //   Draw rotated erase bar 1
-//    //
- 
-//    var eraseBarPixelsDrawn = 0;
-//    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
-
-//       if (wvf.order == 0) {
-//          displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.top, wvf.eraseX);
-//       }
-//       else if (wvf.waveformName == "CO2") {
-//          if ((wvf.eraseX % 16) == 0) {
-//             displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.top, wvf.eraseX);
-//          }
-//          else {
-//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX);
-//          }
-//       }
-//       else {
-//          displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX);
-//       }
-
-//       wvf.eraseX++;
-//       if (wvf.eraseX >= wvf.right) {
-
-//          wvf.eraseX = wvf.left;
-
-//          // do this to erase the pixel column that gets drawn to the left of wvf.left since the line width is 2
-//          if (wvf.order == 0) {
-//             displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.top, wvf.eraseX-1);
-//          }
-//          else {
-//             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.top, wvf.eraseX-1);
-//          }
-
-//       }
-
-//       eraseBarPixelsDrawn++;
-
-//    }
-
-// }
-
 
    //
-   //   Draw rotated erase bar 2
+   //   Draw erase bar 
    //
  
    displayCtx.beginPath();
@@ -599,9 +557,35 @@ function drawWaveform(w) {
    var eraseBarPixelsDrawn = 0;
    while (eraseBarPixelsDrawn < NewSamplePixelsDrawn) {
 
-      displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
-      displayCtx.lineTo(wvf.eraseX, wvf.bottom);
- 
+      // displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+      // displayCtx.lineTo(wvf.eraseX, wvf.bottom);
+
+
+      if (window.rotated) {
+
+         displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+         displayCtx.lineTo(wvf.eraseX, wvf.bottom);
+
+      }
+      else {
+
+         if (wvf.order == 0) {
+            displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX, wvf.top);
+         }
+         else if (wvf.waveformName == "CO2") {
+            if ((wvf.eraseX % 16) == 0) {
+               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX, wvf.top);
+            }
+            else {
+               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+            }
+         }
+         else {
+            displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
+         }
+
+      }
+
       wvf.eraseX++;
       if (wvf.eraseX >= wvf.right) {
          wvf.eraseX = wvf.left;
@@ -750,14 +734,79 @@ function drawWaveformScaleArea() {
          var scaleLoWidth = homeScreen.waveformScaleAreaWidth ;
          var scaleLoHeight = wvf.height * 20 / 100 ;
 
-         fitText(homeScreen.getSettingValue("CO2 scale hi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top') ;
-         fitText(homeScreen.getSettingValue("CO2 scale lo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom') ;
+         fitText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top') ;
+         fitText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom') ;
+
+         if (window.rotated) {
+
+            // var x ;
+            // for (x = wvf.left; x < wvf.right; x++) {
+
+            //    if ((x % 16) == 0) {
+            //       var rotatedImageData = rotateImageData(wvf.eraseWithDotsWaveformImageData, 1, wvf.height);
+            //       displayCtx.putImageData(rotatedImageData, x, wvf.top);
+            //    }
+            //    else {
+            //       var rotatedImageData = rotateImageData(wvf.eraseWaveformImageData, 1, wvf.height);
+            //       displayCtx.putImageData(rotatedImageData, x, wvf.top);
+            //    }
+
+            // }
+
+         }
+         else {
+
+            var x ;
+            for (x = wvf.left; x < wvf.right; x++) {
+
+               if ((x % 16) == 0) {
+                  displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, x, wvf.top);
+               }
+               else {
+                  displayCtx.putImageData(wvf.eraseWaveformImageData, x, wvf.top);
+               }
+
+            }
+
+         }
 
       }
 
    }
 
 }
+
+// Function to rotate image data
+function rotateImageData(imageData, width, height) {
+
+    // Create a temporary canvas and context
+    var tempCanvas = document.createElement('canvas');
+    var tempCtx = tempCanvas.getContext('2d');
+
+   // Set canvas dimensions to match rotated dimensions
+   tempCanvas.width = 480;
+   tempCanvas.height = 800;
+
+    // Clear the canvas
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+   // Translate the origin to the lower left corner of the canvas
+   tempCtx.translate(0, tempCanvas.height);
+
+   // Rotate the canvas 90 degrees counterclockwise (to achieve portrait orientation)
+   tempCtx.rotate(-Math.PI / 2);
+ 
+    // Draw the image data at the rotated position
+    tempCtx.putImageData(imageData, 0, -height);
+
+    // Get the rotated image data
+    var rotatedImageData = tempCtx.getImageData(0, 0, width, -height);
+
+    // Return the rotated image data
+    return rotatedImageData;
+
+}
+ 
 
 
 //

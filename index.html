@@ -15,7 +15,7 @@
    <p id="fps-display" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">Frame Rate: </p>
 
    <label for="simulationTypeDropdown"
-      style="font-family: Calibri, Arial, sans-serif; font-size: 14pt; margin-right: 10px;">Select simulation
+      style="font-family: Calibri, Arial, sans-serif; font-size: 14pt; margin-right: 10px;">Select data
       type:</label>
    <select id="simulationTypeDropdown" style="font-family: Calibri, Arial, sans-serif; font-size: 14pt;">
       <option value="simulatedData">Simulated Data</option>
@@ -117,6 +117,8 @@ var framesPerSecond = 60;
 
 homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
 homeScreen.initializeAreas();
+
+window.rotated = 0 ;
 
 if (window.simulatedDataMode) {
    simulateArrivalOfAMSMessage();
