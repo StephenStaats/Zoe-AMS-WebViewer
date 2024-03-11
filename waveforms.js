@@ -566,6 +566,11 @@ function drawWaveform(w) {
          displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
          displayCtx.lineTo(wvf.eraseX, wvf.bottom);
 
+         wvf.eraseX++;
+         if (wvf.eraseX >= wvf.right) {
+            wvf.eraseX = wvf.left;
+         }
+
       }
       else {
 
@@ -584,12 +589,30 @@ function drawWaveform(w) {
             displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX, wvf.top);
          }
 
+         wvf.eraseX++;
+         if (wvf.eraseX >= wvf.right) {
+            wvf.eraseX = wvf.left;
+
+            if (wvf.order == 0) {
+               displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top);
+            }
+            else if (wvf.waveformName == "CO2") {
+               if ((wvf.eraseX % 16) == 0) {
+                  displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX-1, wvf.top);
+               }
+               else {
+                  displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
+               }
+            }
+            else {
+               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
+            }
+
+         }
+
       }
 
-      wvf.eraseX++;
-      if (wvf.eraseX >= wvf.right) {
-         wvf.eraseX = wvf.left;
-      }
+
 
       eraseBarPixelsDrawn++;
 

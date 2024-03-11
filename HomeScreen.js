@@ -85,14 +85,14 @@ HomeScreen.prototype.initializeAreas = function () {
    this.waveformScaleAreaBottom = this.waveformAreaTop + this.waveformAreaHeight;
 
    this.waveformAreaWidth = Math.round(canvasWidth * 54 / 100);
-   this.waveformAreaHeight = Math.round(canvasHeight * 60 / 100);
+   this.waveformAreaHeight = Math.round(canvasHeight * 57 / 100);
    this.waveformAreaLeft = this.waveformScaleAreaRight;
    this.waveformAreaRight = this.waveformAreaLeft + this.waveformAreaWidth;
    this.waveformAreaTop = this.headerBottom;
    this.waveformAreaBottom = this.waveformAreaTop + this.waveformAreaHeight;
 
-   this.bottomParamAreaWidth = this.waveformAreaWidth;
-   this.bottomParamAreaHeight = Math.round(canvasHeight * 17 / 100);
+   this.bottomParamAreaWidth = this.waveformScaleAreaWidth + this.waveformAreaWidth;
+   this.bottomParamAreaHeight = Math.round(canvasHeight * 20 / 100);
    this.bottomParamAreaLeft = 0;
    this.bottomParamAreaRight = this.bottomParamAreaLeft + this.bottomParamAreaWidth;
    this.bottomParamAreaTop = this.waveformAreaBottom + 1;
@@ -105,14 +105,16 @@ HomeScreen.prototype.initializeAreas = function () {
    this.messageAreaTop = this.bottomParamAreaBottom + 1;
    this.messageAreaBottom = this.bottom;
 
+   //this.middleParamAreaWidth = Math.round(canvasWidth * 20 / 100);
    this.middleParamAreaWidth = Math.round(canvasWidth * 20 / 100);
-   this.middleParamAreaHeight = Math.round(canvasHeight * 70 / 100);
+   this.middleParamAreaHeight = Math.round(canvasHeight * 77 / 100);
    this.middleParamAreaLeft = this.waveformAreaRight + 1;
    this.middleParamAreaRight = this.middleParamAreaLeft + this.middleParamAreaWidth;
    this.middleParamAreaTop = this.headerBottom;
    this.middleParamAreaBottom = this.middleParamAreaTop + this.middleParamAreaHeight;
 
-   this.rightParamAreaWidth = canvasWidth - this.waveformAreaWidth - this.middleParamAreaWidth - 4;
+   //this.rightParamAreaWidth = canvasWidth - this.waveformAreaWidth - this.middleParamAreaWidth - 4;
+   this.rightParamAreaWidth = Math.round(canvasWidth * 20 / 100);
    this.rightParamAreaHeight = Math.round(canvasHeight * 77 / 100);
    this.rightParamAreaLeft = this.middleParamAreaRight + 1;
    this.rightParamAreaRight = this.rightParamAreaLeft + this.rightParamAreaWidth;
@@ -139,11 +141,13 @@ HomeScreen.prototype.initializeAreas = function () {
    this.ETCO2ParamAreaBottom = this.ETCO2ParamAreaTop + this.ETCO2ParamAreaHeight;
 
    this.FICO2ParamAreaWidth = this.middleParamAreaWidth;
+   this.FICO2ParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
    this.FICO2ParamAreaLeft = this.middleParamAreaLeft;
    this.FICO2ParamAreaRight = this.middleParamAreaRight;
    this.FICO2ParamAreaTop = this.ETCO2ParamAreaBottom + 1;
    this.FICO2ParamAreaBottom = this.middleParamAreaBottom;
-   this.FICO2ParamAreaHeight = this.FICO2ParamAreaBottom - this.FICO2ParamAreaTop;
+   //this.FICO2ParamAreaHeight = this.FICO2ParamAreaBottom - this.FICO2ParamAreaTop;
+   this.FICO2ParamAreaBottom = this.FICO2ParamAreaTop + this.FICO2ParamAreaHeight;
 
    this.SPO2ParamAreaWidth = this.rightParamAreaWidth;
    this.SPO2ParamAreaHeight = this.HRParamAreaHeight;
@@ -153,18 +157,22 @@ HomeScreen.prototype.initializeAreas = function () {
    this.SPO2ParamAreaBottom = this.HRParamAreaBottom;
 
    this.RRCParamAreaWidth = this.rightParamAreaWidth;
-   this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight;
+   //this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight;
+   this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
    this.RRCParamAreaLeft = this.rightParamAreaLeft;
    this.RRCParamAreaRight = this.rightParamAreaRight;
    this.RRCParamAreaTop = this.ETCO2ParamAreaTop;
-   this.RRCParamAreaBottom = this.ETCO2ParamAreaBottom;
+   //this.RRCParamAreaBottom = this.ETCO2ParamAreaBottom;
+   this.RRCParamAreaBottom = this.RRCParamAreaTop + this.RRCParamAreaHeight;
 
    this.RRParamAreaWidth = this.rightParamAreaWidth;
-   this.RRParamAreaHeight = this.ETCO2ParamAreaHeight;
+   //this.RRParamAreaHeight = this.ETCO2ParamAreaHeight;
+   this.RRParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
    this.RRParamAreaLeft = this.rightParamAreaLeft;
    this.RRParamAreaRight = this.rightParamAreaRight;
    this.RRParamAreaTop = this.ETCO2ParamAreaTop;
-   this.RRParamAreaBottom = this.ETCO2ParamAreaBottom;
+   //this.RRParamAreaBottom = this.ETCO2ParamAreaBottom;
+   this.RRParamAreaBottom = this.RRParamAreaTop + this.RRParamAreaHeight;
 
    // this.blankParamAreaWidth = this.rightParamAreaWidth;
    // this.blankParamAreaHeight = this.FICO2ParamAreaHeight;
@@ -174,12 +182,14 @@ HomeScreen.prototype.initializeAreas = function () {
    // this.blankParamAreaBottom = this.FICO2ParamAreaBottom;
 
    this.TEMPParamAreaWidth = this.rightParamAreaWidth;
+   this.TEMPParamAreaHeight = this.ETCO2ParamAreaHeight ;
    this.TEMPParamAreaLeft = this.rightParamAreaLeft;
    this.TEMPParamAreaRight = this.rightParamAreaRight;
-   this.TEMPParamAreaTop = this.FICO2ParamAreaTop;
+   this.TEMPParamAreaTop = this.RRCParamAreaBottom;
    //this.TEMPParamAreaBottom = this.rightParamAreaBottom;
    this.TEMPParamAreaBottom = this.messageAreaTop - 1;
-   this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
+   //this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
+   this.TEMPParamAreaBottom = this.TEMPParamAreaTop + this.TEMPParamAreaHeight;
 
    this.NIBPParamAreaLeft = this.bottomParamAreaLeft;
    //this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
@@ -187,7 +197,7 @@ HomeScreen.prototype.initializeAreas = function () {
    this.NIBPParamAreaWidth = this.NIBPParamAreaRight - this.NIBPParamAreaLeft;
    this.NIBPParamAreaTop = this.bottomParamAreaTop;
    //this.NIBPParamAreaBottom = this.bottomParamAreaBottom;
-   this.NIBPParamAreaBottom = t = this.messageAreaTop - 1;
+   this.NIBPParamAreaBottom = this.messageAreaTop - 1;
    this.NIBPParamAreaHeight = this.NIBPParamAreaBottom - this.NIBPParamAreaTop;
 
 };
