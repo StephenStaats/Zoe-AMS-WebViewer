@@ -768,7 +768,7 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
          displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
 
-         var parameterTime = homeScreen.getSettingValue("NIBPtime");
+         var parameterTime = translateNumber(window.StringNumbers.SN_Last_time) + ": " + homeScreen.getSettingValue("NIBPtime");
 
          timeY = y + height * 80 / 100;
 
@@ -788,7 +788,7 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
       displayCtx.textAlign = 'center';
       displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
 
-      var parameterTime = homeScreen.getSettingValue("TEMPtime");
+      var parameterTime = translateNumber(window.StringNumbers.SN_Last_time) + ": " + homeScreen.getSettingValue("TEMPtime");
 
       timeY = y + height * 85 / 100;
 
