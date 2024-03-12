@@ -319,8 +319,8 @@ let elapsedTime;
 function drawHomeScreen(timestamp) {
 
    if (redrawHomeScreen == 1) {
-      redrawHomeScreen = 0;
       drawHomeScreenAreas();
+      redrawHomeScreen = 0;
    }
 
    if (!lastTime) {
@@ -481,13 +481,13 @@ function drawTopLine() {
    fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Arial', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle');
 
    textTop = patientIDValueTop + patientIDValueHeight / 2;
-   fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Arial', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle');
+   fitText(homeScreen.getSettingValue("patientId"), window.colors.ZWHITE, 'Arial', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle');
 
    textTop = monitorIDLabelTop + monitorIDLabelHeight / 2;
    fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Arial', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle');
 
    textTop = monitorIDValueTop + monitorIDValueHeight / 2;
-   fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Arial', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle');
+   fitText(homeScreen.getSettingValue("monitorId"), window.colors.ZWHITE, 'Arial', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle');
 
    drawBackArrow(backArrowLeft, backArrowTop, backArrowWidth, backArrowHeight, backArrowHeight * 50 / 100);
 

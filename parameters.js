@@ -5,7 +5,7 @@
 // Define the Parameter class globally
 function Parameter(parameterName) {
 
-   this.firstTimeDraw             = 10 ;
+   //this.firstTimeDraw             = 1 ;
 
    this.parameterName             = parameterName;
    this.parameterValue            = "";
@@ -543,19 +543,24 @@ Parameter.prototype.drawParameterArea = function () {
 
       var redrawNeeded = 0 ;
 
-      if (this.firstTimeDraw > 0) {
-         this.firstTimeDraw -= 1 ;
+      if (redrawHomeScreen) {
          redrawNeeded = 1 ;
       }
-      else if ((this.parameterName          != this.lastParameterName) ||
-               (this.parameterValue          != this.lastParameterValue) ||
-               (this.parameterAlarmStatus    != this.lastParameterAlarmStatus) ||
 
-               (alarmsOn                     != this.lastAlarmsOn) ||
-               (upperLimit                   != this.lastUpperLimit) ||
-               (lowerLimit                   != this.lastLowerLimit) ||
-               (textForegroundColor          != this.lastTextForegroundColor) ||
-               (textBackgroundColor          != this.lastTextBackgroundColor)) {
+      // if (this.firstTimeDraw > 0) {
+      //    this.firstTimeDraw -= 1 ;
+      //    redrawNeeded = 1 ;
+      // }
+
+      if ((this.parameterName          != this.lastParameterName) ||
+         (this.parameterValue          != this.lastParameterValue) ||
+         (this.parameterAlarmStatus    != this.lastParameterAlarmStatus) ||
+
+         (alarmsOn                     != this.lastAlarmsOn) ||
+         (upperLimit                   != this.lastUpperLimit) ||
+         (lowerLimit                   != this.lastLowerLimit) ||
+         (textForegroundColor          != this.lastTextForegroundColor) ||
+         (textBackgroundColor          != this.lastTextBackgroundColor)) {
 
          this.lastParameterName          = this.parameterName ;
          this.lastParameterValue         = this.parameterValue ;
