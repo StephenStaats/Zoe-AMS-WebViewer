@@ -15,19 +15,19 @@ function Waveform(waveformName, order) {
    switch (this.order) {
 
       case 0:
-         this.top = homeScreen.waveformAreaTop ;
-         this.height = topWaveformHeight ;
-         break ;
+         this.top = homeScreen.waveformAreaTop;
+         this.height = topWaveformHeight;
+         break;
 
       case 1:
          this.top = homeScreen.waveformAreaTop + topWaveformHeight;
-         this.height = waveformHeight ;
-         break ;
+         this.height = waveformHeight;
+         break;
 
       case 2:
-         this.top = homeScreen.waveformAreaTop + topWaveformHeight + waveformHeight ;
-         this.height = waveformHeight ;
-         break ;
+         this.top = homeScreen.waveformAreaTop + topWaveformHeight + waveformHeight;
+         this.height = waveformHeight;
+         break;
 
    }
 
@@ -39,7 +39,7 @@ function Waveform(waveformName, order) {
 
    // Set color values for each pixel in the column
    const colorYellow = [255, 255, 0, 255]; // RGBA values for yellow color
-   const colorBlack  = [  0,   0, 0, 255]; // RGBA values for black color
+   const colorBlack = [0, 0, 0, 255]; // RGBA values for black color
 
    for (let y = 0; y < topWaveformHeight; y++) {
 
@@ -179,8 +179,32 @@ function Waveform(waveformName, order) {
             this.yMax = 500;
          }
          else {
-            this.yMin = -100;
-            this.yMax = 4500;
+
+            var CO2Size = homeScreen.getSettingValue("CO2size");
+
+            if (CO2Size == "22") {
+               this.yMin = -100;
+               this.yMax = 2000;
+            }
+            else if (CO2Size == "40") {
+               this.yMin = -100;
+               this.yMax = 4000;
+            }
+            else if (CO2Size == "60") {
+               this.yMin = -100;
+               this.yMax = 6000;
+            }
+            else if (CO2Size == "80") {
+               this.yMin = -100;
+               this.yMax = 8000;
+            }
+            else {
+               this.yMin = -100;
+               this.yMax = 8000;
+            }
+
+            // this.yMin = -100;
+            // this.yMax = 4500;
             //this.yMax = 1500;
          }
          // this.maxSimulatedSampleIndex = window.simulatedWaveformCO2.length;
@@ -222,8 +246,8 @@ function Waveform(waveformName, order) {
             this.yMax = 5000;
          }
          else {
-            this.yMin = -100 ;
-            this.yMax =  100;
+            this.yMin = -100;
+            this.yMax = 100;
          }
          // this.maxSimulatedSampleIndex = window.simulatedWaveformRESP.length;
          // this.simulatedSamples = window.simulatedWaveformRESP;
@@ -436,13 +460,13 @@ function drawWaveform(w) {
    displayCtx.lineCap = 'round';
 
    if (wvf.waveformName == "RESP_AUTO") {
-      var q = 0 ;
+      var q = 0;
    }
 
    while (wvf.drawXTime < wvf.elapsedTime) {
 
       if (wvf.waveformName == "RESP_AUTO") {
-         var q = 0 ;
+         var q = 0;
       }
 
       //if (MSPerPixel > MSPerSample) {   we now upsample 50Hz waveform so that this is always true
@@ -462,19 +486,19 @@ function drawWaveform(w) {
          //    wvf.readSampleTime += MSPerSample;
          // }
          // else {
-            var thisSample = wvf.readSample();
-            wvf.samplesDrawn++;
-            wvf.readSampleTime += MSPerSample;
+         var thisSample = wvf.readSample();
+         wvf.samplesDrawn++;
+         wvf.readSampleTime += MSPerSample;
 
-            if (thisSample == LEAD_OFF_OR_UNPLUGGED) {
+         if (thisSample == LEAD_OFF_OR_UNPLUGGED) {
+            skipPixel = 1;
+         }
+         else {
+            var thisY = normalizeWaveform(thisSample);
+            if (thisY == LEAD_OFF_OR_UNPLUGGED) {
                skipPixel = 1;
             }
-            else {
-               var thisY = normalizeWaveform(thisSample);
-               if (thisY == LEAD_OFF_OR_UNPLUGGED) {
-                  skipPixel = 1;
-               }
-            }
+         }
 
          //}
 
@@ -546,7 +570,7 @@ function drawWaveform(w) {
    //
    //   Draw erase bar 
    //
- 
+
    displayCtx.beginPath();
 
    displayCtx.strokeStyle = window.colors.ZBLACK;
@@ -594,18 +618,10 @@ function drawWaveform(w) {
             wvf.eraseX = wvf.left;
 
             if (wvf.order == 0) {
-               displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX-1, wvf.top);
-            }
-            else if (wvf.waveformName == "CO2") {
-               if ((wvf.eraseX % 16) == 0) {
-                  displayCtx.putImageData(wvf.eraseWithDotsWaveformImageData, wvf.eraseX-1, wvf.top);
-               }
-               else {
-                  displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
-               }
+               displayCtx.putImageData(wvf.eraseTopWaveformImageData, wvf.eraseX - 1, wvf.top);
             }
             else {
-               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX-1, wvf.top);
+               displayCtx.putImageData(wvf.eraseWaveformImageData, wvf.eraseX - 1, wvf.top);
             }
 
          }
@@ -638,31 +654,31 @@ function drawWaveformScaleArea() {
 
       wvf = homeScreen.waveforms[w];
 
-      if (wvf.waveformName.indexOf("ECG") !== -1) {  
-   
+      if (wvf.waveformName.indexOf("ECG") !== -1) {
+
          let labelRect, gainRect, bracketRect;
 
-         let labelRectTop = wvf.top ;
-         let labelRectBottom = wvf.bottom ;
-         var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 30 / 100 ;
-         var labelRectRight = homeScreen.waveformScaleAreaRight ;
+         let labelRectTop = wvf.top;
+         let labelRectBottom = wvf.bottom;
+         var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 30 / 100;
+         var labelRectRight = homeScreen.waveformScaleAreaRight;
 
          labelRect = new CRect(labelRectLeft, labelRectTop, labelRectRight, labelRectBottom);
 
-         let gainRectTop = wvf.top ;
-         let gainRectBottom = wvf.bottom ;
-         var gainRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100 ;
-         var gainRectRight = homeScreen.waveformScaleAreaRight ;
+         let gainRectTop = wvf.top;
+         let gainRectBottom = wvf.bottom;
+         var gainRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100;
+         var gainRectRight = homeScreen.waveformScaleAreaRight;
 
-         gainRect =  new CRect(gainRectLeft, gainRectTop, gainRectRight, gainRectBottom);
- 
+         gainRect = new CRect(gainRectLeft, gainRectTop, gainRectRight, gainRectBottom);
+
          bracketRect = new CRect(homeScreen.waveformScaleAreaLeft, wvf.top, homeScreen.waveformScaleAreaRight, wvf.bottom);
 
          let waveGain = homeScreen.getSettingValue("ECGGain")
 
          let bracketHeightInMM;
          let bracketHeightInPixels;
-         let gainText ;
+         let gainText;
 
          let bandHeightInMM = Math.round(wvf.height / pixelsPerMM);
 
@@ -677,31 +693,31 @@ function drawWaveformScaleArea() {
          switch (waveGain) {
             case "2.5 mm/mV":
                wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (1 * 5);
-               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (1 * 5);
+               wvf.yMax = (bandHeightInMM * window.LSBS_PER_MV) / (1 * 5);
                bracketHeightInMM = 2.5;
                gainText = "1 mV";
                break;
             case "5 mm/mV":
                wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 5);
-               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 5);
+               wvf.yMax = (bandHeightInMM * window.LSBS_PER_MV) / (2 * 5);
                bracketHeightInMM = 5.0;
                gainText = "1 mV";
                break;
             case "10 mm/mV":
                wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 10);
-               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 10);
+               wvf.yMax = (bandHeightInMM * window.LSBS_PER_MV) / (2 * 10);
                bracketHeightInMM = 10.0;
                gainText = "1 mV";
                break;
             case "15 mm/mV":
                wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 15);
-               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 15);
+               wvf.yMax = (bandHeightInMM * window.LSBS_PER_MV) / (2 * 15);
                bracketHeightInMM = 7.5;
                gainText = "0.5 mV";
                break;
             case "20 mm/mV":
                wvf.yMin = -(bandHeightInMM * window.LSBS_PER_MV) / (2 * 20);
-               wvf.yMax =  (bandHeightInMM * window.LSBS_PER_MV) / (2 * 20);
+               wvf.yMax = (bandHeightInMM * window.LSBS_PER_MV) / (2 * 20);
                bracketHeightInMM = 10.0;
                gainText = "0.5 mV";
                break;
@@ -718,12 +734,12 @@ function drawWaveformScaleArea() {
          let leadHeight = wvf.height / 5;
          let gainHeight = wvf.height / 5;
 
-         labelRect.top = bracketRect.top - leadHeight * 75 / 100 ;
+         labelRect.top = bracketRect.top - leadHeight * 75 / 100;
 
-         gainRect.top = bracketRect.bottom + gainHeight * 25 / 100 ;
+         gainRect.top = bracketRect.bottom + gainHeight * 25 / 100;
 
-         fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width()-1, labelRect.height(), 'left', 'top') ;
-         fitText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width()-1, gainRect.height(), 'left', 'top') ;
+         fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width() - 1, labelRect.height(), 'left', 'top');
+         fitText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
 
          let bracketXOffset = 5;
          let bracketLegWidth = 10;
@@ -746,18 +762,18 @@ function drawWaveformScaleArea() {
       }
       else if (wvf.waveformName == "CO2") {
 
-         var scaleHiLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100 ;
-         var scaleHiTop = wvf.top + wvf.height * 5 / 100 ;
-         var scaleHiWidth = homeScreen.waveformScaleAreaWidth ;
-         var scaleHiHeight = wvf.height * 25 / 100 ;
+         var scaleHiLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100;
+         var scaleHiTop = wvf.top + wvf.height * 5 / 100;
+         var scaleHiWidth = homeScreen.waveformScaleAreaWidth;
+         var scaleHiHeight = wvf.height * 25 / 100;
 
-         var scaleLoLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100 ;
-         var scaleLoTop = wvf.bottom - wvf.height * 0 / 100 ;
-         var scaleLoWidth = homeScreen.waveformScaleAreaWidth ;
-         var scaleLoHeight = wvf.height * 20 / 100 ;
+         var scaleLoLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 80 / 100;
+         var scaleLoTop = wvf.bottom - wvf.height * 0 / 100;
+         var scaleLoWidth = homeScreen.waveformScaleAreaWidth;
+         var scaleLoHeight = wvf.height * 20 / 100;
 
-         fitText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top') ;
-         fitText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom') ;
+         fitText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top');
+         fitText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom');
 
          if (window.rotated) {
 
@@ -778,7 +794,7 @@ function drawWaveformScaleArea() {
          }
          else {
 
-            var x ;
+            var x;
             for (x = wvf.left; x < wvf.right; x++) {
 
                if ((x % 16) == 0) {
@@ -801,34 +817,34 @@ function drawWaveformScaleArea() {
 // Function to rotate image data
 function rotateImageData(imageData, width, height) {
 
-    // Create a temporary canvas and context
-    var tempCanvas = document.createElement('canvas');
-    var tempCtx = tempCanvas.getContext('2d');
+   // Create a temporary canvas and context
+   var tempCanvas = document.createElement('canvas');
+   var tempCtx = tempCanvas.getContext('2d');
 
    // Set canvas dimensions to match rotated dimensions
    tempCanvas.width = 480;
    tempCanvas.height = 800;
 
-    // Clear the canvas
-    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+   // Clear the canvas
+   tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
 
    // Translate the origin to the lower left corner of the canvas
    tempCtx.translate(0, tempCanvas.height);
 
    // Rotate the canvas 90 degrees counterclockwise (to achieve portrait orientation)
    tempCtx.rotate(-Math.PI / 2);
- 
-    // Draw the image data at the rotated position
-    tempCtx.putImageData(imageData, 0, -height);
 
-    // Get the rotated image data
-    var rotatedImageData = tempCtx.getImageData(0, 0, width, -height);
+   // Draw the image data at the rotated position
+   tempCtx.putImageData(imageData, 0, -height);
 
-    // Return the rotated image data
-    return rotatedImageData;
+   // Get the rotated image data
+   var rotatedImageData = tempCtx.getImageData(0, 0, width, -height);
+
+   // Return the rotated image data
+   return rotatedImageData;
 
 }
- 
+
 
 
 //
@@ -887,9 +903,9 @@ function startStopWaveforms() {
 function drawWaveformAreas() {
 
    displayCtx.fillStyle = window.colors.ZBLACK;
-   displayCtx.fillRect(homeScreen.waveformAreaLeft, homeScreen.waveformAreaTop, homeScreen.waveformAreaWidth, homeScreen.waveformAreaHeight+1);
+   displayCtx.fillRect(homeScreen.waveformAreaLeft - 1, homeScreen.waveformAreaTop, homeScreen.waveformAreaWidth + 1, homeScreen.waveformAreaHeight + 1);
 
-   drawWaveformScaleArea() ;
+   drawWaveformScaleArea();
 
 }
 
@@ -907,37 +923,37 @@ function setupWaveforms(AMSWaveforms) {
 
    switch (AMSWaveforms.length) {
 
-      case 3 :
+      case 3:
 
          topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2) ;
-         break ;
+         waveformHeight = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2);
+         break;
 
-      case 2 :
+      case 2:
 
          topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight    = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) ;
-         break ;
+         waveformHeight = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight));
+         break;
 
-      case 1 :
-      default :
+      case 1:
+      default:
 
-         topWaveformHeight = homeScreen.waveformAreaHeight ;
-         waveformHeight    = topWaveformHeight ;
-         break ;
+         topWaveformHeight = homeScreen.waveformAreaHeight;
+         waveformHeight = topWaveformHeight;
+         break;
 
    }
 
    var order = 0;
    for (order = 0; order < AMSWaveforms.length; order++) {
 
-      var waveformName = AMSWaveforms[order].waveformName ;
+      var waveformName = AMSWaveforms[order].waveformName;
       const wvf = new Waveform(waveformName, order);
       homeScreen.addWaveform(wvf);
 
    }
 
-   drawWaveformAreas() ;
+   drawWaveformAreas();
 
 }
 
@@ -948,10 +964,10 @@ function setupWaveforms(AMSWaveforms) {
 
 function resetWaveforms() {
 
-   var w = 0 ;
+   var w = 0;
    for (w = 0; w < homeScreen.waveforms.length; w++) {
 
-      var wvf = homeScreen.waveforms[w] ;
+      var wvf = homeScreen.waveforms[w];
 
       wvf.drawX = wvf.left;
       wvf.drawXTime = 0;
@@ -973,7 +989,34 @@ function resetWaveforms() {
 
       wvf.samplesDrawn = 0;
       wvf.samplesToDraw = wvf.width;
-      wvf.clearSamples() ;
+      wvf.clearSamples();
+
+      if (wvf.waveformName == "CO2") {
+
+         var CO2Size = homeScreen.getSettingValue("CO2size");
+
+         if (CO2Size == "22") {
+            wvf.yMin = -100;
+            wvf.yMax = 2000;
+         }
+         else if (CO2Size == "40") {
+            wvf.yMin = -100;
+            wvf.yMax = 4000;
+         }
+         else if (CO2Size == "60") {
+            wvf.yMin = -100;
+            wvf.yMax = 6000;
+         }
+         else if (CO2Size == "80") {
+            wvf.yMin = -100;
+            wvf.yMax = 8000;
+         }
+         else {
+            wvf.yMin = -100;
+            wvf.yMax = 8000;
+         }
+
+      }
 
    }
 
@@ -989,7 +1032,7 @@ var waveformDataMessageCount = 0;
 
 function processWaveformData(AMSWaveforms) {
 
-   if (pauseWaveformDrawing == 1) return(0);
+   if (pauseWaveformDrawing == 1) return (0);
 
    waveformDataMessageCount++
    LOGEVENT(" ");
@@ -1084,11 +1127,11 @@ function processWaveformData(AMSWaveforms) {
          LOGEVENTGREEN("-->  setting currentMSPerSample = currentMSPerSampleNormal");
       }
 
-      var d = 0 ;
+      var d = 0;
 
    }
 
-   return(somethingChanged) ;
+   return (somethingChanged);
 
 }
 

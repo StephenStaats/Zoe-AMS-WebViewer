@@ -35,7 +35,8 @@ window.StringNumbers = {
    SN_Monitor: 14,
    SN_Monitor_ID: 15,
    SN_Last_time: 16,
-   SN_Last_SN: 17
+   SN_Clinician: 17,
+   SN_Last_SN: 18
 };
 
 const ZoeTranslatedStrings = [
@@ -327,6 +328,23 @@ const ZoeTranslatedStrings = [
       pSwedish: "$11 Last",
       pRussian: "$12 Last",
       pChinese: "$13 Last"
+   },
+   {
+      StringNumber: StringNumbers.SN_Clinician,
+      pEnglish: "Clinician",
+      pGerman: "$01 Clinician",
+      pItalian: "$02 Clinician",
+      pFrench: "$03 Clinician",
+      pPortuguese: "$04 Clinician",
+      pSpanish: "$05 Clinician",
+      pPolish: "$06 Clinician",
+      pDutch: "$07 Clinician",
+      pNorwegian: "$08 Clinician",
+      pDanish: "$09 Clinician",
+      pFinnish: "$10 Clinician",
+      pSwedish: "$11 Clinician",
+      pRussian: "$12 Clinician",
+      pChinese: "$13 Clinician"
    },
    {
       StringNumber: StringNumbers.SN_Last_SN,

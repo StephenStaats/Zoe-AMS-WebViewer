@@ -80,6 +80,10 @@ window.simulatedAMSMessages = [
             "settingValue": "Killick"
          },
          {
+            "settingName": "clinicianId",
+            "settingValue": ""
+         },
+         {
             "settingName": "patientId",
             "settingValue": "12345670"
          },
@@ -206,6 +210,30 @@ window.simulatedAMSMessages = [
          {
             "settingName": "TEMPAlarmsOn",
             "settingValue": "0"
+         },
+         {
+            "settingName": "patientIdFormat",
+            "settingValue": "LNFI"
+         },
+         {
+            "settingName": "monitorIdFormat",
+            "settingValue": "MID"
+         },
+         {
+            "settingName": "dateFormat",
+            "settingValue": "MMDDYYYY"
+         },
+         {
+            "settingName": "CO2size",
+            "settingValue": "40"
+         },
+         {
+            "settingName": "CO2sizekPA",
+            "settingValue": "5_0"
+         },
+         {
+            "settingName": "CO2units",
+            "settingValue": "kPa"
          },
          {
             "settingName": "bottomLineMessage",
@@ -296,6 +324,10 @@ window.simulatedAMSMessages = [
             "settingValue": "Villiers"
          },
          {
+            "settingName": "clinicianId",
+            "settingValue": ""
+         },
+         {
             "settingName": "patientId",
             "settingValue": "12345671"
          },
@@ -309,7 +341,7 @@ window.simulatedAMSMessages = [
          },
          {
             "settingName": "CO2ScaleHi",
-            "settingValue": "40"
+            "settingValue": "20"
          },
          {
             "settingName": "CO2ScaleLo",
@@ -424,6 +456,30 @@ window.simulatedAMSMessages = [
             "settingValue": "0"
          },
          {
+            "settingName": "patientIdFormat",
+            "settingValue": "LNFI"
+         },
+         {
+            "settingName": "monitorIdFormat",
+            "settingValue": "MID"
+         },
+         {
+            "settingName": "dateFormat",
+            "settingValue": "MMDDYYYY"
+         },
+         {
+            "settingName": "CO2size",
+            "settingValue": "20"
+         },
+         {
+            "settingName": "CO2sizekPA",
+            "settingValue": "5_0"
+         },
+         {
+            "settingName": "CO2units",
+            "settingValue": "kPa"
+         },
+         {
             "settingName": "bottomLineMessage",
             "settingValue": "HR Asystole"
          },
@@ -500,6 +556,10 @@ window.simulatedAMSMessages = [
          {
             "settingName": "patientLastName",
             "settingValue": "Aubrey"
+         },
+         {
+            "settingName": "clinicianId",
+            "settingValue": ""
          },
          {
             "settingName": "patientId",
@@ -628,6 +688,30 @@ window.simulatedAMSMessages = [
          {
             "settingName": "TEMPAlarmsOn",
             "settingValue": "0"
+         },
+         {
+            "settingName": "patientIdFormat",
+            "settingValue": "LNFI"
+         },
+         {
+            "settingName": "monitorIdFormat",
+            "settingValue": "MID"
+         },
+         {
+            "settingName": "dateFormat",
+            "settingValue": "MMDDYYYY"
+         },
+         {
+            "settingName": "CO2size",
+            "settingValue": "40"
+         },
+         {
+            "settingName": "CO2sizekPA",
+            "settingValue": "5_0"
+         },
+         {
+            "settingName": "CO2units",
+            "settingValue": "kPa"
          },
          {
             "settingName": "bottomLineMessage",
@@ -709,6 +793,10 @@ window.simulatedAMSMessages = [
             "settingValue": "Maturin"
          },
          {
+            "settingName": "clinicianId",
+            "settingValue": ""
+         },
+         {
             "settingName": "patientId",
             "settingValue": "12345670"
          },
@@ -835,6 +923,30 @@ window.simulatedAMSMessages = [
          {
             "settingName": "TEMPAlarmsOn",
             "settingValue": "0"
+         },
+         {
+            "settingName": "patientIdFormat",
+            "settingValue": "LNFI"
+         },
+         {
+            "settingName": "monitorIdFormat",
+            "settingValue": "MID"
+         },
+         {
+            "settingName": "dateFormat",
+            "settingValue": "MMDDYYYY"
+         },
+         {
+            "settingName": "CO2size",
+            "settingValue": "40"
+         },
+         {
+            "settingName": "CO2sizekPA",
+            "settingValue": "5_0"
+         },
+         {
+            "settingName": "CO2units",
+            "settingValue": "kPa"
          },
          {
             "settingName": "bottomLineMessage",

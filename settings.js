@@ -119,25 +119,18 @@ function processSettingData(AMSSettings) {
    }
    else {   
 
+      var needToDrawTopLine = 0 ;
+      var needToResetWaveforms = 0 ;
+      var needToDrawParameterAreas = 0 ;
+      var needToDrawBottomLineMessageArea = 0 ;
 
       var s = 0;
       for (s = 0; s < AMSSettings.length; s++) {
 
          var setting = AMSSettings[s] ;
 
-         if (setting.settingName == "bottomLineMessage") {
-            window.bottomLineMessage = setting.settingValue;
-         }
-         else if (setting.settingName == "bottomLineMessageAlarmStatus") {
-            window.bottomLineMessageAlarmStatus = setting.settingValue;
-         }
-         if ((window.bottomLineMessage != lastBottomLineMessage) || (window.bottomLineMessageAlarmStatus != lastbottomLineMessageAlarmStatus)) {
-            lastBottomLineMessage = window.bottomLineMessage;
-            lastbottomLineMessageAlarmStatus = window.bottomLineMessageAlarmStatus;
-            drawBottomLineMessageArea();
-         }
-
          var hs = 0 ;
+
          for (hs = 0; s < homeScreen.settings.length; hs++) {
 
             if (homeScreen.settings[hs].settingName == setting.settingName) {
@@ -149,25 +142,35 @@ function processSettingData(AMSSettings) {
                   if ((setting.settingName == "deviceName") || 
                       (setting.settingName == "patientFirstName") || 
                       (setting.settingName == "patientLastName") ||
+                      (setting.settingName == "patientIdFormat") ||
+                      (setting.settingName == "monitorIdFormat") ||
                       (setting.settingName == "patientId")) {
 
-                     drawTopLine() ;
+                     needToDrawTopLine = 1 ;
 
                   }
                   else if ((setting.settingName == "ECGLead") || 
                            (setting.settingName == "ECGGain") || 
                            (setting.settingName == "CO2ScaleHi") ||
-                           (setting.settingName == "CO2ScaleLo")) {
+                           (setting.settingName == "CO2ScaleLo") ||
+                           (setting.settingName == "CO2Size")) {
 
-                     drawWaveformAreas() ;
+                     needToResetWaveforms = 1 ;
 
                   }
                   else if (setting.settingName == "TEMPunits") {
 
-                     drawParamterAreas() ;
+                     needToDrawParameterAreas = 1 ;
 
                   }
 
+                  if ((setting.settingName == "bottomLineMessage") ||
+                      (setting.settingName == "bottomLineMessageAlarmStatus")) {
+
+                     needToDrawBottomLineMessageArea = 1 ;
+
+                  }
+ 
                }
 
                break ;
@@ -176,7 +179,22 @@ function processSettingData(AMSSettings) {
 
          }
 
+      }
 
+      if (needToDrawTopLine) {
+         drawTopLine() ;
+      }
+
+      if (needToResetWaveforms) {
+         resetWaveforms() ;
+      }
+
+      if (needToDrawParameterAreas) {
+         drawParamterAreas() ;
+      }
+
+      if (needToDrawBottomLineMessageArea) {
+         drawBottomLineMessageArea();
       }
 
    }

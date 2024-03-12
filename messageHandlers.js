@@ -52,7 +52,7 @@ function processAMSMessage(newAMSMessage) {
    if (settingChange) {
       drawTopLine();
       drawWaveformAreas();
-      drawParameterAreas();
+      drawParameterAreas(0);
       drawBottomLineMessageArea();
    }
 
@@ -66,7 +66,7 @@ function processAMSMessage(newAMSMessage) {
    var parameterChange = processParameterData(AMSParameters) ;
    if (parameterChange) {
       drawWaveformAreas();
-      drawParameterAreas();
+      drawParameterAreas(0);
    }
 
 

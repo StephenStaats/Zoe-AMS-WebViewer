@@ -197,14 +197,15 @@ HomeScreen.prototype.initializeAreas = function () {
    // this.blankParamAreaBottom = this.FICO2ParamAreaBottom;
 
    this.TEMPParamAreaWidth = this.rightParamAreaWidth;
-   this.TEMPParamAreaHeight = this.ETCO2ParamAreaHeight;
    this.TEMPParamAreaLeft = this.rightParamAreaLeft;
    this.TEMPParamAreaRight = this.rightParamAreaRight;
    this.TEMPParamAreaTop = this.RRCParamAreaBottom;
    //this.TEMPParamAreaBottom = this.rightParamAreaBottom;
-   this.TEMPParamAreaBottom = this.messageAreaTop - 1;
+   //this.TEMPParamAreaBottom = this.messageAreaTop - 1;
    //this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
-   this.TEMPParamAreaBottom = this.TEMPParamAreaTop + this.TEMPParamAreaHeight;
+   //this.TEMPParamAreaBottom = this.TEMPParamAreaTop + this.TEMPParamAreaHeight;
+   this.TEMPParamAreaBottom = this.FICO2ParamAreaBottom;
+   this.TEMPParamAreaHeight = this.TEMPParamAreaBottom - this.TEMPParamAreaTop;
 
    this.NIBPParamAreaLeft = this.bottomParamAreaLeft;
    //this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
@@ -313,7 +314,7 @@ function drawHomeScreenAreas() {
 
    drawWaveformAreas();
 
-   drawParameterAreas();
+   drawParameterAreas(1);
 
    drawBottomLineMessageArea();
 
@@ -372,62 +373,26 @@ function drawHomeScreen(timestamp) {
 
 function drawTopLine() {
 
-   var patientNameLabelLeftPercent = 2;
-   var patientNameLabelRightPercent = 12;
+   var patientButtonLeftPercent = 5;
+   var patientButtonRightPercent = 45;
 
-   var patientNameValueLeftPercent = 13;
-   var patientNameValueRightPercent = 38;
-
-   var patientIDLabelLeftPercent = 43;
-   var patientIDLabelRightPercent = 48;
-
-   var patientIDValueLeftPercent = 49;
-   var patientIDValueRightPercent = 61;
-
-   var monitorIDLabelLeftPercent = 65;
-   var monitorIDLabelRightPercent = 78;
-
-   var monitorIDValueLeftPercent = 79;
-   var monitorIDValueRightPercent = 93;
+   var monitorButtonLeftPercent = 50;
+   var monitorButtonRightPercent = 90;
 
    var backArrowLeftPercent = 94;
    var backArrowRightPercent = 100;
 
-   var patientNameLabelLeft = homeScreen.headerLeft + homeScreen.headerWidth * patientNameLabelLeftPercent / 100;
-   var patientNameLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * patientNameLabelRightPercent / 100;
-   var patientNameLabelTop = homeScreen.headerTop;
-   var patientNameLabelHeight = homeScreen.headerHeight;
-   var patientNameLabelWidth = patientNameLabelRight - patientNameLabelLeft;
+   var patientButtonLeft = homeScreen.headerLeft + homeScreen.headerWidth * patientButtonLeftPercent / 100;
+   var patientButtonRight = homeScreen.headerLeft + homeScreen.headerWidth * patientButtonRightPercent / 100;
+   var patientButtonTop = homeScreen.headerTop;
+   var patientButtonHeight = homeScreen.headerHeight;
+   var patientButtonWidth = patientButtonRight - patientButtonLeft;
 
-   var patientNameValueLeft = homeScreen.headerLeft + homeScreen.headerWidth * patientNameValueLeftPercent / 100;
-   var patientNameValueRight = homeScreen.headerLeft + homeScreen.headerWidth * patientNameValueRightPercent / 100;
-   var patientNameValueTop = homeScreen.headerTop;
-   var patientNameValueHeight = homeScreen.headerHeight;
-   var patientNameValueWidth = patientNameValueRight - patientNameValueLeft;
-
-   var patientIDLabelLeft = homeScreen.headerLeft + homeScreen.headerWidth * patientIDLabelLeftPercent / 100;
-   var patientIDLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * patientIDLabelRightPercent / 100;
-   var patientIDLabelTop = homeScreen.headerTop;
-   var patientIDLabelHeight = homeScreen.headerHeight;
-   var patientIDLabelWidth = patientIDLabelRight - patientIDLabelLeft;
-
-   var patientIDValueLeft = homeScreen.headerLeft + homeScreen.headerWidth * patientIDValueLeftPercent / 100;
-   var patientIDValueRight = homeScreen.headerLeft + homeScreen.headerWidth * patientIDValueRightPercent / 100;
-   var patientIDValueTop = homeScreen.headerTop;
-   var patientIDValueHeight = homeScreen.headerHeight;
-   var patientIDValueWidth = patientIDValueRight - patientIDValueLeft;
-
-   var monitorIDLabelLeft = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDLabelLeftPercent / 100;
-   var monitorIDLabelRight = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDLabelRightPercent / 100;
-   var monitorIDLabelTop = homeScreen.headerTop;
-   var monitorIDLabelHeight = homeScreen.headerHeight;
-   var monitorIDLabelWidth = monitorIDLabelRight - monitorIDLabelLeft;
-
-   var monitorIDValueLeft = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDValueLeftPercent / 100;
-   var monitorIDValueRight = homeScreen.headerLeft + homeScreen.headerWidth * monitorIDValueRightPercent / 100;
-   var monitorIDValueTop = homeScreen.headerTop;
-   var monitorIDValueHeight = homeScreen.headerHeight;
-   var monitorIDValueWidth = monitorIDValueRight - monitorIDValueLeft;
+   var monitorButtonLeft = homeScreen.headerLeft + homeScreen.headerWidth * monitorButtonLeftPercent / 100;
+   var monitorButtonRight = homeScreen.headerLeft + homeScreen.headerWidth * monitorButtonRightPercent / 100;
+   var monitorButtonTop = homeScreen.headerTop;
+   var monitorButtonHeight = homeScreen.headerHeight;
+   var monitorButtonWidth = monitorButtonRight - monitorButtonLeft;
 
    var backArrowLeft = homeScreen.headerLeft + homeScreen.headerWidth * backArrowLeftPercent / 100;
    var backArrowRight = homeScreen.headerLeft + homeScreen.headerWidth * backArrowRightPercent / 100;
@@ -443,66 +408,72 @@ function drawTopLine() {
    displayCtx.textAlign = 'left';
    displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
 
-   var textTop;
+   var textTop = patientButtonTop + patientButtonHeight * 55 / 100 ;
+ 
+   let patientButtonLabel = "";
 
-   // textTop = patientNameLabelTop + patientNameLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Arial', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
+   var patientId = homeScreen.getSettingValue("patientId") ;
+   var firstName = homeScreen.getSettingValue("patientFirstName") ;
+   var lastName  = homeScreen.getSettingValue("patientLastName") ;
 
-   // textTop = patientNameValueTop + patientNameValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Arial', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
+   var patientIdFormat = homeScreen.getSettingValue("patientIdFormat") ;
 
-   // textTop = patientIDLabelTop + patientIDLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Arial', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = patientIDValueTop + patientIDValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Arial', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = monitorIDLabelTop + monitorIDLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Arial', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = monitorIDValueTop + monitorIDValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Arial', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-
-   // textTop = patientNameLabelTop + patientNameLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Droid Sans', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle') ;
-
-   // textTop = patientNameValueTop + patientNameValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Patient Name"), window.colors.ZWHITE, 'Droid Sans', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle') ;
-
-   // textTop = patientIDLabelTop + patientIDLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Droid Sans', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = patientIDValueTop + patientIDValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Patient ID"), window.colors.ZWHITE, 'Droid Sans', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = monitorIDLabelTop + monitorIDLabelHeight / 2 ;
-   // fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Droid Sans', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   // textTop = monitorIDValueTop + monitorIDValueHeight / 2 ;
-   // fitText(homeScreen.getSettingValue("Monitor ID"), window.colors.ZWHITE, 'Droid Sans', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle') ;
-
-   textTop = patientNameLabelTop + patientNameLabelHeight / 2;
-   fitText(translateNumber(window.StringNumbers.SN_Name), window.colors.ZWHITE, 'Arial', 20, patientNameLabelLeft, textTop, patientNameLabelWidth, patientNameLabelHeight, 'left', 'middle');
-
-   textTop = patientNameValueTop + patientNameValueHeight / 2;
-   var patientName = homeScreen.getSettingValue("patientLastName") + ", " + homeScreen.getSettingValue("patientFirstName");
-   if (patientName == ", ") {
-      patientName = "";
+   if (patientIdFormat == "PID") {
+      patientButtonLabel = patientId ; 
    }
-   fitText(patientName, window.colors.ZWHITE, 'Arial', 20, patientNameValueLeft, textTop, patientNameValueWidth, patientNameLabelHeight, 'left', 'middle');
+   if (patientIdFormat == "LNFI") {
+      if (firstName.length > 0) {
+         patientButtonLabel = lastName + ", " + firstName.charAt(0) + "." ;
+      }
+      else {
+         patientButtonLabel = lastName  ;
+      }
+   }
+   else if (patientIdFormat == "FNLI") {
+      if (lastName.length > 0) {
+         patientButtonLabel = firstName + " " + lastName.charAt(0) + "." ;
+      }
+      else {
+         patientButtonLabel = firstName  ;
+      }
+   }
+   else if (patientIdFormat == "blank") {
+      patientButtonLabel = "";
+   }
 
-   textTop = patientIDLabelTop + patientIDLabelHeight / 2;
-   fitText(translateNumber(window.StringNumbers.SN_ID), window.colors.ZWHITE, 'Arial', 20, patientIDLabelLeft, textTop, patientIDLabelWidth, patientIDLabelHeight, 'left', 'middle');
+   let monitorButtonLabel = "";
 
-   textTop = patientIDValueTop + patientIDValueHeight / 2;
-   fitText(homeScreen.getSettingValue("patientId"), window.colors.ZWHITE, 'Arial', 20, patientIDValueLeft, textTop, patientIDValueWidth, patientIDLabelHeight, 'left', 'middle');
+   var monitorId = homeScreen.getSettingValue("monitorId") ;
+   var clinicianId = homeScreen.getSettingValue("clinicianId") ;
 
-   textTop = monitorIDLabelTop + monitorIDLabelHeight / 2;
-   fitText(translateNumber(window.StringNumbers.SN_Monitor), window.colors.ZWHITE, 'Arial', 20, monitorIDLabelLeft, textTop, monitorIDLabelWidth, patientIDLabelHeight, 'left', 'middle');
+   var monitorIdFormat = homeScreen.getSettingValue("monitorIdFormat") ;
 
-   textTop = monitorIDValueTop + monitorIDValueHeight / 2;
-   fitText(homeScreen.getSettingValue("monitorId"), window.colors.ZWHITE, 'Arial', 20, monitorIDValueLeft, textTop, monitorIDValueWidth, patientIDLabelHeight, 'left', 'middle');
+   if (monitorIdFormat == "MID") {
+      monitorButtonLabel = monitorId ; 
+   }
+   else if (monitorIdFormat == "CID") {
+      monitorButtonLabel = clinicianId ; 
+   }
+   else {
+      monitorButtonLabel = "";
+   }
+
+   if (patientIdFormat != "blank") {
+      if (patientButtonLabel.length == 0) {
+         patientButtonLabel = translateNumber(window.StringNumbers.SN_Patient) + ":" ;
+      }
+      fitText(patientButtonLabel, window.colors.ZWHITE, 'Arial', 20, patientButtonLeft, textTop, patientButtonWidth, patientButtonHeight, 'left', 'middle');
+   }
+
+   if (monitorButtonLabel.length == 0) {
+      if (monitorIdFormat == "MID") {
+         monitorButtonLabel = translateNumber(window.StringNumbers.SN_Monitor) + ":" ;
+      }
+      else {
+         monitorButtonLabel = translateNumber(window.StringNumbers.SN_Clinician) + ":" ;
+      }
+   }
+   fitText(monitorButtonLabel, window.colors.ZWHITE, 'Arial', 20, monitorButtonLeft, textTop, monitorButtonWidth, monitorButtonHeight, 'left', 'middle');
 
    drawBackArrow(backArrowLeft, backArrowTop, backArrowWidth, backArrowHeight, backArrowHeight * 50 / 100);
 
@@ -548,7 +519,7 @@ function drawBackArrow(x, y, w, h, size) {
 //   drawBottomLineMessageArea
 //
 
-var lastAlarmsSilenced = -1 ;
+var lastAlarmsSilenced = -1;
 
 function drawBottomLineMessageArea() {
 
@@ -569,7 +540,7 @@ function drawBottomLineMessageArea() {
          displayCtx.fillStyle = window.colors.ZBLACK;
          displayCtx.fillRect(messageX, messageY, 60, messageHeight);
 
-         var audioPausedIconX = messageX + 10 ;
+         var audioPausedIconX = messageX + 10;
          var audioPausedIconY = messageY + (messageHeight - 40) / 2;
 
          const audioPausedImageData = "data:image/png;base64,Qk32EgAAAAAAADYAAAAoAAAAKAAAACgAAAABABgAAAAAAMASAADDDgAAww4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAD/AAD/AAD/wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAD/AAD/AAD/wMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAD/wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAD/wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/wMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
@@ -583,8 +554,8 @@ function drawBottomLineMessageArea() {
 
       }
 
-      messageX += 60 ;
-      messageWidth -= 60 ;
+      messageX += 60;
+      messageWidth -= 60;
 
    }
 
@@ -644,10 +615,26 @@ function updateClock() {
    // Get the current month, day, and year
    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to match the standard month numbering
    const day = currentDate.getDate().toString().padStart(2, '0');
-   const year = currentDate.getFullYear();
+   const fullYear = currentDate.getFullYear();
+   const year = currentDate.getFullYear().toString().slice(-2); // Get last two digits of the year
 
-   // Format the date as mm/dd/yyyy
-   const formattedDate = `${month}/${day}/${year}`;
+   let formattedDate = "";
+
+   var dateFormat = homeScreen.getSettingValue("dateFormat") ;
+
+   if (dateFormat == "MMDDYY") {
+      formattedDate = `${month}/${day}/${year}`;
+   }
+   else if (dateFormat == "DDMMYYYY") {
+      formattedDate = `${day}/${month}/${fullYear}`;
+   }
+   else if (dateFormat == "MMDDYYYY") {
+      formattedDate = `${month}/${day}/${fullYear}`;
+   }
+   else if (dateFormat == "YYYYMMDD") {
+      formattedDate = `${fullYear}/${month}/${day}`;
+   }
+ 
 
    // Get the current hours and minutes
    const hours = currentDate.getHours().toString().padStart(2, '0');

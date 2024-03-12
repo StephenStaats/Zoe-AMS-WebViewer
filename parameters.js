@@ -935,9 +935,16 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 //  drawParameterAreas
 //
 
-function drawParameterAreas() {
+function drawParameterAreas(clearFirst) {
 
-   var clearRESPParameterArea = 1;
+   if (clearFirst == 1) {
+      displayCtx.fillStyle = "#000000";
+      displayCtx.fillRect(homeScreen.middleParamAreaLeft, homeScreen.middleParamAreaTop, homeScreen.middleParamAreaWidth, homeScreen.middleParamAreaHeight);
+      displayCtx.fillRect(homeScreen.rightParamAreaLeft, homeScreen.rightParamAreaTop, homeScreen.rightParamAreaWidth, homeScreen.rightParamAreaHeight);
+      displayCtx.fillRect(homeScreen.bottomParamAreaLeft, homeScreen.bottomParamAreaTop, homeScreen.bottomParamAreaWidth, homeScreen.bottomParamAreaHeight);
+   }
+
+   //var clearRESPParameterArea = 1;
 
    for (p = 0; p < homeScreen.parameters.length; p++) {
 
@@ -951,10 +958,10 @@ function drawParameterAreas() {
 
    }
 
-   if (clearRESPParameterArea) {
-      clearParameterArea("RR");
-      return;
-   }
+   // if (clearRESPParameterArea) {
+   //    clearParameterArea("RR");
+   //    return;
+   // }
 
 }
 
@@ -964,6 +971,8 @@ function drawParameterAreas() {
 //
 
 function setupParameters(AMSParameters) {
+
+   drawParameterAreas(1);
 
    homeScreen.clearParameterList();
 
