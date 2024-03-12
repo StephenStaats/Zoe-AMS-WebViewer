@@ -48,6 +48,13 @@ function HomeScreen(width, height) {
    this.bottomParamAreaTop = 0;
    this.bottomParamAreaBottom = 0;
 
+   this.dateTimeAreaWidth = 0;
+   this.dateTimeAreaHeight = 0;
+   this.dateTimeAreaLeft = 0;
+   this.dateTimeAreaRight = 0;
+   this.dateTimeAreaTop = 0;
+   this.dateTimeAreaBottom = 0;
+
    this.messageAreaWidth = 0;
    this.messageAreaHeight = 0;
    this.messageAreaLeft = 0;
@@ -67,6 +74,7 @@ function HomeScreen(width, height) {
 
 HomeScreen.prototype.initializeAreas = function () {
 
+
    var canvasWidth = this.width;
    var canvasHeight = this.height;
 
@@ -78,7 +86,7 @@ HomeScreen.prototype.initializeAreas = function () {
    this.headerBottom = this.headerTop + this.headerHeight;
 
    this.waveformScaleAreaWidth = Math.round(canvasWidth * 6 / 100);
-   this.waveformScaleAreaHeight = Math.round(canvasHeight * 60 / 100);
+   this.waveformScaleAreaHeight = Math.round(canvasHeight * 57 / 100);
    this.waveformScaleAreaLeft = 0;
    this.waveformScaleAreaRight = this.waveformScaleAreaLeft + this.waveformScaleAreaWidth;
    this.waveformScaleAreaTop = this.headerBottom;
@@ -98,10 +106,17 @@ HomeScreen.prototype.initializeAreas = function () {
    this.bottomParamAreaTop = this.waveformAreaBottom + 1;
    this.bottomParamAreaBottom = this.bottomParamAreaTop + this.bottomParamAreaHeight;
 
-   this.messageAreaWidth = canvasWidth;
+   this.dateTimeAreaLeft = 0;
+   this.dateTimeAreaRight = Math.round(canvasWidth * 15 / 100);;
+   this.dateTimeAreaHeight = Math.round(canvasHeight * 13 / 100);
+   this.dateTimeAreaWidth = this.dateTimeAreaRight - this.dateTimeAreaLeft;
+   this.dateTimeAreaTop = this.bottomParamAreaBottom + 1;
+   this.dateTimeAreaBottom = this.bottom;
+
+   this.messageAreaLeft = this.dateTimeAreaRight + 1;
+   this.messageAreaRight = this.headerRight;
+   this.messageAreaWidth = this.messageAreaRight - this.messageAreaLeft;
    this.messageAreaHeight = Math.round(canvasHeight * 13 / 100);
-   this.messageAreaLeft = 0;
-   this.messageAreaRight = this.messageAreaLeft + this.messageAreaWidth;
    this.messageAreaTop = this.bottomParamAreaBottom + 1;
    this.messageAreaBottom = this.bottom;
 
@@ -141,7 +156,7 @@ HomeScreen.prototype.initializeAreas = function () {
    this.ETCO2ParamAreaBottom = this.ETCO2ParamAreaTop + this.ETCO2ParamAreaHeight;
 
    this.FICO2ParamAreaWidth = this.middleParamAreaWidth;
-   this.FICO2ParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
+   this.FICO2ParamAreaHeight = this.ETCO2ParamAreaHeight / 2;
    this.FICO2ParamAreaLeft = this.middleParamAreaLeft;
    this.FICO2ParamAreaRight = this.middleParamAreaRight;
    this.FICO2ParamAreaTop = this.ETCO2ParamAreaBottom + 1;
@@ -158,7 +173,7 @@ HomeScreen.prototype.initializeAreas = function () {
 
    this.RRCParamAreaWidth = this.rightParamAreaWidth;
    //this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight;
-   this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
+   this.RRCParamAreaHeight = this.ETCO2ParamAreaHeight / 2;
    this.RRCParamAreaLeft = this.rightParamAreaLeft;
    this.RRCParamAreaRight = this.rightParamAreaRight;
    this.RRCParamAreaTop = this.ETCO2ParamAreaTop;
@@ -167,7 +182,7 @@ HomeScreen.prototype.initializeAreas = function () {
 
    this.RRParamAreaWidth = this.rightParamAreaWidth;
    //this.RRParamAreaHeight = this.ETCO2ParamAreaHeight;
-   this.RRParamAreaHeight = this.ETCO2ParamAreaHeight / 2 ;
+   this.RRParamAreaHeight = this.ETCO2ParamAreaHeight / 2;
    this.RRParamAreaLeft = this.rightParamAreaLeft;
    this.RRParamAreaRight = this.rightParamAreaRight;
    this.RRParamAreaTop = this.ETCO2ParamAreaTop;
@@ -182,7 +197,7 @@ HomeScreen.prototype.initializeAreas = function () {
    // this.blankParamAreaBottom = this.FICO2ParamAreaBottom;
 
    this.TEMPParamAreaWidth = this.rightParamAreaWidth;
-   this.TEMPParamAreaHeight = this.ETCO2ParamAreaHeight ;
+   this.TEMPParamAreaHeight = this.ETCO2ParamAreaHeight;
    this.TEMPParamAreaLeft = this.rightParamAreaLeft;
    this.TEMPParamAreaRight = this.rightParamAreaRight;
    this.TEMPParamAreaTop = this.RRCParamAreaBottom;
@@ -195,7 +210,7 @@ HomeScreen.prototype.initializeAreas = function () {
    //this.NIBPParamAreaRight = this.bottomParamAreaRight - this.bottomParamAreaWidth * 15 / 100;
    this.NIBPParamAreaRight = this.bottomParamAreaRight;
    this.NIBPParamAreaWidth = this.NIBPParamAreaRight - this.NIBPParamAreaLeft;
-   this.NIBPParamAreaTop = this.bottomParamAreaTop;
+   this.NIBPParamAreaTop = this.bottomParamAreaTop + 1;
    //this.NIBPParamAreaBottom = this.bottomParamAreaBottom;
    this.NIBPParamAreaBottom = this.messageAreaTop - 1;
    this.NIBPParamAreaHeight = this.NIBPParamAreaBottom - this.NIBPParamAreaTop;
@@ -296,7 +311,7 @@ function drawHomeScreenAreas() {
 
    drawTopLine();
 
-   drawWaveformAreas() ;
+   drawWaveformAreas();
 
    drawParameterAreas();
 
@@ -533,6 +548,8 @@ function drawBackArrow(x, y, w, h, size) {
 //   drawBottomLineMessageArea
 //
 
+var lastAlarmsSilenced = -1 ;
+
 function drawBottomLineMessageArea() {
 
    var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(window.bottomLineMessageAlarmStatus);
@@ -543,13 +560,39 @@ function drawBottomLineMessageArea() {
    var messageX = homeScreen.messageAreaLeft;
    var messageY = homeScreen.messageAreaTop;
    var messageWidth = homeScreen.messageAreaWidth;
+   var messageHeight = homeScreen.messageAreaHeight;
 
-   //messageY  = messageY + homeScreen.messageAreaHeight * 20 / 100;  // adjust since values in NIBP font can go below the parameter area
+   if (window.alarmsSilenced == 1) {
+
+      if (window.alarmsSilenced != lastAlarmsSilenced) {
+
+         displayCtx.fillStyle = window.colors.ZBLACK;
+         displayCtx.fillRect(messageX, messageY, 60, messageHeight);
+
+         var audioPausedIconX = messageX + 10 ;
+         var audioPausedIconY = messageY + (messageHeight - 40) / 2;
+
+         const audioPausedImageData = "data:image/png;base64,Qk32EgAAAAAAADYAAAAoAAAAKAAAACgAAAABABgAAAAAAMASAADDDgAAww4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAD/AAD/AAD/wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAD/AAD/AAD/wMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAD/wMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAD/wMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/wMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/wMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+         const audioPausedImage = new Image();
+         audioPausedImage.src = audioPausedImageData;
+
+         audioPausedImage.onload = function () {
+            // Draw the image onto the canvas
+            displayCtx.drawImage(audioPausedImage, audioPausedIconX, audioPausedIconY);
+         };
+
+      }
+
+      messageX += 60 ;
+      messageWidth -= 60 ;
+
+   }
+
+   lastAlarmsSilenced = window.alarmsSilenced;
 
    var messageHeight = homeScreen.messageAreaBottom - messageY;
 
    displayCtx.fillStyle = backgroundColor;
-   //displayCtx.clearRect(messageX, messageY, messageWidth, messageHeight);
    displayCtx.fillRect(messageX, messageY, messageWidth, messageHeight);
 
    var centerX = messageX + messageWidth / 2;
@@ -565,7 +608,62 @@ function drawBottomLineMessageArea() {
 }
 
 
+//
+//   updateClock
+//
 
+function updateClock() {
+
+   var messageX = homeScreen.messageAreaLeft;
+   var messageY = homeScreen.messageAreaTop;
+   var messageWidth = homeScreen.messageAreaWidth;
+
+   var messageHeight = homeScreen.messageAreaBottom - messageY;
+
+   displayCtx.fillStyle = window.colors.ZBLACK;
+   displayCtx.fillRect(homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight);
+
+   var dateLeft = homeScreen.dateTimeAreaLeft;
+   var dateTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 5 / 100;;
+   var dateWidth = homeScreen.dateTimeAreaWidth;
+   var dateHeight = homeScreen.dateTimeAreaHeight * 30 / 100;
+
+   var timeLeft = homeScreen.dateTimeAreaLeft;
+   var timeTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 35 / 100;;
+   var timeWidth = homeScreen.dateTimeAreaWidth;
+   var timeHeight = homeScreen.dateTimeAreaHeight * 60 / 100;
+
+   displayCtx.fillStyle = window.colors.ZWHITE;
+   displayCtx.font = '12pt Arial';
+   displayCtx.textAlign = 'center';
+   displayCtx.textBaseline = 'middle';
+
+   // Create a new Date object without any parameters
+   const currentDate = new Date();
+
+   // Get the current month, day, and year
+   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to match the standard month numbering
+   const day = currentDate.getDate().toString().padStart(2, '0');
+   const year = currentDate.getFullYear();
+
+   // Format the date as mm/dd/yyyy
+   const formattedDate = `${month}/${day}/${year}`;
+
+   // Get the current hours and minutes
+   const hours = currentDate.getHours().toString().padStart(2, '0');
+   const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+   const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+
+   // Format the time as HH:MM
+   const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+   displayCtx.fillText(formattedDate, dateLeft + dateWidth / 2, dateTop + dateHeight / 2); // Adjust the positioning as needed
+
+   displayCtx.font = '18pt Arial';
+
+   displayCtx.fillText(formattedTime, timeLeft + timeWidth / 2, timeTop + timeHeight / 2); // Adjust the positioning as needed
+
+}
 
 
 // Add event listener for mouse click
@@ -573,13 +671,6 @@ displayCanvas.addEventListener('click', handleClick);
 
 // Add event listener for touch events
 displayCanvas.addEventListener('touchstart', handleTouch);
-
-// // Function to respond to touch or mouse click events
-// function respondToMouseClickOrTouchAt(x, y) {
-//    if ((x >= backArrowTouchAreaLeft) && (x <= backArrowTouchAreaLeft + backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
-//       window.location.href = 'select.html';
-//    }
-// }
 
 // Function to handle touch events
 function handleTouch(event) {
@@ -589,7 +680,7 @@ function handleTouch(event) {
    const x = touch.clientX - rect.left;
    const y = touch.clientY - rect.top;
    LOGEVENTMAGENTA("Touch at (" + x + ", " + y + ")");
-   respondToMouseClickOrTouchAt(x, y) ;
+   respondToMouseClickOrTouchAt(x, y);
 }
 
 // Function to handle mouse click
@@ -598,7 +689,7 @@ function handleClick(event) {
    const x = event.clientX - rect.left;
    const y = event.clientY - rect.top;
    LOGEVENTMAGENTA("Mouse click at (" + x + ", " + y + ")");
-   respondToMouseClickOrTouchAt(x, y) ;
+   respondToMouseClickOrTouchAt(x, y);
 }
 
 

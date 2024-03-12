@@ -91,9 +91,64 @@ function updateFramesPerSecond(elapsedTime) {
 }
 
 // Function to respond to touch or mouse click events
+function backArrowTouched(x, y) {
+   if ((x >= backArrowTouchAreaLeft) && (x <= backArrowTouchAreaLeft + backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
+      return(1);
+   }
+   else {
+      return(0);
+   }
+}
+
+function waveformAreaTouched(x, y) {
+   if ((x >= homeScreen.waveformAreaLeft) && (x <= homeScreen.waveformAreaLeft + homeScreen.waveformAreaWidth) && (y >= homeScreen.waveformAreaTop) && (y <= homeScreen.waveformAreaTop + homeScreen.waveformAreaHeight)) {
+      return(1);
+   }
+   else {
+      return(0);
+   }
+}
+
+// Function to respond to touch or mouse click events
+function alarmingParameterAreaTouched(x, y) {
+
+   for (p = 0; p < homeScreen.parameters.length; p++) {
+
+      var parameterName = homeScreen.parameters[p].parameterName ;
+      var parameterAlarmStatus = homeScreen.parameters[p].parameterAlarmStatus ;
+      var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(parameterAlarmStatus) ;
+
+      if (numericAlarmStatus >= window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW) {
+
+         var left = getLeftFromParameterName(parameterName);
+         var top = getTopFromParameterName(parameterName);
+         var width = getWidthFromParameterName(parameterName);
+         var height = getHeightFromParameterName(parameterName);
+
+         if ((x >= left) && (x <= left + width) && (y >= top) && (y <= top + height)) {
+
+            return(1);
+
+         }
+
+      }
+ 
+   }
+
+   return(0);
+}
+
+
+// Function to respond to touch or mouse click events
 function respondToMouseClickOrTouchAt(x, y) {
-   if ((x <= backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
+   if (backArrowTouched(x,y)) {
       window.location.href = 'select.html';
+   }
+   else if (waveformAreaTouched(x,y)) {
+      startStopWaveforms();
+   }
+   else if (alarmingParameterAreaTouched(x,y)) {
+      silenceAlarms();
    }
 }
 

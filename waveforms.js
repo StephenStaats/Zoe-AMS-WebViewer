@@ -631,7 +631,6 @@ function drawWaveform(w) {
 function drawWaveformScaleArea() {
 
    displayCtx.fillStyle = window.colors.ZBLACK;
-   displayCtx.clearRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
    displayCtx.fillRect(homeScreen.waveformScaleAreaLeft, homeScreen.waveformScaleAreaTop, homeScreen.waveformScaleAreaWidth, homeScreen.waveformScaleAreaHeight);
 
    var w;
@@ -873,9 +872,9 @@ function startStopWaveforms() {
       pauseWaveformDrawing = 1;
    } else {
       button.textContent = 'Pause Waveforms';
-      redrawHomeScreen = 1;
-      //pauseWaveformDrawing = 0;
-      resetWaveforms(0);
+      //redrawHomeScreen = 1;
+      pauseWaveformDrawing = 0;
+      resetWaveforms();
    }
 
 }
@@ -888,7 +887,7 @@ function startStopWaveforms() {
 function drawWaveformAreas() {
 
    displayCtx.fillStyle = window.colors.ZBLACK;
-   displayCtx.fillRect(homeScreen.waveformAreaLeft, homeScreen.waveformAreaTop, homeScreen.waveformAreaWidth, homeScreen.waveformAreaHeight);
+   displayCtx.fillRect(homeScreen.waveformAreaLeft, homeScreen.waveformAreaTop, homeScreen.waveformAreaWidth, homeScreen.waveformAreaHeight+1);
 
    drawWaveformScaleArea() ;
 
@@ -947,39 +946,40 @@ function setupWaveforms(AMSWaveforms) {
 //   resetWaveforms
 //
 
-//var waveformSetIndex = 0;
+function resetWaveforms() {
 
-//function resetWaveforms(shiftWaveforms) {
-// function resetWaveforms() {
+   var w = 0 ;
+   for (w = 0; w < homeScreen.waveforms.length; w++) {
 
-//    //const randomInteger = Math.floor(Math.random() * 2);
+      var wvf = homeScreen.waveforms[w] ;
 
-//    // if (shiftWaveforms) {
-//    //    waveformSetIndex++
-//    //    if (waveformSetIndex >= currentWaveforms.length) {
-//    //       waveformSetIndex = 0;
-//    //    }
-//    // }
+      wvf.drawX = wvf.left;
+      wvf.drawXTime = 0;
+      wvf.eraseX = wvf.drawX + homeScreen.eraseBarWidth;
+      wvf.drawY = 0;
+      wvf.drawXLast = Number.MIN_VALUE;
+      wvf.drawYLast = Number.MIN_VALUE;
+      wvf.headIndex = 0;
+      wvf.tailIndex = 0;
 
-//    pauseWaveformDrawing = 1;
+      wvf.elapsedTime = 0;       // total elapsed time in MS (as clocked by the browser)
+      wvf.drawnPixelTime = 0;    // total time represented by drawn pixels
+      wvf.shiftedPixelTime = 0;  // total time represented by shifted pixels
+      wvf.readSampleTime = 0;    // total time represented by read samples
+      wvf.readSampleTime = 0;    // total time represented by read samples
 
-//    //setupWaveforms(currentWaveforms[waveformSetIndex]);
+      wvf.pixelsDrawnToBuffer = 0;
+      wvf.pixelBufferIndex = 0;
 
-//    pauseWaveformDrawing = 0;
+      wvf.samplesDrawn = 0;
+      wvf.samplesToDraw = wvf.width;
+      wvf.clearSamples() ;
 
-//    if (window.simulatedDataMode) {
-//       simulateArrivalOfAMSMessage();
-//    }
+   }
 
-//    // Get the button element by its ID
-//    // var button = document.getElementById('startStopWaveformsButton');
+   drawWaveformAreas();
 
-//    // button.textContent = 'Pause Waveforms';
-
-//    redrawHomeScreen = 1;
-
-// }
-
+}
 
 //
 //   processWaveformData

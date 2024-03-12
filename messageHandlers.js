@@ -47,18 +47,29 @@ function processAMSMessage(newAMSMessage) {
    LOGEVENT(" ");
    LOGEVENTGREEN('In processAMSMessage, count = ', AMSMessageCount);
 
+   const AMSSettings = newAMSMessage.settings ;
+   var settingChange = processSettingData(AMSSettings) ;
+   if (settingChange) {
+      drawTopLine();
+      drawWaveformAreas();
+      drawParameterAreas();
+      drawBottomLineMessageArea();
+   }
+
    const AMSWaveforms = newAMSMessage.waveforms ;
    var waveformChange = processWaveformData(AMSWaveforms) ;
+   if (waveformChange) {
+      drawWaveformAreas();
+   }
 
    const AMSParameters = newAMSMessage.parameters ;
    var parameterChange = processParameterData(AMSParameters) ;
-
-   const AMSSettings = newAMSMessage.settings ;
-   var settingChange = processSettingData(AMSSettings) ;
-
-   if (waveformChange || parameterChange || settingChange) {
-      redrawHomeScreen = 1 ;
+   if (parameterChange) {
+      drawWaveformAreas();
+      drawParameterAreas();
    }
+
+
 
 }
 

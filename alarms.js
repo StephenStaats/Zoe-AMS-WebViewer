@@ -4,6 +4,7 @@
 
 window.monitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
 window.lastMonitorAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
+window.lastHighestAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE ;
 
 window.monitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
 window.lastMonitorAlarmTone = window.Z_ALARM_TONE.Z_ALARM_TONE_NONE ;
@@ -199,8 +200,9 @@ function soundalarmTone() {
 
    monitorAlarmTone = getAlarmToneFromAlarmStatus(monitorAlarmStatus) ;
 
-   if (monitorAlarmTone != lastMonitorAlarmTone) {
+   if ((highestAlarmStatus != lastHighestAlarmStatus) || (monitorAlarmTone != lastMonitorAlarmTone)) {
 
+      lastHighestAlarmStatus = highestAlarmStatus ;
       lastMonitorAlarmTone = monitorAlarmTone ;
 
       toneToggleState = 0 ;
@@ -211,7 +213,9 @@ function soundalarmTone() {
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_NONE :
             //LOGALARMEVENT(translateNumber(window.StringNumbers.SN_New_alarm_tone_OFF)) ;
-            window.alarmsSilenced = 0 ;
+            if (highestAlarmStatus < window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE) {
+               window.alarmsSilenced = 0 ;
+            }
             break ;
 
          case window.Z_ALARM_TONE.Z_ALARM_TONE_LOW :
@@ -472,6 +476,8 @@ function updateBlinkState() {
          getAMSMessages() ;
 
       }
+
+      updateClock() ;
 
    }
 
