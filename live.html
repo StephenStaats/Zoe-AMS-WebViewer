@@ -72,6 +72,8 @@ homeScreen.initializeAreas();
 
 //resetWaveforms(0);
 
+window.simulatedDataMode = sessionStorage.getItem("simulatedDataMode");
+
 if (window.simulatedDataMode) {
    simulateArrivalOfAMSMessage();
    simulateArrivalOfAMSMessage();

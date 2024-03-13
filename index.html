@@ -119,6 +119,8 @@ homeScreen.initializeAreas();
 
 window.rotated = 0 ;
 
+window.simulatedDataMode = sessionStorage.getItem("simulatedDataMode");
+
 if (window.simulatedDataMode) {
    simulateArrivalOfAMSMessage();
    simulateArrivalOfAMSMessage();
@@ -142,15 +144,15 @@ function updateFramesPerSecond(elapsedTime) {
 }
 
 
-//
-//   showSelectScreen  
-//
+// //
+// //   showSelectScreen  
+// //
 
-function showSelectScreen() {
+// function showSelectScreen() {
 
-  window.location.href = 'select.html';
+//   window.location.href = 'select.html';
 
-}
+// }
 
 // Function to respond to touch or mouse click events
 function backArrowTouched(x, y) {

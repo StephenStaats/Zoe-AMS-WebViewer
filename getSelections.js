@@ -81,6 +81,7 @@ function handleListItemClick(item) {
    console.log("Associated deviceId:", deviceId);
    //window.selectedDeviceId = deviceId ;
    sessionStorage.setItem("selectedDeviceId", deviceId);
+   sessionStorage.setItem("simulatedDataMode", window.simulatedDataMode);
    window.location.href = "live.html";
 }
 

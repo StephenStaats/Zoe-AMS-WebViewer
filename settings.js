@@ -158,15 +158,15 @@ function processSettingData(AMSSettings) {
                      needToResetWaveforms = 1 ;
 
                   }
-                  else if (setting.settingName == "TEMPunits") {
+                  else if ((setting.settingName == "TEMPunits") ||
+                           (setting.settingName == "CO2units")) {
 
                      needToDrawParameterAreas = 1 ;
 
                   }
-
-                  if ((setting.settingName == "bottomLineMessage") ||
-                      (setting.settingName == "bottomLineMessageAlarmStatus")) {
-
+                  else if ((setting.settingName == "bottomLineMessage") ||
+                           (setting.settingName == "bottomLineMessageAlarmStatus")) {
+    
                      needToDrawBottomLineMessageArea = 1 ;
 
                   }

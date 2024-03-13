@@ -233,7 +233,7 @@ window.simulatedAMSMessages = [
          },
          {
             "settingName": "CO2units",
-            "settingValue": "kPa"
+            "settingValue": "mmHg"
          },
          {
             "settingName": "bottomLineMessage",
@@ -477,7 +477,7 @@ window.simulatedAMSMessages = [
          },
          {
             "settingName": "CO2units",
-            "settingValue": "kPa"
+            "settingValue": "mmHg"
          },
          {
             "settingName": "bottomLineMessage",
@@ -711,7 +711,7 @@ window.simulatedAMSMessages = [
          },
          {
             "settingName": "CO2units",
-            "settingValue": "kPa"
+            "settingValue": "mmHg"
          },
          {
             "settingName": "bottomLineMessage",
@@ -946,7 +946,7 @@ window.simulatedAMSMessages = [
          },
          {
             "settingName": "CO2units",
-            "settingValue": "kPa"
+            "settingValue": "mmHg"
          },
          {
             "settingName": "bottomLineMessage",

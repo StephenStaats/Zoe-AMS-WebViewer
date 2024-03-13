@@ -82,15 +82,15 @@ function getNumericAlarmStatusFromAlarmStatus(alarmStatus) {
       case "NORMAL_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.NORMAL_NONE; break ;
       case "ACKNOWLEDGED_NONE" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE; break ;
       case "LATCHED_NONE" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_NONE; break ;
+      case "LATCHED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_LOW; break ;
+      case "LATCHED_MEDIUM" :      numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM; break ;
+      case "LATCHED_HIGH" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH; break ;
       case "ACTIVE_NONE" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE; break ;
       case "ACKNOWLEDGED_LOW" :    numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW; break ;
       case "ACKNOWLEDGED_MEDIUM" : numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM; break ;
-      case "LATCHED_LOW" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_LOW; break ;
-      case "LATCHED_MEDIUM" :      numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM; break ;
+      case "ACKNOWLEDGED_HIGH" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH; break ;
       case "ACTIVE_LOW" :          numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW; break ;
       case "ACTIVE_MEDIUM" :       numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM; break ;
-      case "ACKNOWLEDGED_HIGH" :   numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH; break ;
-      case "LATCHED_HIGH" :        numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH; break ;
       case "ACTIVE_HIGH" :         numericAlarmStatus = window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH; break ;
    }
 
@@ -108,21 +108,12 @@ function getNeedToColorFromAlarmStatus(alarmStatus) {
    var needToColor = 0;
 
    switch (alarmStatus) {
-      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
-         needToColor = 0;
-         break;
 
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
          needToColor = 1;
          break;
@@ -315,6 +306,76 @@ function soundalarmTone() {
 }
 
 
+//
+//  getTextForegroundColorFromAlarmStatus
+//
+
+function getTextForegroundColorFromAlarmStatus(alarmStatus, blinkState) {
+
+   let returnColor;
+
+   switch (alarmStatus) {
+
+      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
+         returnColor = window.colors.ZWHITE;
+         break;
+
+      default:
+         returnColor = window.colors.ZWHITE;
+         break;
+   }
+
+   return returnColor;
+}
+
 
 //
 //  getTextBackgroundColorFromAlarmStatus
@@ -325,10 +386,12 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
    let returnColor;
 
    switch (alarmStatus) {
+
       case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
+         returnColor = window.colors.ZBLACK;
+         break;
+
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
          returnColor = window.colors.ZBLACK;
          break;
 
@@ -344,73 +407,53 @@ function getTextBackgroundColorFromAlarmStatus(alarmStatus, blinkState) {
          returnColor = window.colors.ZRED;
          break;
 
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
+         returnColor = window.colors.ZBLACK;
+         break;
+
+      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
+         returnColor = window.colors.ZBLACK;
+         break;
+
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
          returnColor = window.colors.ZCYAN;
          break;
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
-         // if (window.alarmsSilenced) {
-         //    returnColor = window.colors.ZBLINK_YELLOW_ON ;
-         // }
-         // else {
-            returnColor = (blinkState < 4) ? window.colors.ZBLINK_YELLOW_ON : window.colors.ZBLINK_YELLOW_OFF;
-         //}
+         if (blinkState < 4) returnColor = window.colors.ZBLINK_YELLOW_ON;
+         else                returnColor = window.colors.ZBLINK_YELLOW_OFF;
          break;
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
-         // if (window.alarmsSilenced) {
-         //    returnColor = window.colors.ZBLINK_RED_ON ;
-
-         // }
-         // else {
-            returnColor = (blinkState < 4) ? window.colors.ZBLINK_RED_ON : window.colors.ZBLINK_RED_OFF;
-         //}
+         if (blinkState < 4) returnColor = window.colors.ZBLINK_RED_ON;
+         else                returnColor = window.colors.ZBLINK_RED_OFF;
          break;
 
       default:
          returnColor = window.colors.ZBLACK;
          break;
+
    }
 
    return returnColor;
 }
 
 
-function getTextForegroundColorFromAlarmStatus(alarmStatus, blinkState) {
-
-   let returnColor;
-
-   switch (alarmStatus) {
-      case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
-         returnColor = window.colors.ZWHITE;
-         break;
-
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM:
-         returnColor = window.colors.ZBLACK;
-         break;
-
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
-         returnColor = window.colors.ZWHITE;
-         break;
-
-      default:
-         returnColor = window.colors.ZWHITE;
-         break;
-   }
-
-   return returnColor;
-}
-
+//
+//  updateAlarmTones
+//
 
 function updateAlarmTones() {
 
@@ -419,11 +462,13 @@ function updateAlarmTones() {
       case window.Z_PARAM_ALARM_STATUS.NORMAL_NONE:
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_NONE:
       case window.Z_PARAM_ALARM_STATUS.LATCHED_NONE:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_NONE:
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_LOW:
       case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_MEDIUM:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_LOW:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_MEDIUM:
+      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
          // silence 
          break;
 
@@ -435,17 +480,12 @@ function updateAlarmTones() {
          playAlarmToneMEDIUM();
          break;
 
-      case window.Z_PARAM_ALARM_STATUS.ACKNOWLEDGED_HIGH:
-      case window.Z_PARAM_ALARM_STATUS.LATCHED_HIGH:
-         // silence 
-         break;
-
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH:
          playAlarmToneHIGH();
          break;
 
       default:
-         // silence 
+         playAlarmToneLOW();
          break;
 
    }

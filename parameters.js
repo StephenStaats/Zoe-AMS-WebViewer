@@ -514,6 +514,10 @@ function getHeightFromParameterName(parameterName) {
 
 Parameter.prototype.drawParameterArea = function () {
 
+   if (this.parameterName == "ETCO2") {
+      var s = 0 ;
+   }
+
    textForegroundColor = this.getColorFromParameterName(this.parameterName);
    textBackgroundColor = window.colors.ZBLACK;
 
@@ -526,14 +530,10 @@ Parameter.prototype.drawParameterArea = function () {
       textBackgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState);
    }
 
-   // displayCtx.fillStyle = this.textBackgroundColor;
-
    var left = getLeftFromParameterName(this.parameterName);
    var top = getTopFromParameterName(this.parameterName);
    var width = getWidthFromParameterName(this.parameterName);
    var height = getHeightFromParameterName(this.parameterName);
-
-   // displayCtx.fillRect(left, top, width, height);
 
    var pointSize = this.getPointSizeFromParameterName(this.parameterName);
 
@@ -556,11 +556,6 @@ Parameter.prototype.drawParameterArea = function () {
       if (redrawHomeScreen) {
          redrawNeeded = 1 ;
       }
-
-      // if (this.firstTimeDraw > 0) {
-      //    this.firstTimeDraw -= 1 ;
-      //    redrawNeeded = 1 ;
-      // }
 
       if ((this.parameterName          != this.lastParameterName) ||
          (this.parameterValue          != this.lastParameterValue) ||
@@ -623,8 +618,6 @@ Parameter.prototype.drawParameterArea = function () {
 
       }
 
-      //redrawNeeded = 1 ;
-
       if (redrawNeeded) {
 
          drawGenericParameterArea(this.parameterName, units, this.parameterValue, alarmsOn, upperLimit, lowerLimit, textForegroundColor, textBackgroundColor, "Arial", pointSize, left, top, width, height); // Draw the rectangle (x, y, width, height)
@@ -659,49 +652,14 @@ function clearParameterArea(parameterName) {
 //  drawGenericParameterArea
 //
 
-// Base64 encoded string of your image data
-const pauseAudioImageData = "data:image/png;base64,Qk32EgAAAAAAADYAAAAoAAAAKAAAACgAAAABABgAAAAAAMASAADDDgAAww4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwMDAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-
-// Create an Image object
-const pauseAudioImage = new Image();
-
-// Set the source of the image
-pauseAudioImage.src = pauseAudioImageData;
-
-// var lastHRAlarmsOn = "" ;
-// var lastSPO2AlarmsOn = "" ;
-// var lastETCO2AlarmsOn = "" ;
-// var lastFICO2AlarmsOn = "" ;
-// var lastRRCAlarmsOn = "" ;
-// var lastRRAlarmsOn = "" ;
-// var lastTEMPAlarmsOn = "" ;
-// var lastNIBPAlarmsOn = "" ;
-
 function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, lowerLimit, textForegroundColor, textBackgroundColor, font, fontSize, x, y, width, height) {
 
    displayCtx.fillStyle = textBackgroundColor;
 
-   // var left = getLeftFromParameterName(label);
-   // var top = getTopFromParameterName(label);
-   // var width = getWidthFromParameterName(labele);
-   // var height = getHeightFromParameterName(tlabel);
-
    displayCtx.fillRect(x, y, width, height);
 
-
-
-   // // Set the outline color
-   // displayCtx.strokeStyle = window.colors.AreaSeparatorColor;
-   // // Set the outline width
-   // displayCtx.lineWidth = 1; 
-   // // Draw the rectangle outline
-   // displayCtx.strokeRect(x, y, width, height);
-
-   // Set the text color
    displayCtx.fillStyle = textForegroundColor;
 
-   // var labelX = x + width * 10 / 100 ;
-   // var labelY = y + height * 15 / 100 ;
    var labelX = x + 8;
    var labelY = y + 20;
 
@@ -712,19 +670,16 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
    var valueY = y + height * 70 / 100;
 
    // Add label in the upper left corner
-   // Set the font and font size
-   displayCtx.font = '11pt Arial'; // Reset to default font and size
+   displayCtx.font = '11pt Arial';  
    displayCtx.textAlign = 'left';
-   displayCtx.fillText(label, labelX, labelY); // Adjust the positioning as needed
+   displayCtx.fillText(label, labelX, labelY);  
 
-   //var labelRight= labelX + displayCtx.measureText(label).width;
    var labelRight= labelX + displayCtx.measureText("MMM").width;
 
    // Add units right below label in the upper left corner
-   // Set the font and font size
-   displayCtx.font = '9pt Arial'; // Reset to default font and size
+   displayCtx.font = '9pt Arial';  
    displayCtx.textAlign = 'left';
-   displayCtx.fillText(units, unitsX, unitsY); // Adjust the positioning as needed
+   displayCtx.fillText(units, unitsX, unitsY);  
 
    if (label == "NIBP") {
 
@@ -738,34 +693,31 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
       if (value.indexOf(" / ") == -1) {
 
-         displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed
+         displayCtx.fillText(value, valueX, valueY);  
 
       }
       else {
 
-         //displayCtx.fillStyle = 'rgba(255, 255, 255, 0.5)'; // Transparent white
-
-         // Split the string by "/"
          const parts = value.split(" / ");
 
          // Extract systolic and diastolic values
-         const systolic = parts[0]; // "120"
-         const diastolicWithMean = parts[1]; // "80 (100)"
+         const systolic = parts[0];  
+         const diastolicWithMean = parts[1]; 
 
          // Extract diastolic and mean values
-         const diastolic = diastolicWithMean.split(" ")[0]; // "80"
-         const mean = diastolicWithMean.split("(")[1].replace(")", ""); // "100"
+         const diastolic = diastolicWithMean.split(" ")[0];  
+         const mean = diastolicWithMean.split("(")[1].replace(")", "");  
 
          // Form the desired strings
-         const sysDiaString = `${systolic} / ${diastolic}`; // "120 / 80"
-         const meanString = `(${mean})`; // "(100)"
+         const sysDiaString = `${systolic} / ${diastolic}`;  
+         const meanString = `(${mean})`;  
 
          displayCtx.font = `${fontSize + 5}pt ${font}`;
          displayCtx.textAlign = 'center';
 
          valueX = x + width * 50 / 100;
 
-         displayCtx.fillText(sysDiaString, valueX, valueY); // Adjust the positioning as needed
+         displayCtx.fillText(sysDiaString, valueX, valueY);  
 
          displayCtx.font = `${fontSize - 15}pt ${font}`;
          displayCtx.textAlign = 'left';
@@ -773,7 +725,7 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          valueX = x + width * 80 / 100;
          valueY = y + height * 70 / 100;
 
-         displayCtx.fillText(meanString, valueX, valueY); // Adjust the positioning as needed
+         displayCtx.fillText(meanString, valueX, valueY); 
 
          var parameterTime = homeScreen.getSettingValue("NIBPtime");
 
@@ -781,10 +733,10 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
             timeY = y + height * 80 / 100;
 
-            displayCtx.font = '12pt Arial'; // Reset to default font and size
+            displayCtx.font = '12pt Arial';  
             displayCtx.textAlign = 'left';
 
-            displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY); // Adjust the positioning as needed
+            displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY);  
 
          }
 
@@ -797,7 +749,7 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
       displayCtx.font = `${fontSize}pt ${font}`;
       displayCtx.textAlign = 'center';
-      displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
+      displayCtx.fillText(value, valueX, valueY);    
 
       var parameterTime = homeScreen.getSettingValue("TEMPtime");
 
@@ -805,138 +757,72 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
          timeY = y + height * 85 / 100;
 
-         displayCtx.font = '11pt Arial'; // Reset to default font and size
+         displayCtx.font = '11pt Arial'; 
          displayCtx.textAlign = 'left';
 
-         displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY); // Adjust the positioning as needed
+         displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY); 
 
       }
 
    }
-   // else if (label == "FICO2") {
-
-   //    valueY = y + height * 80 / 100;
-
-   //    displayCtx.font = `${fontSize}pt ${font}`;
-   //    displayCtx.textAlign = 'center';
-   //    displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed   
-
-   // }
    else {
 
       displayCtx.font = `${fontSize}pt ${font}`;
       displayCtx.textAlign = 'center';
-      displayCtx.fillText(value, valueX, valueY); // Adjust the positioning as needed  
+      displayCtx.fillText(value, valueX, valueY);   
 
    }
 
-   // var redrawAlarmLimits = 0 ;
+   if (alarmsOn == "1") {
 
-   // if ((label == "HR") && (alarmsOn != lastHRAlarmsOn)) {
-   //    lastHRAlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
+      if (label == "NIBP") {
 
-   // if ((label == "SPO2") && (alarmsOn != lastSPO2AlarmsOn)) {
-   //    lastSPO2AlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
+         var alarmStringX = x + width * 55 / 100;
+         var alarmStringY = y + 20;
 
-   // if ((label == "ETCO2") && (alarmsOn != lastETCO2AlarmsOn)) {
-   //    lastETCO2AlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if ((label == "FICO2") && (alarmsOn != lastFICO2AlarmsOn)) {
-   //    lastFICO2AlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if ((label == "RRC") && (alarmsOn != lastRRCAlarmsOn)) {
-   //    lastRRCAlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if ((label == "RR") && (alarmsOn != lastRRAlarmsOn)) {
-   //    lastRRAlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if ((label == "TEMP") && (alarmsOn != lastTEMPAlarmsOn)) {
-   //    lastTEMPAlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if ((label == "NIBP") && (alarmsOn != lastNIBPAlarmsOn)) {
-   //    lastNIBPAlarmsOn = alarmsOn ;
-   //    redrawAlarmLimits = 1 ;
-   // }
-
-   // if (redrawAlarmLimits) {
-
-      if (alarmsOn == "1") {
-
-         if (label == "NIBP") {
-
-            var alarmStringX = x + width * 55 / 100;
-            var alarmStringY = y + 20;
-
-            displayCtx.font = '10pt Arial'; // Reset to default font and size
-            displayCtx.textAlign = 'left';
-            displayCtx.fillText(homeScreen.getSettingValue("NIBPAlarmSettingsString"), alarmStringX, alarmStringY); // Adjust the positioning as needed
-
-         }
-         else {
-
-            var upperLimitX = x + width * 90 / 100;
-            var lowerLimitX = x + width * 90 / 100;
-
-            var upperLimitY = y + 20;
-            var lowerLimitY = y + 35;
-
-            // Add limits in the upper right corner
-            // Set the font and font size
-            displayCtx.font = '9pt Arial'; // Reset to default font and size
-            displayCtx.textAlign = 'right';
-            displayCtx.fillText(upperLimit, upperLimitX, upperLimitY); // Adjust the positioning as needed
-            displayCtx.fillText(lowerLimit, lowerLimitX, lowerLimitY); // Adjust the positioning as needed
-         }
+         displayCtx.font = '10pt Arial'; 
+         displayCtx.textAlign = 'left';
+         displayCtx.fillText(homeScreen.getSettingValue("NIBPAlarmSettingsString"), alarmStringX, alarmStringY); 
 
       }
       else {
 
-         // display alarms off icon
+         var upperLimitX = x + width * 90 / 100;
+         var lowerLimitX = x + width * 90 / 100;
 
-         var alarmsOffIconX = x + width - 45;
-         var alarmsOffIconY = y + 7;
+         var upperLimitY = y + 20;
+         var lowerLimitY = y + 35;
 
-         if (label == "NIBP") {
-            alarmsOffIconX = labelRight + 10;
-            alarmsOffIconY = y + 10;
-         }
-
-         const alarmsOffImageData = "data:image/png;base64,Qk1aAwAAAAAAAHYAAAAoAAAAIgAAACUAAAABAAQAAAAAAOQCAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AACQAAAAAAAAAAAAAAAACQAAAAAACZkAAAAAAAAAAAAAAACZkAAAAACZmZAAAAAAAAAAAAAACZmZAAAAAAmZmQAAAAAAAAAAAACZmZAAAAAAAJmZkAAAAAAAAAAACZmZAAAAAAAACZmZAAAAAAAAAACZmZAAAAAAAAAAmZmQAAAAAAAACZmZAAAAAAAAB3d5mZl3d3d3d3eZmZd3cAAAAAAHd3eZmZd3d3d3eZmZd3dwAAAAAAB3AAmZmQAAAACZmZAAdwAAAAAAAHcAAJmZkAAACZmZAAB3AAAAAAAAB3AACZmZAACZmZAAB3AAAAAAAAAHcAAAmZmQCZmZAAAHcAAAAAAAAAB3AAAJmZmZmZAAAHcAAAAAAAAAAHcAAACZmZmZAAAAdwAAAAAAAAAAB3AAAAmZmZAAAAdwAAAAAAAAAAAHcAAACZmZkAAAB3AAB3AAAAAAAAB3AACZmZmZAAB3AAAHcAAAAAAAAHcACZmZmZmQAHcAAHcAAAAAAAAAB3CZmZAJmZkHcAAAdwAAAAAAAAAHeZmZAACZmZdwAAdwAAAAAAAAAACZmZAAAAmZmQAAB3AAAAAAAAAACZmZAAAAAJmZkAB3AAAAAAAAAACZmZAAAAAACZmZAHcAAAAAAAAACZmZcAAAAAAHmZmXcAAAAAAAAACZmZB3AAAAAHcJmZlwAAAAAAAACZmZAHcAAAAAdwCZmZAAAAAAAACZmZAAB3AAAAdwAAmZmQAAAAAACZmZAAAHcAAAB3AAB5mZkAAAAACZmZAAAAB3AAB3AAAHeZmZAAAAAAmZAAAAAHcAAHcAAHcAmZAAAAAAAJAAAAAAB3AHcAAAdwAJAAAAAAAAAAAAAAAHcAdwAAdwAAAAAAAAAAAAAAAAAAB3dwAAB3AAAAAAAAAAAAAAAAAAAHd3AAB3AAAAAAAAAAAAAAAAAAAAB3AAAHcAAAAAAAAAAAAAAAAAAAAHcAAAAAAAAAAAAAAA";
-         const alarmsOffImage = new Image();
-         alarmsOffImage.src = alarmsOffImageData;
-         // Wait for the image to load
-         alarmsOffImage.onload = function () {
-            // Draw the image onto the canvas
-            displayCtx.drawImage(alarmsOffImage, alarmsOffIconX, alarmsOffIconY);
-         };
-
-         //   pauseAudioImage.onload = function() {
-         //       // Draw the image onto the canvas
-         //       displayCtx.drawImage(pauseAudioImage, 0, 50);
-         //   };
-
-         //   audioPausedImage.onload = function() {
-         //       // Draw the image onto the canvas
-         //       displayCtx.drawImage(audioPausedImage, 0, 100);
-         //   };
-
+         // Add limits in the upper right corner
+         displayCtx.font = '9pt Arial'; 
+         displayCtx.textAlign = 'right';
+         displayCtx.fillText(upperLimit, upperLimitX, upperLimitY); 
+         displayCtx.fillText(lowerLimit, lowerLimitX, lowerLimitY); 
       }
 
-   //}
+   }
+   else {
+
+      // display alarms off icon
+
+      var alarmsOffIconX = x + width - 45;
+      var alarmsOffIconY = y + 7;
+
+      if (label == "NIBP") {
+         alarmsOffIconX = labelRight + 10;
+         alarmsOffIconY = y + 10;
+      }
+
+      const alarmsOffImageData = "data:image/png;base64,Qk1aAwAAAAAAAHYAAAAoAAAAIgAAACUAAAABAAQAAAAAAOQCAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AACQAAAAAAAAAAAAAAAACQAAAAAACZkAAAAAAAAAAAAAAACZkAAAAACZmZAAAAAAAAAAAAAACZmZAAAAAAmZmQAAAAAAAAAAAACZmZAAAAAAAJmZkAAAAAAAAAAACZmZAAAAAAAACZmZAAAAAAAAAACZmZAAAAAAAAAAmZmQAAAAAAAACZmZAAAAAAAAB3d5mZl3d3d3d3eZmZd3cAAAAAAHd3eZmZd3d3d3eZmZd3dwAAAAAAB3AAmZmQAAAACZmZAAdwAAAAAAAHcAAJmZkAAACZmZAAB3AAAAAAAAB3AACZmZAACZmZAAB3AAAAAAAAAHcAAAmZmQCZmZAAAHcAAAAAAAAAB3AAAJmZmZmZAAAHcAAAAAAAAAAHcAAACZmZmZAAAAdwAAAAAAAAAAB3AAAAmZmZAAAAdwAAAAAAAAAAAHcAAACZmZkAAAB3AAB3AAAAAAAAB3AACZmZmZAAB3AAAHcAAAAAAAAHcACZmZmZmQAHcAAHcAAAAAAAAAB3CZmZAJmZkHcAAAdwAAAAAAAAAHeZmZAACZmZdwAAdwAAAAAAAAAACZmZAAAAmZmQAAB3AAAAAAAAAACZmZAAAAAJmZkAB3AAAAAAAAAACZmZAAAAAACZmZAHcAAAAAAAAACZmZcAAAAAAHmZmXcAAAAAAAAACZmZB3AAAAAHcJmZlwAAAAAAAACZmZAHcAAAAAdwCZmZAAAAAAAACZmZAAB3AAAAdwAAmZmQAAAAAACZmZAAAHcAAAB3AAB5mZkAAAAACZmZAAAAB3AAB3AAAHeZmZAAAAAAmZAAAAAHcAAHcAAHcAmZAAAAAAAJAAAAAAB3AHcAAAdwAJAAAAAAAAAAAAAAAHcAdwAAdwAAAAAAAAAAAAAAAAAAB3dwAAB3AAAAAAAAAAAAAAAAAAAHd3AAB3AAAAAAAAAAAAAAAAAAAAB3AAAHcAAAAAAAAAAAAAAAAAAAAHcAAAAAAAAAAAAAAA";
+      const alarmsOffImage = new Image();
+      alarmsOffImage.src = alarmsOffImageData;
+      // Wait for the image to load
+      alarmsOffImage.onload = function () {
+         // Draw the image onto the canvas
+         displayCtx.drawImage(alarmsOffImage, alarmsOffIconX, alarmsOffIconY);
+      };
+
+   }
 
 }
 
@@ -1012,9 +898,6 @@ function processParameterData(AMSParameters) {
    parameterDataMessageCount++
    LOGEVENT(" ");
    LOGEVENTYELLOW('in processParameterData, count = ', parameterDataMessageCount);
-
-   // Parse the JSON string into JavaScript object
-   //const parameterData = JSON.parse(newParameterDataMessage);
 
    // See if the parameter setup is changing
    var somethingChanged = 0;
