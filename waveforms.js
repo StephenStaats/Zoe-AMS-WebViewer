@@ -182,7 +182,7 @@ function Waveform(waveformName, order) {
 
             var CO2Size = homeScreen.getSettingValue("CO2size");
 
-            if (CO2Size == "22") {
+            if (CO2Size == "20") {
                this.yMin = -100;
                this.yMax = 2000;
             }
@@ -995,7 +995,7 @@ function resetWaveforms() {
 
          var CO2Size = homeScreen.getSettingValue("CO2size");
 
-         if (CO2Size == "22") {
+         if (CO2Size == "20") {
             wvf.yMin = -100;
             wvf.yMax = 2000;
          }

@@ -84,10 +84,20 @@ Parameter.prototype.getUnitsOfMeasureFromParameterName = function () {
       unitsOfMeasure = "%";
    }
    else if (this.parameterName == "ETCO2") {
-      unitsOfMeasure = "mmHg";
+      if (homeScreen.getSettingValue("CO2units") == "mmHg") {
+         unitsOfMeasure = "mmHg";
+      }
+      else {
+         unitsOfMeasure = "kPa";
+      }
    }
    else if (this.parameterName == "FICO2") {
-      unitsOfMeasure = "mmHg";
+      if (homeScreen.getSettingValue("CO2units") == "mmHg") {
+         unitsOfMeasure = "mmHg";
+      }
+      else {
+         unitsOfMeasure = "kPa";
+      }
    }
    else if (this.parameterName == "RRC") {
       unitsOfMeasure = "rpm";

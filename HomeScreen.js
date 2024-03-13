@@ -523,7 +523,8 @@ var lastAlarmsSilenced = -1;
 
 function drawBottomLineMessageArea() {
 
-   var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(window.bottomLineMessageAlarmStatus);
+   //var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(window.bottomLineMessageAlarmStatus);
+   var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(homeScreen.getSettingValue("bottomLineMessageAlarmStatus"));
 
    var foregroundColor = getTextForegroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState);
    var backgroundColor = getTextBackgroundColorFromAlarmStatus(numericAlarmStatus, window.blinkState);
@@ -574,7 +575,8 @@ function drawBottomLineMessageArea() {
    displayCtx.textAlign = 'center';
    displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
 
-   displayCtx.fillText(window.bottomLineMessage, centerX, centerY); // Adjust the positioning as needed
+   //displayCtx.fillText(window.bottomLineMessage, centerX, centerY); // Adjust the positioning as needed
+   displayCtx.fillText(homeScreen.getSettingValue("bottomLineMessage"), centerX, centerY); // Adjust the positioning as needed
 
 }
 
