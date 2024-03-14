@@ -587,12 +587,59 @@ function drawWaveform(w) {
 
       if (window.rotated) {
 
-         displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
-         displayCtx.lineTo(wvf.eraseX, wvf.bottom);
+         // displayCtx.moveTo(wvf.eraseX, wvf.top + 1);
+         // displayCtx.lineTo(wvf.eraseX, wvf.bottom);
+
+         // wvf.eraseX++;
+         // if (wvf.eraseX >= wvf.right) {
+         //    wvf.eraseX = wvf.left;
+         // }
+
+
+
+            // var x ;
+            // for (x = wvf.left; x < wvf.right; x++) {
+            //    if ((x % 16) == 0) {
+            //       var rotatedX = Math.floor(rotateX(x, -wvf.top, 90)) ;
+            //       var rotatedY = Math.floor(displayCanvas.height - rotateY(x, -wvf.top, 90)) ;
+            //       displayCtx.putImageData(wvf.eraseWithDotsWaveformImageDataRow, rotatedX, rotatedY);
+            //       LOGEVENTYELLOW("put ImageData with dots at " + rotatedX + ", " + rotatedY) ;
+            //    }
+            // }
+
+
+
+         var rotatedX = Math.floor(rotateX(wvf.eraseX, -wvf.top, 90)) ; 
+         var rotatedY = Math.floor(displayCanvas.height - rotateY(wvf.eraseX, -wvf.top, 90)) ; 
+
+         if (wvf.order == 0) {
+            displayCtx.putImageData(wvf.eraseTopWaveformImageDataRow, rotatedX, rotatedY);
+         }
+         else if (wvf.waveformName == "CO2") {
+            if ((wvf.eraseX % 16) == 0) {
+               displayCtx.putImageData(wvf.eraseWithDotsWaveformImageDataRow, rotatedX, rotatedY);
+            }
+            else {
+               displayCtx.putImageData(wvf.eraseWaveformImageDataRow, rotatedX, rotatedY);
+            }
+         }
+         else {
+            displayCtx.putImageData(wvf.eraseWaveformImageDataRow, rotatedX, rotatedY);
+         }
 
          wvf.eraseX++;
          if (wvf.eraseX >= wvf.right) {
             wvf.eraseX = wvf.left;
+
+            //var rotatedXL = displayCanvas.height - rotateX(wvf.left - 1, -wvf.top, 90) ;
+
+            if (wvf.order == 0) {
+               displayCtx.putImageData(wvf.eraseTopWaveformImageDataRow, rotatedX, rotatedY-1);
+            }
+            else {
+               displayCtx.putImageData(wvf.eraseWaveformImageDataRow, rotatedX, rotatedY-1);
+            }
+
          }
 
       }
@@ -779,17 +826,25 @@ function drawWaveformScaleArea() {
 
             // var x ;
             // for (x = wvf.left; x < wvf.right; x++) {
-
             //    if ((x % 16) == 0) {
             //       var rotatedImageData = rotateImageData(wvf.eraseWithDotsWaveformImageData, 1, wvf.height);
             //       displayCtx.putImageData(rotatedImageData, x, wvf.top);
-            //    }
-            //    else {
-            //       var rotatedImageData = rotateImageData(wvf.eraseWaveformImageData, 1, wvf.height);
-            //       displayCtx.putImageData(rotatedImageData, x, wvf.top);
+            //       LOGEVENTYELLOW("put rotatedImageData with dots at " + x + ", " + wvf.top) ;
             //    }
 
             // }
+
+            var x ;
+            for (x = wvf.left; x < wvf.right; x++) {
+               if ((x % 16) == 0) {
+                  var rotatedX = Math.floor(rotateX(x, -wvf.top, 90)) ;
+                  var rotatedY = Math.floor(displayCanvas.height - rotateY(x, -wvf.top, 90)) ;
+                  displayCtx.putImageData(wvf.eraseWithDotsWaveformImageDataRow, rotatedX, rotatedY);
+                  LOGEVENTYELLOW("put ImageData with dots at " + rotatedX + ", " + rotatedY) ;
+               }
+            }
+
+            var s = 0 ;
 
          }
          else {

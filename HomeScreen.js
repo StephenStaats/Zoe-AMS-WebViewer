@@ -679,6 +679,22 @@ function handleTouch(event) {
    respondToMouseClickOrTouchAt(x, y);
 }
 
+function rotateX(x, y, degrees) {
+   var radians = degrees * (Math.PI / 180);
+   var cosRadians = Math.cos(radians) ;
+   var sinRadians = Math.sin(radians) ;
+   var rotatedX = x * cosRadians - y * sinRadians ;
+   return(rotatedX) ;
+}
+
+function rotateY(x, y, degrees) {
+   var radians = degrees * (Math.PI / 180);
+   var cosRadians = Math.cos(radians) ;
+   var sinRadians = Math.sin(radians) ;
+   var rotatedY = x * sinRadians + y * cosRadians ;
+   return(rotatedY) ;
+}
+
 // Function to handle mouse click
 function handleClick(event) {
    const rect = displayCanvas.getBoundingClientRect();

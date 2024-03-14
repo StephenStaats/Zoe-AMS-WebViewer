@@ -120,7 +120,7 @@ function alarmingParameterAreaTouched(x, y) {
       var parameterAlarmStatus = homeScreen.parameters[p].parameterAlarmStatus ;
       var numericAlarmStatus = getNumericAlarmStatusFromAlarmStatus(parameterAlarmStatus) ;
 
-      if (numericAlarmStatus >= window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW) {
+      if (numericAlarmStatus >= window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM) {
 
          var left = getLeftFromParameterName(parameterName);
          var top = getTopFromParameterName(parameterName);
@@ -142,14 +142,27 @@ function alarmingParameterAreaTouched(x, y) {
 
 
 // Function to respond to touch or mouse click events
+
 function respondToMouseClickOrTouchAt(x, y) {
-   if (backArrowTouched(x,y)) {
+
+   if (window.rotated) {
+      rotatedX = displayCanvas.height - rotateX(x, -y, 90) ;
+      rotatedY = rotateY(x, -y, 90) ;
+      LOGEVENTCYAN("Rotated x, y = " + rotatedX + ", " + rotatedY) ;
+   }
+   if (backArrowTouched(rotatedX, rotatedY)) {
       window.location.href = 'select.html';
    }
-   else if (waveformAreaTouched(x,y)) {
-      startStopWaveforms();
+   else if (waveformAreaTouched(rotatedX, rotatedY)) {
+      //startStopWaveforms();
+      if (pauseWaveformDrawing) {
+         pauseWaveformDrawing = 0;
+      }
+      else {
+         pauseWaveformDrawing = 1;
+      }
    }
-   else if (alarmingParameterAreaTouched(x,y)) {
+   else if (alarmingParameterAreaTouched(rotatedX, rotatedY)) {
       silenceAlarms();
    }
 }
