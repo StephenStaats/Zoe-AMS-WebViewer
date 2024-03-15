@@ -107,6 +107,19 @@ const displayCtx = displayCanvas.getContext('2d');
 displayCtx.fillStyle = 'black';
 displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
+const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
+
+if (sessionStorage.getItem("simulatedDataMode") != null) {
+   window.simulatedDataMode = sessionStorage.getItem("simulatedDataMode");
+}
+
+if (window.simulatedDataMode == 1) {
+   simulationTypeDropdown.value = 'simulatedData';
+}
+else {
+   simulationTypeDropdown.value = 'liveData';
+}
+
 //
 //   Create and initialize home screen
 //
@@ -119,9 +132,7 @@ homeScreen.initializeAreas();
 
 window.rotated = 0 ;
 
-window.simulatedDataMode = sessionStorage.getItem("simulatedDataMode");
-
-if (window.simulatedDataMode) {
+if (window.simulatedDataMode == 1) {
    simulateArrivalOfAMSMessage();
    simulateArrivalOfAMSMessage();
 }
@@ -142,17 +153,6 @@ function updateFramesPerSecond(elapsedTime) {
    framesPerSecond = 1000 / elapsedTime; // Calculate frames per second
    fpsDisplay.textContent = `Frame Rate: ${Math.round(framesPerSecond)} FPS`;
 }
-
-
-// //
-// //   showSelectScreen  
-// //
-
-// function showSelectScreen() {
-
-//   window.location.href = 'select.html';
-
-// }
 
 // Function to respond to touch or mouse click events
 function backArrowTouched(x, y) {

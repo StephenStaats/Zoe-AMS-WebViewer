@@ -506,7 +506,7 @@ function updateBlinkState() {
 
    if ((window.blinkState % 4) == 1) {
 
-      if (window.simulatedDataMode) {
+      if (window.simulatedDataMode == 1) {
 
          simulateArrivalOfAMSMessage() ;
 

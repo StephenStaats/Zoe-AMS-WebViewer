@@ -31,17 +31,6 @@ function resizeCanvas() {
 //  Listener for changing simulation type dropdown
 //
 
-const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
-
-if (window.simulatedDataMode) {
-   simulationTypeDropdown.value = 'simulatedData';
-}
-else {
-   simulationTypeDropdown.value = 'liveData';
-}
-
-
-
 simulationTypeDropdown.addEventListener("change", function () {
 
    homeScreen.clearWaveformList() ;

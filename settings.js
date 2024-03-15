@@ -210,6 +210,14 @@ function processSettingData(AMSSettings) {
 
 function findSelectedPatient(selectedDeviceId) {
 
+   if (selectedDeviceId == "0") {
+
+      window.simulatedDataMode = 0 ;
+      sessionStorage.setItem("simulatedDataMode", window.simulatedDataMode);
+      return ;  // this is to allow for live data to be selected
+
+   }
+
    var m = 0;
    for (m = 0; m < simulatedAMSMessages.length; m++) {
 
@@ -220,16 +228,16 @@ function findSelectedPatient(selectedDeviceId) {
 
          if (AMSMessage.settings[s].settingName == "deviceId") {
 
-            //if (AMSMessage.settings[s].settingValue == selectedDeviceId) {
-
             var deviceId = AMSMessage.settings[s].settingValue
             if (deviceId == selectedDeviceId) {
 
                simulatedAMSMessageIndex = m;
 
+               window.simulatedDataMode = 1 ;
+               sessionStorage.setItem("simulatedDataMode", window.simulatedDataMode);
+
                simulateArrivalOfAMSMessage();
 
-               //drawTopLine();
                redrawHomeScreen = 1 ;
 
                return;

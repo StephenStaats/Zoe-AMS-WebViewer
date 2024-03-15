@@ -1,12 +1,13 @@
 // Dummy data
 const data = [
+  { deviceId: "0", deviceName: "ASDR3", patientFirstName: "Bertie", patientLastName: "Wooster" },
   { deviceId: "1", deviceName: "Device 1", patientFirstName: "Preserved", patientLastName: "Killick" },
   { deviceId: "2", deviceName: "Device 2", patientFirstName: "Diana", patientLastName: "Villers" },
   { deviceId: "3", deviceName: "Device 3", patientFirstName: "Jack", patientLastName: "Aubrey" },
   { deviceId: "4", deviceName: "Device 4", patientFirstName: "Stephen", patientLastName: "Maturin" },
   { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
   { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
-   { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
+  { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
   { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },
   { deviceId: "ID6", deviceName: "Device 2", patientFirstName: "Jane", patientLastName: "Smith" },
   { deviceId: "ID7", deviceName: "Device 1", patientFirstName: "John", patientLastName: "Doe" },

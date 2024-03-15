@@ -174,7 +174,7 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
          this.autoScale = false;
-         if (window.simulatedDataMode) {
+         if (window.simulatedDataMode == 1) {
             this.yMin = -500;
             this.yMax = 500;
          }
@@ -220,7 +220,7 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 25.0;
          this.autoScale = false;  // already auto-scaled by monitor
-         if (window.simulatedDataMode) {
+         if (window.simulatedDataMode == 1) {
             this.yMin = -5000;
             this.yMax = 5000;
          }
@@ -241,7 +241,7 @@ function Waveform(waveformName, order) {
          this.sampleRate = 250;
          this.sweepSpeed = 6.25;
          this.autoScale = false;  // already auto-scaled by monitor
-         if (window.simulatedDataMode) {
+         if (window.simulatedDataMode == 1) {
             this.yMin = -5000;
             this.yMax = 5000;
          }
@@ -295,7 +295,7 @@ function Waveform(waveformName, order) {
 
    // if (this.autoScale) {
 
-   //    if (window.simulatedDataMode) {
+   //    if (window.simulatedDataMode == 1) {
 
    //       var minY;
    //       var maxY;
@@ -421,7 +421,7 @@ function drawWaveform(w) {
    var pixelsPerMS = pixelsPerSecond / 1000;
    var MSPerPixel = 1 / pixelsPerMS;
    var MSPerSample = 0;
-   if (window.simulatedDataMode) {
+   if (window.simulatedDataMode == 1) {
       MSPerPixel = 1 / pixelsPerMS;
       MSPerSample = 1000 / wvf.sampleRateIn;
    }
@@ -479,7 +479,7 @@ function drawWaveform(w) {
       var skipPixel = 0;
       while (wvf.drawnPixelTime > wvf.readSampleTime) {
 
-         // if (window.simulatedDataMode) {
+         // if (window.simulatedDataMode == 1) {
          //    var thisY = normalizeWaveform(wvf.simulatedSamples[wvf.tailIndex]);
          //    wvf.tailIndex = (wvf.tailIndex + 1) % wvf.maxSimulatedSampleIndex;
          //    wvf.samplesDrawn++;
