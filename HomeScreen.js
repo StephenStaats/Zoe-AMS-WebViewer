@@ -462,7 +462,7 @@ function drawTopLine() {
       if (patientButtonLabel.length == 0) {
          patientButtonLabel = translateNumber(window.StringNumbers.SN_Patient) + ":" ;
       }
-      fitText(patientButtonLabel, window.colors.ZWHITE, 'Arial', 20, patientButtonLeft, textTop, patientButtonWidth, patientButtonHeight, 'left', 'middle');
+      fitOverlayText(patientButtonLabel, window.colors.ZWHITE, 'Arial', 20, patientButtonLeft, textTop, patientButtonWidth, patientButtonHeight, 'left', 'middle');
    }
 
    if (monitorButtonLabel.length == 0) {
@@ -473,7 +473,7 @@ function drawTopLine() {
          monitorButtonLabel = translateNumber(window.StringNumbers.SN_Clinician) + ":" ;
       }
    }
-   fitText(monitorButtonLabel, window.colors.ZWHITE, 'Arial', 20, monitorButtonLeft, textTop, monitorButtonWidth, monitorButtonHeight, 'left', 'middle');
+   fitOverlayText(monitorButtonLabel, window.colors.ZWHITE, 'Arial', 20, monitorButtonLeft, textTop, monitorButtonWidth, monitorButtonHeight, 'left', 'middle');
 
    drawBackArrow(backArrowLeft, backArrowTop, backArrowWidth, backArrowHeight, backArrowHeight * 50 / 100);
 

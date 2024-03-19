@@ -247,7 +247,7 @@ function getWaveformIdFromWaveformName(waveformName) {
 // no / Verdana: Verdana is a sans-serif typeface designed by Matthew Carter for Microsoft. It's known for its clarity and readability, particularly at smaller sizes, making it popular for web content.
 
 
-function fitText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
 
    displayCtx.fillStyle = textColor;
 
@@ -272,7 +272,16 @@ function fitText(textToFit, textColor, textFontTypeface, textPointSize, textLeft
  
    displayCtx.textAlign = saveTextAlign ;
    displayCtx.textBaseline =  saveTextBaseline ;
-;
+
+}
+
+
+function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+
+   displayCtx.fillStyle = backgroundColor;
+   displayCtx.fillRect(textLeft, textTop, textWidth, textHeight) ;
+
+   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) ;
 
 }
 

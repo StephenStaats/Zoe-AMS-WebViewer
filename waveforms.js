@@ -155,6 +155,17 @@ function Waveform(waveformName, order) {
       case 'ECGI':
       case 'ECGII':
       case 'ECGIII':
+      case 'ECGAVL':
+      case 'ECGAVR':
+      case 'ECGAVF':
+      case 'ECGV':
+      case 'ECGV1':
+      case 'ECGV2':
+      case 'ECGV3':
+      case 'ECGV4':
+      case 'ECGV5':
+      case 'ECGV6':
+
          this.waveformId = getWaveformIdFromWaveformName(this.waveformName);
          this.color = window.colors.ECGColor;
          this.fill = false;
@@ -498,27 +509,42 @@ function drawWaveform(w) {
             if (thisY == LEAD_OFF_OR_UNPLUGGED) {
                skipPixel = 1;
             }
+            else {
+
+               avgYSum += thisY;
+               avgYCount++;
+
+               if (thisY > highestY) {
+                  highestY = thisY;
+               }
+               if (thisY < lowestY) {
+                  lowestY = thisY;
+               }
+
+            }
+
          }
 
          //}
 
-         avgYSum += thisY;
-         avgYCount++;
+         // avgYSum += thisY;
+         // avgYCount++;
 
-         if (thisY > highestY) {
-            highestY = thisY;
-         }
-         if (thisY < lowestY) {
-            lowestY = thisY;
-         }
+         // if (thisY > highestY) {
+         //    highestY = thisY;
+         // }
+         // if (thisY < lowestY) {
+         //    lowestY = thisY;
+         // }
 
       }
 
       if (skipPixel == 0) {
 
-         if (wvf.waveformName.indexOf("ECG") !== -1) {  //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
-            wvf.drawY = lowestY;
-         }
+         // if (wvf.waveformName.indexOf("ECG") !== -1) {  //if ECG (to preserve peaks) use :wvf.drawY = lowestY;
+         //    wvf.drawY = lowestY;
+         // }
+
          // else if (wvf.waveformName.indexOf("RRA") !== -1) { //if RRA (to preserve amplitude) use most extreme point
          //    var highDiff = Math.abs(highestY - wvf.drawY);
          //    var lowDiff = Math.abs(lowestY - wvf.drawY);
@@ -535,11 +561,43 @@ function drawWaveform(w) {
          //       wvf.drawY = wvf.bottom;
          //    }
          // }
+
+         if (wvf.waveformName.indexOf("ECG") !== -1) { //if ECG (to preserve amplitude) use most extreme point
+
+            // var highDiff = Math.abs(highestY - wvf.drawYLast);
+            // var lowDiff = Math.abs(lowestY - wvf.drawYLast);
+            // if (highDiff > lowDiff) {
+            //    wvf.drawY = highestY;
+            // }
+            // else {
+            //    wvf.drawY = lowestY;
+            // }
+
+            if ((highestY > wvf.drawYLast) && (lowestY > wvf.drawYLast)) {
+               wvf.drawY = highestY;
+            }
+            else if ((highestY < wvf.drawYLast) && (lowestY < wvf.drawYLast)) {
+               wvf.drawY = lowestY;
+            }
+            else {
+               wvf.drawYLast = lowestY;
+               wvf.drawY = highestY;
+            }
+
+            if (wvf.drawY < wvf.top) {
+               wvf.drawY = wvf.top;
+            }
+            else if (wvf.drawY > wvf.bottom) {
+               wvf.drawY = wvf.bottom;
+            }
+         }
+
          else {
             wvf.drawY = avgYSum / avgYCount;
          }
 
-         if ((wvf.drawXLast != Number.MIN_VALUE) && (wvf.drawYLast != Number.MIN_VALUE)) {
+         //if ((wvf.drawXLast != Number.MIN_VALUE) && (wvf.drawYLast != Number.MIN_VALUE)) {
+         if ((wvf.drawXLast != Number.MIN_VALUE) && (wvf.drawYLast != Number.MIN_VALUE) && (wvf.drawYLast != wvf.top) && (wvf.drawYLast != wvf.bottom)) {
             displayCtx.moveTo(wvf.drawXLast, wvf.drawYLast);
             displayCtx.lineTo(wvf.drawX, wvf.drawY);
             if (wvf.fill) {
@@ -688,6 +746,37 @@ function drawWaveform(w) {
 
 
 //
+//   getECGLeadTextFromWaveformName
+//
+
+function getECGLeadTextFromWaveformName(waveformName) {
+
+   let returnText = "" ;
+
+   switch (waveformName) {
+
+      case "ECGI":     returnText = "I";      break ;
+      case "ECGII":    returnText = "II";     break ;
+      case "ECGIII":   returnText = "III";    break ;
+      case "ECGAVL":   returnText = "aVL";    break ;
+      case "ECGAVR":   returnText = "aVR";    break ;
+      case "ECGAVF":   returnText = "aVF";    break ;
+      case "ECGV":     returnText = "V";      break ;
+      case "ECGV1":    returnText = "V1";     break ;
+      case "ECGV2":    returnText = "V2";     break ;
+      case "ECGV3":    returnText = "V3";     break ;
+      case "ECGV4":    returnText = "V4";     break ;
+      case "ECGV5":    returnText = "V5";     break ;
+      case "ECGV6":    returnText = "V6";     break ;
+
+   }
+
+   return (returnText) ;
+
+}
+
+
+//
 //   drawWaveformScaleArea
 //
 
@@ -707,19 +796,22 @@ function drawWaveformScaleArea() {
 
          let labelRectTop = wvf.top;
          let labelRectBottom = wvf.bottom;
-         var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 30 / 100;
+         //var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 30 / 100;
+         var labelRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100;
          var labelRectRight = homeScreen.waveformScaleAreaRight;
 
          labelRect = new CRect(labelRectLeft, labelRectTop, labelRectRight, labelRectBottom);
 
          let gainRectTop = wvf.top;
          let gainRectBottom = wvf.bottom;
+         //var gainRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100;
          var gainRectLeft = homeScreen.waveformScaleAreaLeft + homeScreen.waveformScaleAreaWidth * 10 / 100;
          var gainRectRight = homeScreen.waveformScaleAreaRight;
 
          gainRect = new CRect(gainRectLeft, gainRectTop, gainRectRight, gainRectBottom);
 
-         bracketRect = new CRect(homeScreen.waveformScaleAreaLeft, wvf.top, homeScreen.waveformScaleAreaRight, wvf.bottom);
+         //bracketRect = new CRect(homeScreen.waveformScaleAreaLeft, wvf.top, homeScreen.waveformScaleAreaRight, wvf.bottom);
+         bracketRect = new CRect(gainRectLeft, wvf.top, homeScreen.waveformScaleAreaRight, wvf.bottom);
 
          let waveGain = homeScreen.getSettingValue("ECGGain")
 
@@ -776,7 +868,9 @@ function drawWaveformScaleArea() {
 
          bracketRect.bottom = bracketRect.top + bracketHeightInPixels;
 
-         let leadText = homeScreen.getSettingValue("ECGLead")
+         // let leadText = homeScreen.getSettingValue("ECGLead")
+
+         let leadText = getECGLeadTextFromWaveformName(wvf.waveformName);
 
          let leadHeight = wvf.height / 5;
          let gainHeight = wvf.height / 5;
@@ -784,9 +878,6 @@ function drawWaveformScaleArea() {
          labelRect.top = bracketRect.top - leadHeight * 75 / 100;
 
          gainRect.top = bracketRect.bottom + gainHeight * 25 / 100;
-
-         fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width() - 1, labelRect.height(), 'left', 'top');
-         fitText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
 
          let bracketXOffset = 5;
          let bracketLegWidth = 10;
@@ -806,6 +897,12 @@ function drawWaveformScaleArea() {
          drawLine(displayCtx, bracketCenterRight, bracketTop, bracketCenterRight, bracketBottom, window.colors.ZWHITE);
          drawLine(displayCtx, bracketCenterRight, bracketBottom, bracketRight, bracketBottom, window.colors.ZWHITE);
 
+         //fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width() - 1, labelRect.height(), 'left', 'top');
+         //fitText(leadText, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', 11, (bracketCenterLeft + bracketCenterRight) / 2, labelRect.top, labelRect.width() - 1, labelRect.height(), 'center', 'top');
+         //fitText(gainText, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
+         fitOverlayText(leadText, window.colors.ZWHITE, 'Arial', 11, (bracketCenterLeft + bracketCenterRight) / 2, labelRect.top, labelRect.width() - 1, labelRect.height(), 'center', 'top');
+         fitOverlayText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
+
       }
       else if (wvf.waveformName == "CO2") {
 
@@ -819,8 +916,8 @@ function drawWaveformScaleArea() {
          var scaleLoWidth = homeScreen.waveformScaleAreaWidth;
          var scaleLoHeight = wvf.height * 20 / 100;
 
-         fitText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top');
-         fitText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom');
+         fitOverlayText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top');
+         fitOverlayText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom');
 
          if (window.rotated) {
 
@@ -976,28 +1073,59 @@ function setupWaveforms(AMSWaveforms) {
 
    homeScreen.clearWaveformList();
 
-   switch (AMSWaveforms.length) {
+   if (displayCtx.width == 800) { // 740, top channel given extra height
 
-      case 3:
+      switch (AMSWaveforms.length) {
 
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2);
-         break;
+         case 3:
 
-      case 2:
+            topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+            waveformHeight = Math.round((Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight)) / 2);
+            break;
 
-         topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
-         waveformHeight = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight));
-         break;
+         case 2:
 
-      case 1:
-      default:
+            topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+            waveformHeight = Math.round(Math.round(homeScreen.waveformAreaHeight) - Math.round(topWaveformHeight));
+            break;
 
-         topWaveformHeight = homeScreen.waveformAreaHeight;
-         waveformHeight = topWaveformHeight;
-         break;
+         case 1:
+         default:
+
+            topWaveformHeight = homeScreen.waveformAreaHeight;
+            waveformHeight = topWaveformHeight;
+            break;
+
+      }
 
    }
+   else {                          // DS20, all channels same height
+
+      switch (AMSWaveforms.length) {
+
+         case 3:
+
+            topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 3);
+            waveformHeight = topWaveformHeight;
+            break;
+
+         case 2:
+
+            topWaveformHeight = Math.round(homeScreen.waveformAreaHeight / 2);
+            waveformHeight = topWaveformHeight;
+            break;
+
+         case 1:
+         default:
+
+            topWaveformHeight = homeScreen.waveformAreaHeight;
+            waveformHeight = topWaveformHeight;
+            break;
+
+      }
+
+   }
+
 
    var order = 0;
    for (order = 0; order < AMSWaveforms.length; order++) {
