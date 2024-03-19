@@ -277,32 +277,6 @@ Parameter.prototype.getColorFromParameterName = function () {
 //   getPointSizeFromParameterName  
 //
 
-var HRpointSize = 50;
-var ETCO2pointSize = 45;
-var FICO2pointSize = 20;
-var SPO2pointSize = 50;
-var RRCpointSize = 30;
-var RRpointSize = 30;
-var TEMPpointSize = 30;
-var NIBPpointSize = 45;
-
-var messagePointsize = 20 ;
-var topLinePointsize = 20 ;
-
-var datePointsize = 12 ;
-var timePointsize = 18 ;
-
-var waveformLabelPointsize = 11 ;
-var parameterLabelPointsize = 11 ;
-var parameterUnitsPointsize = 9 ;
-
-var NIBPTimePointsize = 12 ;
-var TEMPTimePointsize = 11 ;
-
-var NIBPAlarmSettingsPointsize = 10 ;
-var alarmSettingsPointsize = 11 ;
-
-
 Parameter.prototype.getPointSizeFromParameterName = function () {
 
    var pointSize = 20;
@@ -671,11 +645,11 @@ function clearParameterArea(parameterName) {
 
 function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, lowerLimit, textForegroundColor, textBackgroundColor, font, fontSize, x, y, width, height) {
 
-   var labelX = x + 8;
+   var labelX = x + 10;
    var labelY = y + 20;
 
-   var unitsX = x + 8;
-   var unitsY = y + 35;
+   var unitsX = labelX;
+   var unitsY = labelY + parameterUnitsPointsize * 1.2 * 1.33; // Convert points to pixels
 
    var valueX = x + width * 50 / 100;
    var valueY = y + height * 70 / 100;
@@ -797,7 +771,8 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
       if (label == "NIBP") {
 
          var alarmStringX = x + width * 55 / 100;
-         var alarmStringY = y + 20;
+         //var alarmStringY = labelY + NIBPAlarmSettingsPointsize * 1.2 * 1.33; // Convert points to pixels
+         var alarmStringY = labelY ;
 
          // displayCtx.font = '10pt Arial'; 
          // displayCtx.textAlign = 'left';
@@ -810,16 +785,18 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          var upperLimitX = x + width * 90 / 100;
          var lowerLimitX = x + width * 90 / 100;
 
-         var upperLimitY = y + 20;
-         var lowerLimitY = y + 35;
+         // var upperLimitY = y + 20;
+         // var lowerLimitY = y + 35;
+         var upperLimitY = labelY;
+         var lowerLimitY = labelY + + alarmSettingsPointsize * 1.2 * 1.33; // Convert points to pixels
 
          // Add limits in the upper right corner
          // displayCtx.font = '9pt Arial'; 
          // displayCtx.textAlign = 'right';
          // displayCtx.fillText(upperLimit, upperLimitX, upperLimitY); 
          // displayCtx.fillText(lowerLimit, lowerLimitX, lowerLimitY); 
-         placeOverlayText(upperLimit, textForegroundColor, font, NIBPAlarmSettingsPointsize, 'right', 'middle', upperLimitX, upperLimitY) ;
-         placeOverlayText(lowerLimit, textForegroundColor, font, NIBPAlarmSettingsPointsize, 'right', 'middle', lowerLimitX, lowerLimitY) ;
+         placeOverlayText(upperLimit, textForegroundColor, font, alarmSettingsPointsize, 'right', 'middle', upperLimitX, upperLimitY) ;
+         placeOverlayText(lowerLimit, textForegroundColor, font, alarmSettingsPointsize, 'right', 'middle', lowerLimitX, lowerLimitY) ;
 
       }
 
@@ -828,12 +805,12 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
       // display alarms off icon
 
-      var alarmsOffIconX = x + width - 45;
-      var alarmsOffIconY = y + 7;
+      var alarmsOffIconX = x + width - alarmsOffIconXOffset ;
+      var alarmsOffIconY = y + alarmsOffIconYOffset;
 
       if (label == "NIBP") {
-         alarmsOffIconX = labelRight + 10;
-         alarmsOffIconY = y + 10;
+         alarmsOffIconX = labelRight + NIBPAlarmsOffIconXOffset;
+         alarmsOffIconY = y + NIBPAlarmsOffIconYOffset;
       }
 
       const alarmsOffImageData = "data:image/png;base64,Qk1aAwAAAAAAAHYAAAAoAAAAIgAAACUAAAABAAQAAAAAAOQCAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAMDAwACAgIAAAAD/AAD/AAAA//8A/wAAAP8A/wD//wAA////AACQAAAAAAAAAAAAAAAACQAAAAAACZkAAAAAAAAAAAAAAACZkAAAAACZmZAAAAAAAAAAAAAACZmZAAAAAAmZmQAAAAAAAAAAAACZmZAAAAAAAJmZkAAAAAAAAAAACZmZAAAAAAAACZmZAAAAAAAAAACZmZAAAAAAAAAAmZmQAAAAAAAACZmZAAAAAAAAB3d5mZl3d3d3d3eZmZd3cAAAAAAHd3eZmZd3d3d3eZmZd3dwAAAAAAB3AAmZmQAAAACZmZAAdwAAAAAAAHcAAJmZkAAACZmZAAB3AAAAAAAAB3AACZmZAACZmZAAB3AAAAAAAAAHcAAAmZmQCZmZAAAHcAAAAAAAAAB3AAAJmZmZmZAAAHcAAAAAAAAAAHcAAACZmZmZAAAAdwAAAAAAAAAAB3AAAAmZmZAAAAdwAAAAAAAAAAAHcAAACZmZkAAAB3AAB3AAAAAAAAB3AACZmZmZAAB3AAAHcAAAAAAAAHcACZmZmZmQAHcAAHcAAAAAAAAAB3CZmZAJmZkHcAAAdwAAAAAAAAAHeZmZAACZmZdwAAdwAAAAAAAAAACZmZAAAAmZmQAAB3AAAAAAAAAACZmZAAAAAJmZkAB3AAAAAAAAAACZmZAAAAAACZmZAHcAAAAAAAAACZmZcAAAAAAHmZmXcAAAAAAAAACZmZB3AAAAAHcJmZlwAAAAAAAACZmZAHcAAAAAdwCZmZAAAAAAAACZmZAAB3AAAAdwAAmZmQAAAAAACZmZAAAHcAAAB3AAB5mZkAAAAACZmZAAAAB3AAB3AAAHeZmZAAAAAAmZAAAAAHcAAHcAAHcAmZAAAAAAAJAAAAAAB3AHcAAAdwAJAAAAAAAAAAAAAAAHcAdwAAdwAAAAAAAAAAAAAAAAAAB3dwAAB3AAAAAAAAAAAAAAAAAAAHd3AAB3AAAAAAAAAAAAAAAAAAAAB3AAAHcAAAAAAAAAAAAAAAAAAAAHcAAAAAAAAAAAAAAA";

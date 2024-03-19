@@ -590,7 +590,7 @@ function updateBlinkState() {
 
       if ((window.blinkState % 2) == 0) {                 // avoid too much distracting redrawing on desktop...
 
-         drawParameterAreas(0);
+         //drawParameterAreas(0);
 
          // if (mHR.NeedToColor()) {
             // drawHRParameterArea() ;

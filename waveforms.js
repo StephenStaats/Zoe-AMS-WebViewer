@@ -872,12 +872,14 @@ function drawWaveformScaleArea() {
 
          let leadText = getECGLeadTextFromWaveformName(wvf.waveformName);
 
-         let leadHeight = wvf.height / 5;
-         let gainHeight = wvf.height / 5;
+         // let leadHeight = wvf.height / 5;
+         // let gainHeight = wvf.height / 5;
 
-         labelRect.top = bracketRect.top - leadHeight * 75 / 100;
+         // labelRect.top = bracketRect.top - leadHeight * 75 / 100;
+         // gainRect.top = bracketRect.bottom + gainHeight * 25 / 100;
 
-         gainRect.top = bracketRect.bottom + gainHeight * 25 / 100;
+         labelRect.top = bracketRect.top - waveformLabelPointsize * 1.2 * 1.33; // Convert points to pixels
+         gainRect.top = bracketRect.bottom + waveformLabelPointsize * 0.3 * 1.33; // Convert points to pixels
 
          let bracketXOffset = 5;
          let bracketLegWidth = 10;

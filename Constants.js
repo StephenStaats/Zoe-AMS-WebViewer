@@ -8,11 +8,11 @@ window.developmentMode = 0;
 
 window.graphicsDebug = 0;
 
-window.alarmsSilenced = 0 ;
+window.alarmsSilenced = 0;
 
-window.selectedDeviceId = 0 ;
+window.selectedDeviceId = 0;
 
-window.rotated = 0 ;
+window.rotated = 0;
 
 //
 //   Note:  The following enums and constants must be kept in sync with CVM10
@@ -44,7 +44,7 @@ window.Z_ALARM_TONE = {
    Z_ALARM_TONE_MEDIUM: 2,
    Z_ALARM_TONE_HIGH: 3,
    Z_ALARM_TONE_TEST: 4
-} ;
+};
 
 const NZALARMTONES = Object.keys(Z_ALARM_TONE).length;
 
@@ -52,11 +52,11 @@ const NZALARMTONES = Object.keys(Z_ALARM_TONE).length;
 //  Alarm suspend modes 
 //
 
-window.Z_ALL_ALARMS_OFF_TRUE  = 0x1898 ;
-window.Z_ALL_ALARMS_OFF_FALSE = 0x1914 ;
+window.Z_ALL_ALARMS_OFF_TRUE = 0x1898;
+window.Z_ALL_ALARMS_OFF_FALSE = 0x1914;
 
 //window.LEAD_OFF_OR_UNPLUGGED = Number.MIN_VALUE;
-window.LEAD_OFF_OR_UNPLUGGED = -32768 ;
+window.LEAD_OFF_OR_UNPLUGGED = -32768;
 
 window.Z_WAVEFORM_ID = {
    Z_WAVEFORM_ECGI: 0,
@@ -269,11 +269,91 @@ function getWaveformIdFromWaveformName(waveformName) {
 
 //    // Draw text
 //    displayCtx.fillText(textToFit, textLeft, textTop);
- 
+
 //    displayCtx.textAlign = saveTextAlign ;
 //    displayCtx.textBaseline =  saveTextBaseline ;
 
 // }
+
+var HRpointSize = 50;
+var ETCO2pointSize = 45;
+var FICO2pointSize = 20;
+var SPO2pointSize = 50;
+var RRCpointSize = 30;
+var RRpointSize = 30;
+var TEMPpointSize = 30;
+var NIBPpointSize = 45;
+
+var messagePointsize = 20;
+var topLinePointsize = 20;
+
+var datePointsize = 12;
+var timePointsize = 18;
+
+var waveformLabelPointsize = 11;
+var parameterLabelPointsize = 11;
+var parameterUnitsPointsize = 9;
+
+var NIBPTimePointsize = 12;
+var TEMPTimePointsize = 11;
+
+var NIBPAlarmSettingsPointsize = 10;
+var alarmSettingsPointsize = 11;
+
+var pointsizesAdjusted = 0 ;
+
+var alarmsOffIconXOffset = 45 ;
+var alarmsOffIconYOffset =  7 ;
+var NIBPAlarmsOffIconXOffset = 10 ;
+var NIBPAlarmsOffIconYOffset = 10 ;
+
+function adjustPointsizes() {
+
+   if (pointsizesAdjusted == 0) {
+
+      var adjustmentFactor = displayCtx.canvas.width / 800;  // pointsizes were originally designed for CVM, which is 480 x 800 pixels
+
+      HRpointSize *= adjustmentFactor;
+      ETCO2pointSize *= adjustmentFactor;
+      FICO2pointSize *= adjustmentFactor;
+      SPO2pointSize *= adjustmentFactor;
+      RRCpointSize *= adjustmentFactor;
+      RRpointSize *= adjustmentFactor;
+      TEMPpointSize *= adjustmentFactor;
+      NIBPpointSize *= adjustmentFactor;
+
+      messagePointsize *= adjustmentFactor;
+      topLinePointsize *= adjustmentFactor;
+
+      datePointsize *= adjustmentFactor;
+      timePointsize *= adjustmentFactor;
+
+      waveformLabelPointsize *= adjustmentFactor;
+      parameterLabelPointsize *= adjustmentFactor;
+      parameterUnitsPointsize *= adjustmentFactor;
+
+      NIBPTimePointsize *= adjustmentFactor;
+      TEMPTimePointsize *= adjustmentFactor;
+
+      NIBPAlarmSettingsPointsize *= adjustmentFactor;
+      alarmSettingsPointsize *= adjustmentFactor;
+
+      if (adjustmentFactor > 1) {
+
+         var OffsetAdjustmentFactor = adjustmentFactor * 60 / 100 ;
+
+         alarmsOffIconXOffset *= OffsetAdjustmentFactor ;
+         alarmsOffIconYOffset *= OffsetAdjustmentFactor ;
+         NIBPAlarmsOffIconXOffset *= OffsetAdjustmentFactor ;
+         NIBPAlarmsOffIconYOffset *= OffsetAdjustmentFactor ;
+
+      }
+
+      pointsizesAdjusted = 1 ;
+
+   }
+
+}
 
 
 function placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop) {
@@ -284,17 +364,17 @@ function placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize,
    var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
    displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
 
-   var saveTextAlign = displayCtx.textAlign ;
-   var saveTextBaseline = displayCtx.textBaseline ;
+   var saveTextAlign = displayCtx.textAlign;
+   var saveTextBaseline = displayCtx.textBaseline;
 
    displayCtx.textAlign = textAlign;
-   displayCtx.textBaseline = textBaseline;  
+   displayCtx.textBaseline = textBaseline;
 
    // Draw text
    displayCtx.fillText(textToFit, textLeft, textTop);
- 
-   displayCtx.textAlign = saveTextAlign ;
-   displayCtx.textBaseline =  saveTextBaseline ;
+
+   displayCtx.textAlign = saveTextAlign;
+   displayCtx.textBaseline = saveTextBaseline;
 
 }
 
@@ -302,9 +382,9 @@ function placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize,
 function placeText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textRectLeft, textRectTop, textRectWidth, textRectHeight) {
 
    displayCtx.fillStyle = backgroundColor;
-   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight) ;
+   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight);
 
-   placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop) ;
+   placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop);
 
 }
 
@@ -323,7 +403,7 @@ function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, t
 
    fontSizePt = fontSizePx / 1.33; // Convert pixels to points
 
-   placeOverlayText(textToFit, textColor, textFontTypeface, fontSizePt, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight) ;
+   placeOverlayText(textToFit, textColor, textFontTypeface, fontSizePt, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight);
 
 }
 
@@ -331,9 +411,9 @@ function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, t
 function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textRectLeft, textRectTop, textRectWidth, textRectHeight) {
 
    displayCtx.fillStyle = backgroundColor;
-   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight) ;
+   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight);
 
-   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight) ;
+   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight);
 
 }
 
@@ -344,35 +424,35 @@ function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPo
 
 class CRect {
 
-  constructor(left, top, right, bottom) {
-    this.left = left;
-    this.top = top;
-    this.right = right;
-    this.bottom = bottom;
-  }
+   constructor(left, top, right, bottom) {
+      this.left = left;
+      this.top = top;
+      this.right = right;
+      this.bottom = bottom;
+   }
 
-  width() {
-    return this.right - this.left;
-  }
+   width() {
+      return this.right - this.left;
+   }
 
-  height() {
-    return this.bottom - this.top;
-  }
+   height() {
+      return this.bottom - this.top;
+   }
 
 }
 
 function fillRect(ctx, rect, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(rect.left, rect.top, rect.width(), rect.height());
+   ctx.fillStyle = color;
+   ctx.fillRect(rect.left, rect.top, rect.width(), rect.height());
 }
 
 function drawLine(ctx, startX, startY, endX, endY, color) {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(startX, startY);
-  ctx.lineTo(endX, endY);
-  ctx.stroke();
+   ctx.strokeStyle = color;
+   ctx.lineWidth = 1;
+   ctx.beginPath();
+   ctx.moveTo(startX, startY);
+   ctx.lineTo(endX, endY);
+   ctx.stroke();
 }
 
 
@@ -385,8 +465,8 @@ window.LOGEVENT = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = timestring1 + timestring2 + " " + argstring;
 
@@ -408,8 +488,8 @@ window.LOGEVENTRED = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[31m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
@@ -428,8 +508,8 @@ window.LOGEVENTGREEN = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[32m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
@@ -441,8 +521,8 @@ window.LOGEVENTYELLOW = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[33m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
@@ -454,8 +534,8 @@ window.LOGEVENTBLUE = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[34m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
@@ -467,8 +547,8 @@ window.LOGEVENTMAGENTA = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[35m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
@@ -480,8 +560,8 @@ window.LOGEVENTCYAN = function (...args) {
 
    var argstring = args.join(' ');
 
-   timestring1 =  new Date().toLocaleTimeString('en-US', { hour12: false }) + '.' 
-   timestring2 =  new Date().getMilliseconds().toString().padStart(3, '0') ;
+   timestring1 = new Date().toLocaleTimeString('en-US', { hour12: false }) + '.'
+   timestring2 = new Date().getMilliseconds().toString().padStart(3, '0');
 
    var logstring = '\x1b[36m' + timestring1 + timestring2 + " " + argstring + '\x1b[0m';
 
