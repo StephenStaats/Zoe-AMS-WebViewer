@@ -462,7 +462,7 @@ function drawTopLine() {
       if (patientButtonLabel.length == 0) {
          patientButtonLabel = translateNumber(window.StringNumbers.SN_Patient) + ":" ;
       }
-      fitOverlayText(patientButtonLabel, window.colors.ZWHITE, 'Arial', 20, patientButtonLeft, textTop, patientButtonWidth, patientButtonHeight, 'left', 'middle');
+      fitOverlayText(patientButtonLabel, window.colors.ZWHITE, 'Arial', topLinePointsize, 'left', 'middle', patientButtonLeft, textTop, patientButtonWidth, patientButtonHeight);
    }
 
    if (monitorButtonLabel.length == 0) {
@@ -473,7 +473,7 @@ function drawTopLine() {
          monitorButtonLabel = translateNumber(window.StringNumbers.SN_Clinician) + ":" ;
       }
    }
-   fitOverlayText(monitorButtonLabel, window.colors.ZWHITE, 'Arial', 20, monitorButtonLeft, textTop, monitorButtonWidth, monitorButtonHeight, 'left', 'middle');
+   fitOverlayText(monitorButtonLabel, window.colors.ZWHITE, 'Arial', topLinePointsize, 'left', 'middle', monitorButtonLeft, textTop, monitorButtonWidth, monitorButtonHeight);
 
    drawBackArrow(backArrowLeft, backArrowTop, backArrowWidth, backArrowHeight, backArrowHeight * 50 / 100);
 
@@ -571,19 +571,20 @@ function drawBottomLineMessageArea() {
 
    var messageHeight = homeScreen.messageAreaBottom - messageY;
 
-   displayCtx.fillStyle = backgroundColor;
-   displayCtx.fillRect(messageX, messageY, messageWidth, messageHeight);
+   // displayCtx.fillStyle = backgroundColor;
+   // displayCtx.fillRect(messageX, messageY, messageWidth, messageHeight);
 
    var centerX = messageX + messageWidth / 2;
    var centerY = messageY + messageHeight / 2;
 
-   displayCtx.fillStyle = foregroundColor;
-   displayCtx.font = '20pt Arial';
-   displayCtx.textAlign = 'center';
-   displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
+   // displayCtx.fillStyle = foregroundColor;
+   // displayCtx.font = '20pt Arial';
+   // displayCtx.textAlign = 'center';
+   // displayCtx.textBaseline = 'middle'; // Set text baseline to middle for vertical centering
 
    //displayCtx.fillText(window.bottomLineMessage, centerX, centerY); // Adjust the positioning as needed
-   displayCtx.fillText(homeScreen.getSettingValue("bottomLineMessage"), centerX, centerY); // Adjust the positioning as needed
+   //displayCtx.fillText(homeScreen.getSettingValue("bottomLineMessage"), centerX, centerY); // Adjust the positioning as needed
+   placeText(homeScreen.getSettingValue("bottomLineMessage"), foregroundColor, backgroundColor, 'Arial', messagePointsize, 'center', 'middle', centerX, centerY, messageX, messageY, messageWidth, messageHeight) ;
 
 }
 
@@ -600,9 +601,6 @@ function updateClock() {
 
    var messageHeight = homeScreen.messageAreaBottom - messageY;
 
-   displayCtx.fillStyle = window.colors.ZBLACK;
-   displayCtx.fillRect(homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight);
-
    var dateLeft = homeScreen.dateTimeAreaLeft;
    var dateTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 5 / 100;;
    var dateWidth = homeScreen.dateTimeAreaWidth;
@@ -612,11 +610,6 @@ function updateClock() {
    var timeTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 35 / 100;;
    var timeWidth = homeScreen.dateTimeAreaWidth;
    var timeHeight = homeScreen.dateTimeAreaHeight * 60 / 100;
-
-   displayCtx.fillStyle = window.colors.ZWHITE;
-   displayCtx.font = '12pt Arial';
-   displayCtx.textAlign = 'center';
-   displayCtx.textBaseline = 'middle';
 
    // Create a new Date object without any parameters
    const currentDate = new Date();
@@ -644,20 +637,28 @@ function updateClock() {
       formattedDate = `${fullYear}/${month}/${day}`;
    }
  
-
    // Get the current hours and minutes
    const hours = currentDate.getHours().toString().padStart(2, '0');
    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
 
-   // Format the time as HH:MM
    const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-   displayCtx.fillText(formattedDate, dateLeft + dateWidth / 2, dateTop + dateHeight / 2); // Adjust the positioning as needed
+   // displayCtx.fillStyle = window.colors.ZBLACK;
+   // displayCtx.fillRect(homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight);
 
-   displayCtx.font = '18pt Arial';
+   // displayCtx.fillStyle = window.colors.ZWHITE;
+   // displayCtx.font = '12pt Arial';
+   // displayCtx.textAlign = 'center';
+   // displayCtx.textBaseline = 'middle';
 
-   displayCtx.fillText(formattedTime, timeLeft + timeWidth / 2, timeTop + timeHeight / 2); // Adjust the positioning as needed
+   // displayCtx.fillText(formattedDate, dateLeft + dateWidth / 2, dateTop + dateHeight / 2); // Adjust the positioning as needed
+   placeText(formattedDate, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', datePointsize, 'center', 'middle', dateLeft + dateWidth / 2, dateTop + dateHeight / 2, homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight) ;
+
+   //displayCtx.font = '18pt Arial';
+
+   //displayCtx.fillText(formattedTime, timeLeft + timeWidth / 2, timeTop + timeHeight / 2); // Adjust the positioning as needed
+   placeOverlayText(formattedTime, window.colors.ZWHITE, 'Arial', timePointsize, 'center', 'middle', timeLeft + timeWidth / 2, timeTop + timeHeight / 2) ;
 
 }
 

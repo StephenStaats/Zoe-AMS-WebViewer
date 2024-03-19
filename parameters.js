@@ -286,6 +286,23 @@ var RRpointSize = 30;
 var TEMPpointSize = 30;
 var NIBPpointSize = 45;
 
+var messagePointsize = 20 ;
+var topLinePointsize = 20 ;
+
+var datePointsize = 12 ;
+var timePointsize = 18 ;
+
+var waveformLabelPointsize = 11 ;
+var parameterLabelPointsize = 11 ;
+var parameterUnitsPointsize = 9 ;
+
+var NIBPTimePointsize = 12 ;
+var TEMPTimePointsize = 11 ;
+
+var NIBPAlarmSettingsPointsize = 10 ;
+var alarmSettingsPointsize = 11 ;
+
+
 Parameter.prototype.getPointSizeFromParameterName = function () {
 
    var pointSize = 20;
@@ -654,12 +671,6 @@ function clearParameterArea(parameterName) {
 
 function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, lowerLimit, textForegroundColor, textBackgroundColor, font, fontSize, x, y, width, height) {
 
-   displayCtx.fillStyle = textBackgroundColor;
-
-   displayCtx.fillRect(x, y, width, height);
-
-   displayCtx.fillStyle = textForegroundColor;
-
    var labelX = x + 8;
    var labelY = y + 20;
 
@@ -670,21 +681,26 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
    var valueY = y + height * 70 / 100;
 
    // Add label in the upper left corner
-   displayCtx.font = '11pt Arial';  
-   displayCtx.textAlign = 'left';
-   displayCtx.fillText(label, labelX, labelY);  
+   // displayCtx.fillStyle = textBackgroundColor;
+   // displayCtx.fillRect(x, y, width, height);
+   // displayCtx.fillStyle = textForegroundColor;
+   // displayCtx.font = '11pt Arial';  
+   // displayCtx.textAlign = 'left';
+   // displayCtx.fillText(label, labelX, labelY);  
+   placeText(label, textForegroundColor, textBackgroundColor, font, parameterLabelPointsize, 'left', 'middle', labelX, labelY, x, y, width, height) ;
 
    var labelRight= labelX + displayCtx.measureText("MMM").width;
 
    // Add units right below label in the upper left corner
-   displayCtx.font = '9pt Arial';  
-   displayCtx.textAlign = 'left';
-   displayCtx.fillText(units, unitsX, unitsY);  
+   // displayCtx.font = '9pt Arial';  
+   // displayCtx.textAlign = 'left';
+   // displayCtx.fillText(units, unitsX, unitsY);  
+   placeOverlayText(units, textForegroundColor, font, parameterUnitsPointsize, 'left', 'middle', unitsX, unitsY) ;
 
    if (label == "NIBP") {
 
-      displayCtx.font = `${fontSize}pt ${font}`;
-      displayCtx.textAlign = 'center';
+      // displayCtx.font = `${fontSize}pt ${font}`;
+      // displayCtx.textAlign = 'center';
 
       valueX = x + width * 40 / 100;
       valueY = y + height * 70 / 100;
@@ -693,7 +709,8 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
       if (value.indexOf(" / ") == -1) {
 
-         displayCtx.fillText(value, valueX, valueY);  
+         //displayCtx.fillText(value, valueX, valueY);  
+         placeOverlayText(value, textForegroundColor, font, fontSize, 'center', 'middle', valueX, valueY) ;
 
       }
       else {
@@ -712,20 +729,20 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          const sysDiaString = `${systolic} / ${diastolic}`;  
          const meanString = `(${mean})`;  
 
-         displayCtx.font = `${fontSize + 5}pt ${font}`;
-         displayCtx.textAlign = 'center';
-
          valueX = x + width * 50 / 100;
 
-         displayCtx.fillText(sysDiaString, valueX, valueY);  
-
-         displayCtx.font = `${fontSize - 15}pt ${font}`;
-         displayCtx.textAlign = 'left';
+         // displayCtx.font = `${fontSize + 5}pt ${font}`;
+         // displayCtx.textAlign = 'center';
+         //displayCtx.fillText(sysDiaString, valueX, valueY);  
+         placeOverlayText(sysDiaString, textForegroundColor, font, fontSize + 5, 'center', 'middle', valueX, valueY) ;
 
          valueX = x + width * 80 / 100;
          valueY = y + height * 70 / 100;
 
-         displayCtx.fillText(meanString, valueX, valueY); 
+         // displayCtx.font = `${fontSize - 15}pt ${font}`;
+         // displayCtx.textAlign = 'left';
+         //displayCtx.fillText(meanString, valueX, valueY); 
+         placeOverlayText(meanString, textForegroundColor, font, fontSize - 15, 'left', 'middle', valueX, valueY) ;
 
          var parameterTime = homeScreen.getSettingValue("NIBPtime");
 
@@ -733,10 +750,10 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
             timeY = y + height * 80 / 100;
 
-            displayCtx.font = '12pt Arial';  
-            displayCtx.textAlign = 'left';
-
-            displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY);  
+            // displayCtx.font = '12pt Arial';  
+            // displayCtx.textAlign = 'left';
+            //displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY);  
+            placeOverlayText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, textForegroundColor, font, NIBPTimePointsize, 'left', 'middle', labelX, timeY) ;
 
          }
 
@@ -747,9 +764,10 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
       valueY = y + height * 60 / 100;
 
-      displayCtx.font = `${fontSize}pt ${font}`;
-      displayCtx.textAlign = 'center';
-      displayCtx.fillText(value, valueX, valueY);    
+      // displayCtx.font = `${fontSize}pt ${font}`;
+      // displayCtx.textAlign = 'center';
+     // displayCtx.fillText(value, valueX, valueY);    
+      placeOverlayText(value, textForegroundColor, font, fontSize, 'center', 'middle', valueX, valueY) ;
 
       var parameterTime = homeScreen.getSettingValue("TEMPtime");
 
@@ -757,19 +775,20 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
 
          timeY = y + height * 85 / 100;
 
-         displayCtx.font = '11pt Arial'; 
-         displayCtx.textAlign = 'left';
-
-         displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY); 
+         // displayCtx.font = '11pt Arial'; 
+         // displayCtx.textAlign = 'left';
+         //displayCtx.fillText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, labelX, timeY); 
+         placeOverlayText(translateNumber(window.StringNumbers.SN_Last_time) + ": " + parameterTime, textForegroundColor, font, TEMPTimePointsize, 'left', 'middle', labelX, timeY) ;
 
       }
 
    }
    else {
 
-      displayCtx.font = `${fontSize}pt ${font}`;
-      displayCtx.textAlign = 'center';
-      displayCtx.fillText(value, valueX, valueY);   
+      // displayCtx.font = `${fontSize}pt ${font}`;
+      // displayCtx.textAlign = 'center';
+      // displayCtx.fillText(value, valueX, valueY);   
+      placeOverlayText(value, textForegroundColor, font, fontSize, 'center', 'middle', valueX, valueY) ;
 
    }
 
@@ -780,9 +799,10 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          var alarmStringX = x + width * 55 / 100;
          var alarmStringY = y + 20;
 
-         displayCtx.font = '10pt Arial'; 
-         displayCtx.textAlign = 'left';
-         displayCtx.fillText(homeScreen.getSettingValue("NIBPAlarmSettingsString"), alarmStringX, alarmStringY); 
+         // displayCtx.font = '10pt Arial'; 
+         // displayCtx.textAlign = 'left';
+         // displayCtx.fillText(homeScreen.getSettingValue("NIBPAlarmSettingsString"), alarmStringX, alarmStringY); 
+         placeOverlayText(homeScreen.getSettingValue("NIBPAlarmSettingsString"), textForegroundColor, font, NIBPAlarmSettingsPointsize, 'left', 'middle', alarmStringX, alarmStringY) ;
 
       }
       else {
@@ -794,10 +814,13 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          var lowerLimitY = y + 35;
 
          // Add limits in the upper right corner
-         displayCtx.font = '9pt Arial'; 
-         displayCtx.textAlign = 'right';
-         displayCtx.fillText(upperLimit, upperLimitX, upperLimitY); 
-         displayCtx.fillText(lowerLimit, lowerLimitX, lowerLimitY); 
+         // displayCtx.font = '9pt Arial'; 
+         // displayCtx.textAlign = 'right';
+         // displayCtx.fillText(upperLimit, upperLimitX, upperLimitY); 
+         // displayCtx.fillText(lowerLimit, lowerLimitX, lowerLimitY); 
+         placeOverlayText(upperLimit, textForegroundColor, font, NIBPAlarmSettingsPointsize, 'right', 'middle', upperLimitX, upperLimitY) ;
+         placeOverlayText(lowerLimit, textForegroundColor, font, NIBPAlarmSettingsPointsize, 'right', 'middle', lowerLimitX, lowerLimitY) ;
+
       }
 
    }

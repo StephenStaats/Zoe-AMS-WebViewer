@@ -247,19 +247,42 @@ function getWaveformIdFromWaveformName(waveformName) {
 // no / Verdana: Verdana is a sans-serif typeface designed by Matthew Carter for Microsoft. It's known for its clarity and readability, particularly at smaller sizes, making it popular for web content.
 
 
-function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+// function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+
+//    displayCtx.fillStyle = textColor;
+
+//    let fontSizePt = textPointSize; // Initial font size in points
+//    var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
+//    displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+
+//    // Adjust font size to fit text in rectangle
+//    while (displayCtx.measureText(textToFit).width > textWidth || fontSizePx > textHeight) {
+//       fontSizePx--;
+//       displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+//    }
+
+//    var saveTextAlign = displayCtx.textAlign ;
+//    var saveTextBaseline = displayCtx.textBaseline ;
+
+//    displayCtx.textAlign = textAlign;
+//    displayCtx.textBaseline = textBaseline;  
+
+//    // Draw text
+//    displayCtx.fillText(textToFit, textLeft, textTop);
+ 
+//    displayCtx.textAlign = saveTextAlign ;
+//    displayCtx.textBaseline =  saveTextBaseline ;
+
+// }
+
+
+function placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop) {
 
    displayCtx.fillStyle = textColor;
 
    let fontSizePt = textPointSize; // Initial font size in points
    var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
    displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
-
-   // Adjust font size to fit text in rectangle
-   while (displayCtx.measureText(textToFit).width > textWidth || fontSizePx > textHeight) {
-      fontSizePx--;
-      displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
-   }
 
    var saveTextAlign = displayCtx.textAlign ;
    var saveTextBaseline = displayCtx.textBaseline ;
@@ -276,12 +299,41 @@ function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, t
 }
 
 
-function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) {
+function placeText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textRectLeft, textRectTop, textRectWidth, textRectHeight) {
 
    displayCtx.fillStyle = backgroundColor;
-   displayCtx.fillRect(textLeft, textTop, textWidth, textHeight) ;
+   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight) ;
 
-   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textLeft, textTop, textWidth, textHeight, textAlign, textBaseline) ;
+   placeOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop) ;
+
+}
+
+
+function fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight) {
+
+   let fontSizePt = textPointSize; // Initial font size in points
+   var fontSizePx = fontSizePt * 1.33; // Convert points to pixels
+   displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+
+   // Adjust font size to fit text in rectangle
+   while (displayCtx.measureText(textToFit).width > textWidth || fontSizePx > textHeight) {
+      fontSizePx--;
+      displayCtx.font = fontSizePx + 'px ' + textFontTypeface;
+   }
+
+   fontSizePt = fontSizePx / 1.33; // Convert pixels to points
+
+   placeOverlayText(textToFit, textColor, textFontTypeface, fontSizePt, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight) ;
+
+}
+
+
+function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textRectLeft, textRectTop, textRectWidth, textRectHeight) {
+
+   displayCtx.fillStyle = backgroundColor;
+   displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight) ;
+
+   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight) ;
 
 }
 

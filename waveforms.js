@@ -900,8 +900,8 @@ function drawWaveformScaleArea() {
          //fitText(leadText, window.colors.ZWHITE, 'Arial', 11, labelRect.left, labelRect.top, labelRect.width() - 1, labelRect.height(), 'left', 'top');
          //fitText(leadText, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', 11, (bracketCenterLeft + bracketCenterRight) / 2, labelRect.top, labelRect.width() - 1, labelRect.height(), 'center', 'top');
          //fitText(gainText, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
-         fitOverlayText(leadText, window.colors.ZWHITE, 'Arial', 11, (bracketCenterLeft + bracketCenterRight) / 2, labelRect.top, labelRect.width() - 1, labelRect.height(), 'center', 'top');
-         fitOverlayText(gainText, window.colors.ZWHITE, 'Arial', 11, gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height(), 'left', 'top');
+         fitOverlayText(leadText, window.colors.ZWHITE, 'Arial', waveformLabelPointsize, 'center', 'top', (bracketCenterLeft + bracketCenterRight) / 2, labelRect.top, labelRect.width() - 1, labelRect.height());
+         fitOverlayText(gainText, window.colors.ZWHITE, 'Arial', waveformLabelPointsize, 'left', 'top', gainRect.left, gainRect.top, gainRect.width() - 1, gainRect.height());
 
       }
       else if (wvf.waveformName == "CO2") {
@@ -916,8 +916,8 @@ function drawWaveformScaleArea() {
          var scaleLoWidth = homeScreen.waveformScaleAreaWidth;
          var scaleLoHeight = wvf.height * 20 / 100;
 
-         fitOverlayText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', 11, scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight, 'right', 'top');
-         fitOverlayText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', 11, scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight, 'right', 'bottom');
+         fitOverlayText(homeScreen.getSettingValue("CO2ScaleHi"), wvf.color, 'Arial', waveformLabelPointsize, 'right', 'top', scaleHiLeft, scaleHiTop, scaleHiWidth, scaleHiHeight);
+         fitOverlayText(homeScreen.getSettingValue("CO2ScaleLo"), wvf.color, 'Arial', waveformLabelPointsize, 'right', 'bottom', scaleLoLeft, scaleLoTop, scaleLoWidth, scaleLoHeight);
 
          if (window.rotated) {
 
@@ -1073,7 +1073,7 @@ function setupWaveforms(AMSWaveforms) {
 
    homeScreen.clearWaveformList();
 
-   if (displayCtx.width == 800) { // 740, top channel given extra height
+   if (displayCtx.canvas.width == 800) { // 740, top channel given extra height
 
       switch (AMSWaveforms.length) {
 
