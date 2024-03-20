@@ -315,6 +315,8 @@ function adjustPointsizes() {
 
       var adjustmentFactor = displayCtx.canvas.width / 800;  // pointsizes were originally designed for CVM, which is 480 x 800 pixels
 
+      disconnectedMessagePointsize *= adjustmentFactor;
+
       HRpointSize *= adjustmentFactor;
       ETCO2pointSize *= adjustmentFactor;
       FICO2pointSize *= adjustmentFactor;
