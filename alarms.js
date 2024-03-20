@@ -496,10 +496,6 @@ function updateAlarmTones() {
 //  updateBlinkState
 //
 
-var needToBlinkMessage        = 0 ;
-var needToBlinkParameterBoxes = 0 ;
-var suspendTimerRunning       = 0 ;
-
 function updateBlinkState() {
 
    window.blinkState++ ;
@@ -534,34 +530,15 @@ function updateBlinkState() {
 
    soundalarmTone() ;
   
-   needToBlinkMessage        = 0 ;
-   needToBlinkParameterBoxes = 0 ;
+   var needToBlinkMessage        = 0 ;
+   var needToBlinkParameterBoxes = 0 ;
    var suspendTimerRunning       = 0 ;
-
-   //if (monitorAlarmStatus != lastMonitorAlarmStatus) {
-
-      //lastMonitorAlarmStatus = monitorAlarmStatus ;
-
-      //getMonitorAlarmToneFromMonitorAlarmStatus() ;
-
-      //monitorNeedToColor = getNeedToColorFromAlarmStatus(monitorAlarmStatus) ;
-
-      //updateAlarmTones() ;
-
-      //drawHRParameterArea() ;
-
-   //}
-
-   // if (monitorNeedToColor) {
-   //    needToBlinkMessage        = 1 ;
-   //    needToBlinkParameterBoxes = 1 ;
-   // }
 
    switch (monitorAlarmStatus) {
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH :
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM :
-         needToBlinkMessage        = 123 ;
+         needToBlinkMessage        = 1 ;
          needToBlinkParameterBoxes = 1 ;
          break ;
 
@@ -573,14 +550,14 @@ function updateBlinkState() {
 
    }
 
-   if (suspendTimerRunning != window.Z_ALL_ALARMS_OFF_FALSE) needToBlinkMessage = 1 ;
+   //if (suspendTimerRunning != window.Z_ALL_ALARMS_OFF_FALSE) needToBlinkMessage = 1 ;
 
    // if (window.alarmsSilenced) {
    //    needToBlinkMessage        = 0 ;
    //    needToBlinkParameterBoxes = 0 ; 
    // }
 
-   if (needToBlinkMessage == 123) {
+   if (needToBlinkMessage == 1) {
 
 	   //
 	   //   Do this to blink message

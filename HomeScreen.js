@@ -290,6 +290,7 @@ function showDisconnectedMessage() {
    var centerY = homeScreen.top + homeScreen.height / 2 ;
 
    placeText(translateNumber(window.StringNumbers.SN_No_device_connected), window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', disconnectedMessagePointsize, 'center', 'middle', centerX, centerY, homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height) ;
+   LOGEVENTCYAN("In showDisconnectedMessage") ;
 
 }
 
@@ -304,6 +305,7 @@ function showConnectionLostMessage() {
    var centerY = homeScreen.top + homeScreen.height / 2 ;
 
    placeText(translateNumber(window.StringNumbers.SN_Device_disconnected), window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', disconnectedMessagePointsize, 'center', 'middle', centerX, centerY, homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height) ;
+   LOGEVENTCYAN("In showConnectionLostMessage") ;
 
 }
 
@@ -357,7 +359,8 @@ function drawHomeScreenAreas() {
 
 var frameCount = 0;
 
-var connectedToDevice = -1 ;
+var startingUp = 1 ;
+var connectedToDevice = 0 ;
 var lastConnectedToDevice = 0 ;
 
 var redrawHomeScreen = 1;
@@ -380,11 +383,10 @@ function drawHomeScreen(timestamp) {
 
    }
    else {
-
-      if (connectedToDevice < 0) {
-         showDisconnectedMessage();
+      if (startingUp == 1) {
+         startingUp = 0 ;
+         showDisconnectedMessage() ;
       }
-
    }
 
    if (!lastTime) {
@@ -412,10 +414,12 @@ function drawHomeScreen(timestamp) {
 
    frameCount++;
 
-   if (connectedToDevice <= 0) {
-      if (lastConnectedToDevice > 0) {
+   if (connectedToDevice != lastConnectedToDevice) {
+
+      if (connectedToDevice == 0) {
          showConnectionLostMessage();
       }
+
    }
 
    lastConnectedToDevice = connectedToDevice ;
