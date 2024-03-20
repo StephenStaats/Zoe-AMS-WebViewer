@@ -275,6 +275,8 @@ function getWaveformIdFromWaveformName(waveformName) {
 
 // }
 
+var disconnectedMessagePointsize = 30;
+
 var HRpointSize = 50;
 var ETCO2pointSize = 45;
 var FICO2pointSize = 20;

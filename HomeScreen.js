@@ -281,6 +281,34 @@ HomeScreen.prototype.getSettingValue = function (settingName) {
 
 
 //
+//   showDisconnectedMessage
+//
+
+function showDisconnectedMessage() {
+
+   var centerX = homeScreen.left + homeScreen.width / 2 ;
+   var centerY = homeScreen.top + homeScreen.height / 2 ;
+
+   placeText(translateNumber(window.StringNumbers.SN_No_device_connected), window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', disconnectedMessagePointsize, 'center', 'middle', centerX, centerY, homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height) ;
+
+}
+
+
+//
+//   showConnectionLostMessage
+//
+
+function showConnectionLostMessage() {
+
+   var centerX = homeScreen.left + homeScreen.width / 2 ;
+   var centerY = homeScreen.top + homeScreen.height / 2 ;
+
+   placeText(translateNumber(window.StringNumbers.SN_Device_disconnected), window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', disconnectedMessagePointsize, 'center', 'middle', centerX, centerY, homeScreen.left, homeScreen.top, homeScreen.width, homeScreen.height) ;
+
+}
+
+
+//
 //   drawHomeScreenAreas
 //
 
@@ -329,6 +357,9 @@ function drawHomeScreenAreas() {
 
 var frameCount = 0;
 
+var connectedToDevice = -1 ;
+var lastConnectedToDevice = 0 ;
+
 var redrawHomeScreen = 1;
 
 let lastTime;
@@ -336,9 +367,24 @@ let elapsedTime;
 
 function drawHomeScreen(timestamp) {
 
-   if (redrawHomeScreen == 1) {
-      drawHomeScreenAreas();
-      redrawHomeScreen = 0;
+   if (connectedToDevice > 0) {
+
+      if (lastConnectedToDevice <= 0) {
+         redrawHomeScreen = 1 ;
+      }
+
+      if (redrawHomeScreen == 1) {
+         drawHomeScreenAreas();
+         redrawHomeScreen = 0;
+      }
+
+   }
+   else {
+
+      if (connectedToDevice < 0) {
+         showDisconnectedMessage();
+      }
+
    }
 
    if (!lastTime) {
@@ -352,15 +398,27 @@ function drawHomeScreen(timestamp) {
 
       if (elapsedTime) {
 
-         updateFramesPerSecond(elapsedTime);
+         if (connectedToDevice > 0) {
 
-         drawWaveforms(elapsedTime);
+            updateFramesPerSecond(elapsedTime);
+
+            drawWaveforms(elapsedTime);
+
+         }
 
       }
 
    }
 
    frameCount++;
+
+   if (connectedToDevice <= 0) {
+      if (lastConnectedToDevice > 0) {
+         showConnectionLostMessage();
+      }
+   }
+
+   lastConnectedToDevice = connectedToDevice ;
 
    //if (frameCount < 300) {
    requestAnimationFrame(drawHomeScreen);

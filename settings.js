@@ -190,7 +190,7 @@ function processSettingData(AMSSettings) {
       }
 
       if (needToDrawParameterAreas) {
-         drawParamterAreas() ;
+         drawParameterAreas() ;
       }
 
       if (needToDrawBottomLineMessageArea) {

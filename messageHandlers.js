@@ -20,10 +20,16 @@ async function getAMSMessages() {
 
       var AMSMessages = await response.json();
 
-      var m = 0;
-      for (m = 0; m < AMSMessages.length; m++) {
-         AMSMessage = AMSMessages[m];
-         processAMSMessage(AMSMessage);
+      if (AMSMessages.length > 0) {
+
+         connectedToDevice  = 10 ;
+
+         var m = 0;
+         for (m = 0; m < AMSMessages.length; m++) {
+            AMSMessage = AMSMessages[m];
+            processAMSMessage(AMSMessage);
+         }
+
       }
 
    } catch (error) {

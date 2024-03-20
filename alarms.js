@@ -496,6 +496,10 @@ function updateAlarmTones() {
 //  updateBlinkState
 //
 
+var needToBlinkMessage        = 0 ;
+var needToBlinkParameterBoxes = 0 ;
+var suspendTimerRunning       = 0 ;
+
 function updateBlinkState() {
 
    window.blinkState++ ;
@@ -509,6 +513,7 @@ function updateBlinkState() {
       if (window.simulatedDataMode == 1) {
 
          simulateArrivalOfAMSMessage() ;
+         connectedToDevice  = 10 ;
 
       }
       else {
@@ -517,14 +522,20 @@ function updateBlinkState() {
 
       }
 
-      updateClock() ;
+      if (connectedToDevice > 0) {
+         connectedToDevice -= 1 ;
+         updateClock() ;
+      }
+      else {
+         return ;
+      }
 
    }
 
    soundalarmTone() ;
   
-   var needToBlinkMessage        = 0 ;
-   var needToBlinkParameterBoxes = 0 ;
+   needToBlinkMessage        = 0 ;
+   needToBlinkParameterBoxes = 0 ;
    var suspendTimerRunning       = 0 ;
 
    //if (monitorAlarmStatus != lastMonitorAlarmStatus) {
@@ -550,11 +561,12 @@ function updateBlinkState() {
 
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_HIGH :
       case window.Z_PARAM_ALARM_STATUS.ACTIVE_MEDIUM :
-         needToBlinkMessage        = 1 ;
+         needToBlinkMessage        = 123 ;
          needToBlinkParameterBoxes = 1 ;
          break ;
 
-      case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW :
+      ///case window.Z_PARAM_ALARM_STATUS.ACTIVE_LOW :
+      default :
          needToBlinkMessage        = 0 ;
          needToBlinkParameterBoxes = 0 ;
          break ;
@@ -568,7 +580,7 @@ function updateBlinkState() {
    //    needToBlinkParameterBoxes = 0 ; 
    // }
 
-   if (needToBlinkMessage) {
+   if (needToBlinkMessage == 123) {
 
 	   //
 	   //   Do this to blink message
@@ -582,7 +594,7 @@ function updateBlinkState() {
 
    }
 
-   if (needToBlinkParameterBoxes) {
+   if (needToBlinkParameterBoxes == 1) {
 
 	   //
 	   //   Do this to blink parameter boxes

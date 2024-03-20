@@ -36,7 +36,9 @@ window.StringNumbers = {
    SN_Monitor_ID: 15,
    SN_Last_time: 16,
    SN_Clinician: 17,
-   SN_Last_SN: 18
+   SN_No_device_connected: 18,
+   SN_Device_disconnected: 19,
+   SN_Last_SN: 20
 };
 
 const ZoeTranslatedStrings = [
@@ -345,6 +347,40 @@ const ZoeTranslatedStrings = [
       pSwedish: "$11 Clinician",
       pRussian: "$12 Clinician",
       pChinese: "$13 Clinician"
+   },
+   {
+      StringNumber: StringNumbers.SN_No_device_connected,
+      pEnglish: "No device connected",
+      pGerman: "$01 No device connected",
+      pItalian: "$02 No device connected",
+      pFrench: "$03 No device connected",
+      pPortuguese: "$04 No device connected",
+      pSpanish: "$05 No device connected",
+      pPolish: "$06 No device connected",
+      pDutch: "$07 No device connected",
+      pNorwegian: "$08 No device connected",
+      pDanish: "$09 No device connected",
+      pFinnish: "$10 No device connected",
+      pSwedish: "$11 No device connected",
+      pRussian: "$12 No device connected",
+      pChinese: "$13 No device connected"
+   },
+   {
+      StringNumber: StringNumbers.SN_Device_disconnected,
+      pEnglish: "Device disconnected",
+      pGerman: "$01 Device disconnected",
+      pItalian: "$02 Device disconnected",
+      pFrench: "$03 Device disconnected",
+      pPortuguese: "$04 Device disconnected",
+      pSpanish: "$05 Device disconnected",
+      pPolish: "$06 Device disconnected",
+      pDutch: "$07 Device disconnected",
+      pNorwegian: "$08 Device disconnected",
+      pDanish: "$09 Device disconnected",
+      pFinnish: "$10 Device disconnected",
+      pSwedish: "$11 Device disconnected",
+      pRussian: "$12 Device disconnected",
+      pChinese: "$13 Device disconnected"
    },
    {
       StringNumber: StringNumbers.SN_Last_SN,
