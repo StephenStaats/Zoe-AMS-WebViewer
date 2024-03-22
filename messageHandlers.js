@@ -8,7 +8,8 @@ async function getAMSMessages() {
 
    try {
 
-      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {
+      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {  // A Streaming Device for Richmond, 3
+      // const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/8000.002011', {
          method: 'GET',
          headers: {
             'Accept': 'application/json',

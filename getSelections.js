@@ -1,6 +1,7 @@
 // Dummy data
 const data = [
-  { deviceId: "0", deviceName: "ASDR3", patientFirstName: "Bertie", patientLastName: "Wooster" },
+  { deviceId: "0", deviceName: "ASDR3", patientFirstName: "Bertie", patientLastName: "Wooster" },  // A Streaming Device for Richmond, 3
+//   { deviceId: "0", deviceName: "8000.002011", patientFirstName: "Diana", patientLastName: "Villiers" },
   { deviceId: "1", deviceName: "Device 1", patientFirstName: "Preserved", patientLastName: "Killick" },
   { deviceId: "2", deviceName: "Device 2", patientFirstName: "Diana", patientLastName: "Villers" },
   { deviceId: "3", deviceName: "Device 3", patientFirstName: "Jack", patientLastName: "Aubrey" },
