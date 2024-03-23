@@ -290,14 +290,14 @@ var originalmessagePointsize = 20;
 var originaltopLinePointsize = 20;
 
 var originaldatePointsize = 12;
-var originaltimePointsize = 17;
+var originaltimePointsize = 14;
 
 var originalwaveformLabelPointsize = 11;
 var originalparameterLabelPointsize = 11;
 var originalparameterUnitsPointsize = 9;
 
 var originalNIBPTimePointsize = 12;
-var originalTEMPTimePointsize = 11;
+var originalTEMPTimePointsize = 18;
 
 var originalNIBPAlarmSettingsPointsize = 10;
 var originalalarmSettingsPointsize = 11;
@@ -325,7 +325,7 @@ var messagePointsize = 20;
 var topLinePointsize = 20;
 
 var datePointsize = 12;
-var timePointsize = 18;
+var timePointsize = 15;
 
 var waveformLabelPointsize = 11;
 var parameterLabelPointsize = 11;

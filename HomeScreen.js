@@ -659,22 +659,6 @@ function drawBottomLineMessageArea() {
 
 function updateClock() {
 
-   var messageX = homeScreen.messageAreaLeft;
-   var messageY = homeScreen.messageAreaTop;
-   var messageWidth = homeScreen.messageAreaWidth;
-
-   var messageHeight = homeScreen.messageAreaBottom - messageY;
-
-   var dateLeft = homeScreen.dateTimeAreaLeft;
-   var dateTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 5 / 100;;
-   var dateWidth = homeScreen.dateTimeAreaWidth;
-   var dateHeight = homeScreen.dateTimeAreaHeight * 30 / 100;
-
-   var timeLeft = homeScreen.dateTimeAreaLeft;
-   var timeTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 35 / 100;;
-   var timeWidth = homeScreen.dateTimeAreaWidth;
-   var timeHeight = homeScreen.dateTimeAreaHeight * 60 / 100;
-
    // Create a new Date object without any parameters
    const currentDate = new Date();
 
@@ -708,21 +692,25 @@ function updateClock() {
 
    const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-   // displayCtx.fillStyle = window.colors.ZBLACK;
-   // displayCtx.fillRect(homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight);
+   var dateLeft = homeScreen.dateTimeAreaLeft;
+   var dateTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 5 / 100;;
+   var dateWidth = homeScreen.dateTimeAreaWidth;
+   var dateHeight = homeScreen.dateTimeAreaHeight * 30 / 100;
 
-   // displayCtx.fillStyle = window.colors.ZWHITE;
-   // displayCtx.font = '12pt Arial';
-   // displayCtx.textAlign = 'center';
-   // displayCtx.textBaseline = 'middle';
+   var timeLeft = homeScreen.dateTimeAreaLeft;
+   var timeTop = homeScreen.dateTimeAreaTop + homeScreen.dateTimeAreaHeight * 35 / 100;;
+   var timeWidth = homeScreen.dateTimeAreaWidth;
+   var timeHeight = homeScreen.dateTimeAreaHeight * 60 / 100;
 
    // displayCtx.fillText(formattedDate, dateLeft + dateWidth / 2, dateTop + dateHeight / 2); // Adjust the positioning as needed
-   placeText(formattedDate, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', datePointsize, 'center', 'middle', dateLeft + dateWidth / 2, dateTop + dateHeight / 2, homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight) ;
+   //placeText(formattedDate, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', datePointsize, 'center', 'middle', dateLeft + dateWidth / 2, dateTop + dateHeight / 2, homeScreen.dateTimeAreaLeft, homeScreen.dateTimeAreaTop, homeScreen.dateTimeAreaWidth, homeScreen.dateTimeAreaHeight) ;
+   fitText(formattedDate, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', datePointsize, 'center', 'middle', dateLeft + dateWidth / 2, dateTop + dateHeight / 2, dateLeft, dateTop, dateWidth, dateHeight) ;
 
    //displayCtx.font = '18pt Arial';
 
    //displayCtx.fillText(formattedTime, timeLeft + timeWidth / 2, timeTop + timeHeight / 2); // Adjust the positioning as needed
-   placeOverlayText(formattedTime, window.colors.ZWHITE, 'Arial', timePointsize, 'center', 'middle', timeLeft + timeWidth / 2, timeTop + timeHeight / 2) ;
+   //placeOverlayText(formattedTime, window.colors.ZWHITE, 'Arial', timePointsize, 'center', 'middle', timeLeft + timeWidth / 2, timeTop + timeHeight / 2) ;
+   fitText(formattedTime, window.colors.ZWHITE, window.colors.ZBLACK, 'Arial', timePointsize, 'center', 'middle', timeLeft + timeWidth / 2, timeTop + timeHeight / 2, timeLeft, timeTop, timeWidth, timeHeight) ;
 
 }
 
