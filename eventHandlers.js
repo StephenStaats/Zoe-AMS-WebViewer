@@ -8,13 +8,22 @@
 
 function resizeCanvas() {
 
-   // displayCanvas.width = window.innerWidth;
-   // displayCanvas.height = 200; // Fixed height
+   const windowWidth = window.innerWidth;
+   const windowHeight = window.innerHeight;
+
+   // Calculate the new height based on the aspect ratio
+   const newHeight = windowWidth / aspectRatio;
+
+   LOGEVENTCYAN("windowWidth = " + windowWidth + ", newHeight = " + newHeight + ", new aspect ratio = " + windowWidth / newHeight) ;
+
+   // Set canvas dimensions
+   displayCanvas.width = windowWidth;
+   displayCanvas.height = newHeight;
 
    // You might need to adjust the drawing here if necessary
    // For example, redraw the waveform or clear the canvas
-   displayCtx.fillStyle = 'black';
-   displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+   // displayCtx.fillStyle = 'black';
+   // displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
 
    // bufferCanvas.width = displayCanvas.width;
    // bufferCanvas.height = displayCanvas.height;
@@ -23,9 +32,16 @@ function resizeCanvas() {
    // bufferCtx.fillStyle = 'black';
    // bufferCtx.fillRect(0, 0, bufferCanvas.width, bufferCanvas.height);
 
+   homeScreen = new HomeScreen(displayCanvas.width * .98, displayCanvas.height * .98);
+   homeScreen.initializeAreas();
+
+   adjustPointsizes() ;
+
    redrawHomeScreen = 1;
 
 }
+
+ 
 
 //
 //  Listener for changing simulation type dropdown

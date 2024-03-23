@@ -2,7 +2,7 @@
 //   Global constants
 //
 
-window.simulatedDataMode = 0;
+window.simulatedDataMode = 1;
 
 window.developmentMode = 0;
 
@@ -275,6 +275,41 @@ function getWaveformIdFromWaveformName(waveformName) {
 
 // }
 
+var originaldisconnectedMessagePointsize = 30;
+
+var originalHRpointSize = 50;
+var originalETCO2pointSize = 45;
+var originalFICO2pointSize = 20;
+var originalSPO2pointSize = 50;
+var originalRRCpointSize = 30;
+var originalRRpointSize = 30;
+var originalTEMPpointSize = 30;
+var originalNIBPpointSize = 45;
+
+var originalmessagePointsize = 20;
+var originaltopLinePointsize = 20;
+
+var originaldatePointsize = 12;
+var originaltimePointsize = 17;
+
+var originalwaveformLabelPointsize = 11;
+var originalparameterLabelPointsize = 11;
+var originalparameterUnitsPointsize = 9;
+
+var originalNIBPTimePointsize = 12;
+var originalTEMPTimePointsize = 11;
+
+var originalNIBPAlarmSettingsPointsize = 10;
+var originalalarmSettingsPointsize = 11;
+
+//var originalpointsizesAdjusted = 0 ;
+
+var originalalarmsOffIconXOffset = 45 ;
+var originalalarmsOffIconYOffset =  7 ;
+var originalNIBPAlarmsOffIconXOffset = 10 ;
+var originalNIBPAlarmsOffIconYOffset = 10 ;
+
+
 var disconnectedMessagePointsize = 30;
 
 var HRpointSize = 50;
@@ -302,60 +337,61 @@ var TEMPTimePointsize = 11;
 var NIBPAlarmSettingsPointsize = 10;
 var alarmSettingsPointsize = 11;
 
-var pointsizesAdjusted = 0 ;
+//var pointsizesAdjusted = 0 ;
 
 var alarmsOffIconXOffset = 45 ;
 var alarmsOffIconYOffset =  7 ;
 var NIBPAlarmsOffIconXOffset = 10 ;
 var NIBPAlarmsOffIconYOffset = 10 ;
 
+
 function adjustPointsizes() {
 
-   if (pointsizesAdjusted == 0) {
+   // if (pointsizesAdjusted == 0) {
 
       var adjustmentFactor = displayCtx.canvas.width / 800;  // pointsizes were originally designed for CVM, which is 480 x 800 pixels
 
-      disconnectedMessagePointsize *= adjustmentFactor;
+      disconnectedMessagePointsize = adjustmentFactor * originaldisconnectedMessagePointsize;
 
-      HRpointSize *= adjustmentFactor;
-      ETCO2pointSize *= adjustmentFactor;
-      FICO2pointSize *= adjustmentFactor;
-      SPO2pointSize *= adjustmentFactor;
-      RRCpointSize *= adjustmentFactor;
-      RRpointSize *= adjustmentFactor;
-      TEMPpointSize *= adjustmentFactor;
-      NIBPpointSize *= adjustmentFactor;
+      HRpointSize = adjustmentFactor * originalHRpointSize;
+      ETCO2pointSize = adjustmentFactor * originalETCO2pointSize;
+      FICO2pointSize = adjustmentFactor * originalFICO2pointSize;
+      SPO2pointSize = adjustmentFactor * originalSPO2pointSize;
+      RRCpointSize = adjustmentFactor * originalRRCpointSize;
+      RRpointSize = adjustmentFactor * originalRRpointSize;
+      TEMPpointSize = adjustmentFactor * originalTEMPpointSize;
+      NIBPpointSize = adjustmentFactor * originalNIBPpointSize;
 
-      messagePointsize *= adjustmentFactor;
-      topLinePointsize *= adjustmentFactor;
+      messagePointsize = adjustmentFactor * originalmessagePointsize;
+      topLinePointsize = adjustmentFactor * originaltopLinePointsize;
 
-      datePointsize *= adjustmentFactor;
-      timePointsize *= adjustmentFactor;
+      datePointsize = adjustmentFactor * originaldatePointsize;
+      timePointsize = adjustmentFactor * originaltimePointsize;
 
-      waveformLabelPointsize *= adjustmentFactor;
-      parameterLabelPointsize *= adjustmentFactor;
-      parameterUnitsPointsize *= adjustmentFactor;
+      waveformLabelPointsize = adjustmentFactor * originalwaveformLabelPointsize;
+      parameterLabelPointsize = adjustmentFactor * originalparameterLabelPointsize;
+      parameterUnitsPointsize = adjustmentFactor * originalparameterUnitsPointsize;
 
-      NIBPTimePointsize *= adjustmentFactor;
-      TEMPTimePointsize *= adjustmentFactor;
+      NIBPTimePointsize = adjustmentFactor * originalNIBPTimePointsize;
+      TEMPTimePointsize = adjustmentFactor * originalTEMPTimePointsize;
 
-      NIBPAlarmSettingsPointsize *= adjustmentFactor;
-      alarmSettingsPointsize *= adjustmentFactor;
+      NIBPAlarmSettingsPointsize = adjustmentFactor * originalNIBPAlarmSettingsPointsize;
+      alarmSettingsPointsize = adjustmentFactor * originalalarmSettingsPointsize;
 
       if (adjustmentFactor > 1) {
 
          var OffsetAdjustmentFactor = adjustmentFactor * 60 / 100 ;
 
-         alarmsOffIconXOffset *= OffsetAdjustmentFactor ;
-         alarmsOffIconYOffset *= OffsetAdjustmentFactor ;
-         NIBPAlarmsOffIconXOffset *= OffsetAdjustmentFactor ;
-         NIBPAlarmsOffIconYOffset *= OffsetAdjustmentFactor ;
+         alarmsOffIconXOffset = OffsetAdjustmentFactor  * originalalarmsOffIconXOffset;
+         alarmsOffIconYOffset = OffsetAdjustmentFactor  * originalalarmsOffIconYOffset;
+         NIBPAlarmsOffIconXOffset = OffsetAdjustmentFactor  * originalNIBPAlarmsOffIconXOffset;
+         NIBPAlarmsOffIconYOffset = OffsetAdjustmentFactor  * originalNIBPAlarmsOffIconYOffset;
 
       }
 
-      pointsizesAdjusted = 1 ;
+   //    pointsizesAdjusted = 1 ;
 
-   }
+   // }
 
 }
 
@@ -417,7 +453,7 @@ function fitText(textToFit, textColor, backgroundColor, textFontTypeface, textPo
    displayCtx.fillStyle = backgroundColor;
    displayCtx.fillRect(textRectLeft, textRectTop, textRectWidth, textRectHeight);
 
-   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textWidth, textHeight);
+   fitOverlayText(textToFit, textColor, textFontTypeface, textPointSize, textAlign, textBaseline, textLeft, textTop, textRectWidth, textRectHeight);
 
 }
 

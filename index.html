@@ -7,7 +7,6 @@
    <title>Live EKG Chart</title>
    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
    <p><button id="showSelectScreen" onclick="showSelectScreen()">Show Select Screen</button></p>
@@ -71,8 +70,8 @@
    <p></p>
 
    <!-- // On-screen Canvas -->
-   <!-- <canvas id="displayCanvas" width="800" height="480"></canvas> -->
-   <canvas id="displayCanvas" width="1366" height="768"></canvas>
+   <canvas id="displayCanvas" width="800" height="480"></canvas>
+   <!-- <canvas id="displayCanvas" width="1366" height="768"></canvas> -->
 
    <script src="constants.js"></script>
    <script src="colors.js"></script>
@@ -104,9 +103,15 @@ document.getElementById("setAlarmStatusNONEButton").disabled = true;
 const displayCanvas = document.getElementById('displayCanvas');
 const displayCtx = displayCanvas.getContext('2d');
 
-// Set the background of the canvas to black
-displayCtx.fillStyle = 'black';
-displayCtx.fillRect(0, 0, displayCanvas.width, displayCanvas.height);
+// Original aspect ratio of the canvas
+const originalWidth = displayCanvas.width; // Change this to your canvas's original width
+const originalHeight = displayCanvas.height; // Change this to your canvas's original height
+const aspectRatio = originalWidth / originalHeight;
+
+// Redraw canvas when the window is resized
+window.addEventListener('resize', resizeCanvas);
+
+resizeCanvas() ;
 
 const simulationTypeDropdown = document.getElementById("simulationTypeDropdown");
 
@@ -130,9 +135,6 @@ adjustPointsizes() ;
 let pauseWaveformDrawing = 0;
 var framesPerSecond = 60;
 
-homeScreen = new HomeScreen(displayCanvas.width, displayCanvas.height);
-homeScreen.initializeAreas();
-
 window.rotated = 0 ;
 
 if (window.simulatedDataMode == 1) {
@@ -146,6 +148,11 @@ drawHomeScreen();
 
 var intervalId = 0;
 
+
+//
+//   Functions  
+//
+
 //
 //   updateFramesPerSecond  
 //
@@ -157,7 +164,11 @@ function updateFramesPerSecond(elapsedTime) {
    fpsDisplay.textContent = `Frame Rate: ${Math.round(framesPerSecond)} FPS`;
 }
 
-// Function to respond to touch or mouse click events
+
+//
+//   backArrowTouched  
+//
+
 function backArrowTouched(x, y) {
    if ((x >= backArrowTouchAreaLeft) && (x <= backArrowTouchAreaLeft + backArrowTouchAreaWidth) && (y >= backArrowTouchAreaTop) && (y <= backArrowTouchAreaTop + backArrowTouchAreaHeight)) {
       return(1);
@@ -166,6 +177,11 @@ function backArrowTouched(x, y) {
       return(0);
    }
 }
+
+
+//
+//   waveformAreaTouched  
+//
 
 function waveformAreaTouched(x, y) {
    if ((x >= homeScreen.waveformAreaLeft) && (x <= homeScreen.waveformAreaLeft + homeScreen.waveformAreaWidth) && (y >= homeScreen.waveformAreaTop) && (y <= homeScreen.waveformAreaTop + homeScreen.waveformAreaHeight)) {
@@ -176,7 +192,11 @@ function waveformAreaTouched(x, y) {
    }
 }
 
-// Function to respond to touch or mouse click events
+
+//
+//   alarmingParameterAreaTouched  
+//
+
 function alarmingParameterAreaTouched(x, y) {
 
    for (p = 0; p < homeScreen.parameters.length; p++) {
@@ -206,7 +226,10 @@ function alarmingParameterAreaTouched(x, y) {
 }
 
 
-// Function to respond to touch or mouse click events
+//
+//   respondToMouseClickOrTouchAt  
+//
+
 function respondToMouseClickOrTouchAt(x, y) {
 
    if (backArrowTouched(x,y)) {

@@ -703,20 +703,38 @@ function drawGenericParameterArea(label, units, value, alarmsOn, upperLimit, low
          const sysDiaString = `${systolic} / ${diastolic}`;  
          const meanString = `(${mean})`;  
 
-         valueX = x + width * 50 / 100;
+         //valueX = x + width * 50 / 100;
+
+         SDRectLeft = x + width * 20 / 100 ;
+         SDRectRight = x + width * 77 / 100 ;
+         SDRectTop = y + height * 25 / 100 ;
+         SDRectBottom = y + height * 95 / 100 ;
+
+         valueX = (SDRectLeft + SDRectRight) / 2;
+         valueY = (SDRectTop + SDRectBottom) / 2;
 
          // displayCtx.font = `${fontSize + 5}pt ${font}`;
          // displayCtx.textAlign = 'center';
          //displayCtx.fillText(sysDiaString, valueX, valueY);  
-         placeOverlayText(sysDiaString, textForegroundColor, font, fontSize + 5, 'center', 'middle', valueX, valueY) ;
+         //placeOverlayText(sysDiaString, textForegroundColor, font, fontSize + 5, 'center', 'middle', valueX, valueY) ;
+         fitText(sysDiaString, textForegroundColor, window.colors.ZBLACK, font, fontSize + 5, 'center', 'middle', valueX, valueY, SDRectLeft, SDRectTop, SDRectRight - SDRectLeft, SDRectBottom - SDRectTop) ;
 
-         valueX = x + width * 80 / 100;
-         valueY = y + height * 70 / 100;
+         // valueX = x + width * 80 / 100;
+         // valueY = y + height * 70 / 100;
+
+         MRectLeft = x + width * 79 / 100 ;
+         MRectRight = x + width * 99 / 100 ;
+         MRectTop = y + height * 35 / 100 ;
+         MRectBottom = y + height * 75 / 100 ;
+
+         valueX = (MRectLeft + MRectRight) / 2;
+         valueY = (MRectTop + MRectBottom) / 2;
 
          // displayCtx.font = `${fontSize - 15}pt ${font}`;
          // displayCtx.textAlign = 'left';
          //displayCtx.fillText(meanString, valueX, valueY); 
-         placeOverlayText(meanString, textForegroundColor, font, fontSize - 15, 'left', 'middle', valueX, valueY) ;
+         //placeOverlayText(meanString, textForegroundColor, font, fontSize - 15, 'left', 'middle', valueX, valueY) ;
+         fitText(meanString, textForegroundColor, window.colors.ZBLACK, font, fontSize - 15, 'center', 'middle', valueX, valueY, MRectLeft, MRectTop, MRectRight - MRectLeft, MRectBottom - MRectTop) ;
 
          var parameterTime = homeScreen.getSettingValue("NIBPtime");
 
