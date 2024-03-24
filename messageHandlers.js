@@ -8,15 +8,21 @@ async function getAMSMessages() {
 
    try {
 
-      const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {  // A Streaming Device for Richmond, 3
       // const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/8000.002011', {
+      //const response = await fetch('https://app-streamingapiservice.azurewebsites.net/api/v1/toStreamingViewer/c/fromStreamingDevice/JSON/ASDR3', {  // A Streaming Device for Richmond, 3
+      const response = await fetch('https://app-streamingapiservicewithviewer.azurewebsites.net/api/v1/toStreamingViewer/sjs/fromStreamingDevice/JSON/01a1eb57-d2e5-4c23-b804-79be30ddd247', {  // A Streaming Device for Richmond, 3
+
+
+
          method: 'GET',
          headers: {
             'Accept': 'application/json',
+            'x-api-key': '4DA67B46-E266-4139-9189-9C4F42E72604:18bc10d6-e583-450a-bae6-a445ae120084',
          },
       })
       if (!response.ok) {
-         throw new Error('Failed to fetch data');
+         //throw new Error('Failed to fetch data');
+         throw new Error('Failed to fetch data. Status: ' + response.status + ' ' + response.statusText);
       }
 
       var AMSMessages = await response.json();
@@ -35,7 +41,11 @@ async function getAMSMessages() {
 
    } catch (error) {
 
-      LOGEVENTRED('Error:', error);
+      //LOGEVENTRED('Error:', error);
+        LOGEVENTRED('Error:', error.message); // Log the error message
+        LOGEVENTRED('Error stack:', error.stack); // Log the error stack trace
+        LOGEVENTRED('Error occurred. See console for details.');
+
 
    }
 
